@@ -19,10 +19,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse.master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2022-03-07 22:40+0000\n"
-"PO-Revision-Date: 2022-03-11 09:16+0100\n"
+"POT-Creation-Date: 2022-07-12 10:41+0000\n"
+"PO-Revision-Date: 2022-08-21 17:17+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
-"Language-Team: Galician <Proxecto Trasno <proxecto@trasno.gal>>\n"
+"Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -32,7 +32,7 @@ msgstr ""
 "X-Project-Style: gnome\n"
 "X-DL-Team: gl\n"
 "X-DL-Module: seahorse\n"
-"X-DL-Branch: master\n"
+"X-DL-Branch: main\n"
 "X-DL-Domain: po\n"
 "X-DL-State: Translating\n"
 
@@ -83,7 +83,7 @@ msgstr "Seleccionar a data dun calendario"
 #: pgp/seahorse-gpgme-revoke-dialog.ui:74 pgp/seahorse-keyserver-sync.ui:79
 #: pgp/seahorse-revoke.ui:73 pkcs11/pkcs11-request.vala:55
 #: pkcs11/pkcs11-request.vala:106 src/import-dialog.vala:34
-#: src/key-manager.vala:270
+#: src/key-manager.vala:270 ssh/seahorse-ssh-generate.ui:193
 msgid "_Cancel"
 msgstr "_Cancelar"
 
@@ -469,13 +469,12 @@ msgstr ""
 "almacenar na caché a súa frase de paso deste xeito non terá que escribila "
 "continuamente e facer un respaldo das súas chaves e do anel de chaves."
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:202
+#: data/org.gnome.seahorse.Application.appdata.xml.in:220
 msgid "The GNOME Project"
 msgstr "O Proxecto GNOME"
 
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.seahorse.Application.desktop.in.in:6
-#| msgid "keyring;encryption;security;sign;ssh;"
 msgid "keyring;encryption;security;sign;ssh;gpg;pgp;"
 msgstr "anel de chaves;cifrado;seguranza;sinatura;ssh;gpg;pgp;"
 
@@ -845,7 +844,7 @@ msgstr "Crear o novo ID de usuario"
 msgid "Decryption failed. You probably do not have the decryption key."
 msgstr "O descifrado fallou. Probabelmente non ten a chave de descifrado."
 
-#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:477
+#: pgp/seahorse-gpgme.c:73
 msgid "The operation was cancelled"
 msgstr "A operación foi cancelada"
 
@@ -891,7 +890,7 @@ msgid "PGP keys"
 msgstr "Chaves PGP"
 
 #: pgp/seahorse-gpgme-generate-dialog.c:81 pkcs11/pkcs11-generate.vala:60
-#: ssh/seahorse-ssh-generate.ui:147
+#: ssh/seahorse-ssh-generate.ui:130
 msgid "RSA"
 msgstr "RSA"
 
@@ -954,11 +953,11 @@ msgstr "Opcións _avanzadas de chave"
 msgid "_Comment"
 msgstr "_Comentario"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:169 ssh/seahorse-ssh-generate.ui:127
+#: pgp/seahorse-gpgme-generate-dialog.ui:169 ssh/seahorse-ssh-generate.ui:110
 msgid "Encryption _Type"
 msgstr "_Tipo de cifrado"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:199 ssh/seahorse-ssh-generate.ui:164
+#: pgp/seahorse-gpgme-generate-dialog.ui:199 ssh/seahorse-ssh-generate.ui:147
 msgid "Key _Strength (bits)"
 msgstr "_Fortaleza da chave (bits)"
 
@@ -1309,18 +1308,6 @@ msgstr "Descoñecido"
 #: pgp/seahorse-gpgme-subkey.c:86
 msgid "ElGamal"
 msgstr "ElGamal"
-
-#: pgp/seahorse-hkp-source.c:499
-#, c-format
-msgid "Search was not specific enough. Server “%s” found too many keys."
-msgstr ""
-"A busca non foi o suficientemente específica. O servidor «%s» encontrou "
-"demasiadas chaves."
-
-#: pgp/seahorse-hkp-source.c:503
-#, c-format
-msgid "Couldn’t communicate with server “%s”: %s"
-msgstr "Non foi posíbel comunicar co servidor «%s»: %s"
 
 #: pgp/seahorse-keyserver-results.c:62
 #, c-format
@@ -2022,12 +2009,12 @@ msgstr "Datos que importar"
 msgid "_Import"
 msgstr "_Importar"
 
-#: src/import-dialog.vala:74
+#: src/import-dialog.vala:77
 msgid "Import failed"
 msgstr "Fallou a importación"
 
 #. The prompt
-#: src/key-manager.vala:268 ssh/operation.vala:324
+#: src/key-manager.vala:268 ssh/operation.vala:216
 msgid "Import Key"
 msgstr "Importar unha chave"
 
@@ -2160,11 +2147,16 @@ msgstr "Filtro"
 msgid "This collection seems to be empty"
 msgstr "Esta colección semella estar baleira"
 
-#: src/seahorse-key-manager.ui:525
+#: src/seahorse-key-manager.ui:521
+#| msgid "Add a new key or item"
+msgid "Add new items"
+msgstr "Engadir elementos novos"
+
+#: src/seahorse-key-manager.ui:536
 msgid "Keyring is locked"
 msgstr "O anel de chaves está bloqueado"
 
-#: src/seahorse-key-manager.ui:530
+#: src/seahorse-key-manager.ui:541
 msgid "Unlock"
 msgstr "Desbloquear"
 
@@ -2239,17 +2231,17 @@ msgstr "Chave SSH"
 msgid "No public key file is available for this key."
 msgstr "Non hai ningún ficheiro de chave privada dispoñíbel para esta chave."
 
-#: ssh/generate.vala:94
+#: ssh/generate.vala:85
+msgid "Creating Secure Shell Key"
+msgstr "Creando chave de Secure Shell"
+
+#: ssh/generate.vala:93
 msgid "Couldn’t load newly generated Secure Shell key"
 msgstr "Non foi posíbel cargar a nova chave xerada de Secure Shell"
 
-#: ssh/generate.vala:98
+#: ssh/generate.vala:96
 msgid "Couldn’t generate Secure Shell key"
 msgstr "Non foi posíbel xerar a chave de Secure Shell (SSH)"
-
-#: ssh/generate.vala:101
-msgid "Creating Secure Shell Key"
-msgstr "Creando chave de Secure Shell"
 
 #: ssh/key-length-chooser.vala:92
 msgid "1024 bits"
@@ -2301,26 +2293,26 @@ msgstr "(Chave de Secure Shell (SSH) ilexíbel)"
 msgid "Secure Shell Key"
 msgstr "Chave de Secure Shell"
 
-#: ssh/operation.vala:219
+#: ssh/operation.vala:111
 msgid "Remote Host Password"
 msgstr "Contrasinal de host remoto"
 
-#: ssh/operation.vala:262
+#: ssh/operation.vala:154
 msgid "Enter Key Passphrase"
 msgstr "Introduza a frase de paso da chave"
 
-#: ssh/operation.vala:288
+#: ssh/operation.vala:180
 msgid "Passphrase for New Secure Shell Key"
 msgstr "Frase de paso para a nova chave de Secure Shell"
 
 #. No filename specified, make one up
 #. Add the comment to the output
-#: ssh/operation.vala:321
+#: ssh/operation.vala:213
 #, c-format
 msgid "Importing key: %s"
 msgstr "Importando a chave: %s"
 
-#: ssh/operation.vala:321
+#: ssh/operation.vala:213
 msgid "Importing key. Enter passphrase"
 msgstr "Importando a chave. Introduza a frase de paso"
 
@@ -2351,39 +2343,39 @@ msgstr "Escriba a nova frase de paso nova para: %s"
 msgid "Enter the new passphrase again: %s"
 msgstr "Escriba a nova frase de paso nova de novo: %s"
 
-#: ssh/seahorse-ssh-generate.ui:8
+#: ssh/seahorse-ssh-generate.ui:7
 msgid "New Secure Shell Key"
 msgstr "Nova chave de Secure Shell"
 
-#: ssh/seahorse-ssh-generate.ui:55
+#: ssh/seahorse-ssh-generate.ui:38
 msgid "A Secure Shell (SSH) key lets you connect securely to other computers."
 msgstr ""
 "Unha chave de Secure Shell (SSH) permítelle conectar de modo seguro cos "
 "computadores."
 
-#: ssh/seahorse-ssh-generate.ui:78
+#: ssh/seahorse-ssh-generate.ui:61
 msgid "_Description"
 msgstr "_Descrición"
 
-#: ssh/seahorse-ssh-generate.ui:111
+#: ssh/seahorse-ssh-generate.ui:94
 msgid "Your email address, or a reminder of what this key is for."
 msgstr ""
 "O seu enderezo de correo electrónico ou un recordatorio para saber para que "
 "é esta chave."
 
-#: ssh/seahorse-ssh-generate.ui:148
+#: ssh/seahorse-ssh-generate.ui:131
 msgid "DSA"
 msgstr "DSA"
 
-#: ssh/seahorse-ssh-generate.ui:149
+#: ssh/seahorse-ssh-generate.ui:132
 msgid "ECDSA"
 msgstr "ECDSA"
 
-#: ssh/seahorse-ssh-generate.ui:150
+#: ssh/seahorse-ssh-generate.ui:133
 msgid "ED25519"
 msgstr "ED25519"
 
-#: ssh/seahorse-ssh-generate.ui:195
+#: ssh/seahorse-ssh-generate.ui:178
 msgid ""
 "If there is a computer you want to use this key with, you can set up that "
 "computer to recognize your new key."
@@ -2391,13 +2383,10 @@ msgstr ""
 "Se xa hai un computador co que quere usar esta chave, pode configurar ese "
 "computador para que recoñeza a súa nova chave."
 
-#: ssh/seahorse-ssh-generate.ui:221
-msgid "_Just Create Key"
-msgstr "Crear _só a chave"
-
-#: ssh/seahorse-ssh-generate.ui:235
-msgid "_Create and Set Up"
-msgstr "_Crear e configurar"
+#: ssh/seahorse-ssh-generate.ui:201
+#| msgid "Generating key"
+msgid "_Generate"
+msgstr "_Xerar"
 
 #: ssh/seahorse-ssh-key-properties.ui:11
 msgid "SSH Key Properties"
@@ -2504,6 +2493,22 @@ msgstr ""
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "Configurando as chaves de Secure Shell (SSH)…"
+
+#, c-format
+#~ msgid "Search was not specific enough. Server “%s” found too many keys."
+#~ msgstr ""
+#~ "A busca non foi o suficientemente específica. O servidor «%s» encontrou "
+#~ "demasiadas chaves."
+
+#, c-format
+#~ msgid "Couldn’t communicate with server “%s”: %s"
+#~ msgstr "Non foi posíbel comunicar co servidor «%s»: %s"
+
+#~ msgid "_Just Create Key"
+#~ msgstr "Crear _só a chave"
+
+#~ msgid "_Create and Set Up"
+#~ msgstr "_Crear e configurar"
 
 #~ msgid "Seahorse"
 #~ msgstr "Seahorse"
