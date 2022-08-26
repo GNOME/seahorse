@@ -11,9 +11,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2022-03-07 22:40+0000\n"
-"PO-Revision-Date: 2021-11-06 18:22+0100\n"
-"Last-Translator: maite guix <maite.guix@me.com>\n"
+"POT-Creation-Date: 2022-07-12 10:41+0000\n"
+"PO-Revision-Date: 2022-08-26 18:22+0100\n"
+"Last-Translator: Jordi Mas i Hernàndez <jmas@softcatala.org>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
@@ -69,7 +69,7 @@ msgstr "Seleccioneu la data en un calendari"
 #: pgp/seahorse-gpgme-revoke-dialog.ui:74 pgp/seahorse-keyserver-sync.ui:79
 #: pgp/seahorse-revoke.ui:73 pkcs11/pkcs11-request.vala:55
 #: pkcs11/pkcs11-request.vala:106 src/import-dialog.vala:34
-#: src/key-manager.vala:270
+#: src/key-manager.vala:270 ssh/seahorse-ssh-generate.ui:193
 msgid "_Cancel"
 msgstr "_Cancel·la"
 
@@ -455,7 +455,7 @@ msgstr ""
 "no haver-la d'introduir i també per a crear una còpia de seguretat de les "
 "vostres claus i clauers."
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:202
+#: data/org.gnome.seahorse.Application.appdata.xml.in:220
 msgid "The GNOME Project"
 msgstr "El projecte GNOME"
 
@@ -832,7 +832,7 @@ msgid "Decryption failed. You probably do not have the decryption key."
 msgstr ""
 "No s'ha pogut desencriptar. Possiblement no teniu la clau de desencriptació."
 
-#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:477
+#: pgp/seahorse-gpgme.c:73
 msgid "The operation was cancelled"
 msgstr "S'ha cancel·lat l'operació"
 
@@ -878,7 +878,7 @@ msgid "PGP keys"
 msgstr "Claus PGP"
 
 #: pgp/seahorse-gpgme-generate-dialog.c:81 pkcs11/pkcs11-generate.vala:60
-#: ssh/seahorse-ssh-generate.ui:147
+#: ssh/seahorse-ssh-generate.ui:130
 msgid "RSA"
 msgstr "RSA"
 
@@ -941,11 +941,11 @@ msgstr "Opcions _avançades de la clau"
 msgid "_Comment"
 msgstr "_Comenta"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:169 ssh/seahorse-ssh-generate.ui:127
+#: pgp/seahorse-gpgme-generate-dialog.ui:169 ssh/seahorse-ssh-generate.ui:110
 msgid "Encryption _Type"
 msgstr "Tipus d'_encriptació"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:199 ssh/seahorse-ssh-generate.ui:164
+#: pgp/seahorse-gpgme-generate-dialog.ui:199 ssh/seahorse-ssh-generate.ui:147
 msgid "Key _Strength (bits)"
 msgstr "_Fortalesa de la clau (en bits)"
 
@@ -1294,17 +1294,6 @@ msgstr "Desconegut"
 #: pgp/seahorse-gpgme-subkey.c:86
 msgid "ElGamal"
 msgstr "ElGamal"
-
-#: pgp/seahorse-hkp-source.c:499
-#, c-format
-msgid "Search was not specific enough. Server “%s” found too many keys."
-msgstr ""
-"La cerca no ha estat prou específica. El servidor «%s» ha trobat massa claus."
-
-#: pgp/seahorse-hkp-source.c:503
-#, c-format
-msgid "Couldn’t communicate with server “%s”: %s"
-msgstr "No s'ha pogut comunicar amb el servidor «%s»: %s"
 
 #: pgp/seahorse-keyserver-results.c:62
 #, c-format
@@ -1795,7 +1784,7 @@ msgstr "(desconegut)"
 # La clau o la foto (josep)
 #: pgp/seahorse-pgp-uid-list-box-row.ui:7
 msgid "Make _primary"
-msgstr "Fes-la primària"
+msgstr "Fes-la _primària"
 
 #: pgp/seahorse-pgp-uid-list-box-row.ui:64
 msgid "Signatures"
@@ -2000,12 +1989,12 @@ msgstr "Dades a importar"
 msgid "_Import"
 msgstr "_Importa"
 
-#: src/import-dialog.vala:74
+#: src/import-dialog.vala:77
 msgid "Import failed"
 msgstr "Ha fallat la importació"
 
 #. The prompt
-#: src/key-manager.vala:268 ssh/operation.vala:324
+#: src/key-manager.vala:268 ssh/operation.vala:216
 msgid "Import Key"
 msgstr "Importa clau"
 
@@ -2138,11 +2127,15 @@ msgstr "Filtre"
 msgid "This collection seems to be empty"
 msgstr "Aquesta col·lecció sembla que és buida"
 
-#: src/seahorse-key-manager.ui:525
+#: src/seahorse-key-manager.ui:521
+msgid "Add new items"
+msgstr "Afegeix elements nous"
+
+#: src/seahorse-key-manager.ui:536
 msgid "Keyring is locked"
 msgstr "L'anell de claus està bloquejat"
 
-#: src/seahorse-key-manager.ui:530
+#: src/seahorse-key-manager.ui:541
 msgid "Unlock"
 msgstr "Desbloca"
 
@@ -2218,17 +2211,17 @@ msgstr "Clau SSH"
 msgid "No public key file is available for this key."
 msgstr "No hi ha disponible cap fitxer de clau pública per aquesta clau."
 
-#: ssh/generate.vala:94
+#: ssh/generate.vala:85
+msgid "Creating Secure Shell Key"
+msgstr "S'està creant la clau per a l'intèrpret d'ordres segur"
+
+#: ssh/generate.vala:93
 msgid "Couldn’t load newly generated Secure Shell key"
 msgstr "No s'ha pogut carregar la clau nova per a l'intèrpret d'ordres segur"
 
-#: ssh/generate.vala:98
+#: ssh/generate.vala:96
 msgid "Couldn’t generate Secure Shell key"
 msgstr "No s'ha pogut generar la clau per a l'intèrpret d'ordres segur"
-
-#: ssh/generate.vala:101
-msgid "Creating Secure Shell Key"
-msgstr "S'està creant la clau per a l'intèrpret d'ordres segur"
 
 #: ssh/key-length-chooser.vala:92
 msgid "1024 bits"
@@ -2280,26 +2273,26 @@ msgstr "(No és possible llegir la clau de l'intèrpret d'ordres segur)"
 msgid "Secure Shell Key"
 msgstr "Clau d'intèrpret d'ordres segur"
 
-#: ssh/operation.vala:219
+#: ssh/operation.vala:111
 msgid "Remote Host Password"
 msgstr "Contrasenya de l'ordinador remot"
 
-#: ssh/operation.vala:262
+#: ssh/operation.vala:154
 msgid "Enter Key Passphrase"
 msgstr "Introduïu la contrasenya de la clau"
 
-#: ssh/operation.vala:288
+#: ssh/operation.vala:180
 msgid "Passphrase for New Secure Shell Key"
 msgstr "Contrasenya per a la clau nova de l'intèrpret d'ordres segur"
 
 #. No filename specified, make one up
 #. Add the comment to the output
-#: ssh/operation.vala:321
+#: ssh/operation.vala:213
 #, c-format
 msgid "Importing key: %s"
 msgstr "S'està important la clau: %s"
 
-#: ssh/operation.vala:321
+#: ssh/operation.vala:213
 msgid "Importing key. Enter passphrase"
 msgstr "S'està important la clau. Introduïu la contrasenya"
 
@@ -2330,39 +2323,39 @@ msgstr "Introduïu una contrasenya nova de: %s"
 msgid "Enter the new passphrase again: %s"
 msgstr "Introduïu un altre cop la contrasenya nova de: %s"
 
-#: ssh/seahorse-ssh-generate.ui:8
+#: ssh/seahorse-ssh-generate.ui:7
 msgid "New Secure Shell Key"
 msgstr "Clau nova d'intèrpret d'ordres segur"
 
-#: ssh/seahorse-ssh-generate.ui:55
+#: ssh/seahorse-ssh-generate.ui:38
 msgid "A Secure Shell (SSH) key lets you connect securely to other computers."
 msgstr ""
 "Una clau d'intèrpret d'ordres segur (SSH) us permet connectar de manera "
 "segura a altres ordinadors."
 
-#: ssh/seahorse-ssh-generate.ui:78
+#: ssh/seahorse-ssh-generate.ui:61
 msgid "_Description"
 msgstr "_Descripció"
 
-#: ssh/seahorse-ssh-generate.ui:111
+#: ssh/seahorse-ssh-generate.ui:94
 msgid "Your email address, or a reminder of what this key is for."
 msgstr ""
 "La vostra adreça electrònica o qualsevol altre text que us recordi per a què "
 "és aquesta clau."
 
-#: ssh/seahorse-ssh-generate.ui:148
+#: ssh/seahorse-ssh-generate.ui:131
 msgid "DSA"
 msgstr "DSA"
 
-#: ssh/seahorse-ssh-generate.ui:149
+#: ssh/seahorse-ssh-generate.ui:132
 msgid "ECDSA"
 msgstr "ECDSA"
 
-#: ssh/seahorse-ssh-generate.ui:150
+#: ssh/seahorse-ssh-generate.ui:133
 msgid "ED25519"
 msgstr "ED25519"
 
-#: ssh/seahorse-ssh-generate.ui:195
+#: ssh/seahorse-ssh-generate.ui:178
 msgid ""
 "If there is a computer you want to use this key with, you can set up that "
 "computer to recognize your new key."
@@ -2370,13 +2363,9 @@ msgstr ""
 "Si ja sabeu algun ordinador amb el qual vulgueu emprar aquesta clau, podeu "
 "configurar-lo per tal que reconegui la clau nova."
 
-#: ssh/seahorse-ssh-generate.ui:221
-msgid "_Just Create Key"
-msgstr "_Només crea la clau"
-
-#: ssh/seahorse-ssh-generate.ui:235
-msgid "_Create and Set Up"
-msgstr "_Crea i configura"
+#: ssh/seahorse-ssh-generate.ui:201
+msgid "_Generate"
+msgstr "_Genera"
 
 #: ssh/seahorse-ssh-key-properties.ui:11
 msgid "SSH Key Properties"
@@ -2484,88 +2473,4 @@ msgstr ""
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "S'estan configurant les claus de l'intèrpret d'ordres segur..."
-
-#~ msgid "Seahorse"
-#~ msgstr "Seahorse"
-
-#~ msgid "[Unknown]"
-#~ msgstr "[Desconegut]"
-
-#~ msgid "Name/Email"
-#~ msgstr "Nom/adreça electrònica"
-
-#~ msgid ""
-#~ "If you believe that the person that owns this key is “%s”, <i>sign</i> "
-#~ "this key:"
-#~ msgstr ""
-#~ "Si creieu que el propietari d'aquesta clau és «%s», <i>signeu-la</i>:"
-
-#~ msgid "This key has been revoked"
-#~ msgstr "Aquesta clau ha estat revocada"
-
-#~ msgid "This key has expired"
-#~ msgstr "Aquesta clau ha vençut"
-
-#~ msgid "Key Names and Signatures"
-#~ msgstr "Noms de clau i signatures"
-
-#~ msgid "_Add Name"
-#~ msgstr "_Afegeix un nom"
-
-#~ msgid "Names and Signatures"
-#~ msgstr "Noms i signatures"
-
-#~ msgid "Key ID:"
-#~ msgstr "Identificador de la clau:"
-
-#~ msgid "Type:"
-#~ msgstr "Tipus:"
-
-# FIXME FIXME FIXME (josep)
-#~ msgid "Strength:"
-#~ msgstr "Fortalesa:"
-
-#~ msgid "Technical Details"
-#~ msgstr "Detalls tècnics"
-
-#~ msgid "Created:"
-#~ msgstr "Creada:"
-
-#~ msgid "Dates"
-#~ msgstr "Dates"
-
-#~ msgid "_Export to file"
-#~ msgstr "_Exporta al fitxer"
-
-#~ msgid "Actions"
-#~ msgstr "Accions"
-
-#~ msgid "_Other Names:"
-#~ msgstr "_Altres noms:"
-
-#~ msgid "Your trust is manually specified on the <i>Details</i> tab."
-#~ msgstr ""
-#~ "La confiança que hi teniu s'especifica manualment a la pestanya de "
-#~ "<i>Detalls</i>."
-
-#~ msgid "_Sign this Key"
-#~ msgstr "_Signa aquesta clau"
-
-#~ msgid "_People who have signed this key:"
-#~ msgstr "_Persones que han signat aquesta clau:"
-
-#~ msgid "Technical Details:"
-#~ msgstr "Detalls tècnics:"
-
-#~ msgid "Fingerprint:"
-#~ msgstr "Empremta digital:"
-
-#~ msgid "Dates:"
-#~ msgstr "Dates:"
-
-#~ msgid "Indicate trust:"
-#~ msgstr "Indiqueu la confiança:"
-
-#~ msgid "You _trust the owner:"
-#~ msgstr "Confieu en el _propietari:"
 
