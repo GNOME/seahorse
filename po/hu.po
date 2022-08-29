@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2022-03-07 22:40+0000\n"
-"PO-Revision-Date: 2022-03-13 02:28+0100\n"
+"POT-Creation-Date: 2022-07-12 10:41+0000\n"
+"PO-Revision-Date: 2022-08-30 00:50+0200\n"
 "Last-Translator: Balázs Úr <ur.balazs at fsf dot hu>\n"
 "Language-Team: Hungarian <gnome-hu-list at gnome dot org>\n"
 "Language: hu\n"
@@ -70,7 +70,7 @@ msgstr "A dátum kiválasztása naptárból"
 #: pgp/seahorse-gpgme-revoke-dialog.ui:74 pgp/seahorse-keyserver-sync.ui:79
 #: pgp/seahorse-revoke.ui:73 pkcs11/pkcs11-request.vala:55
 #: pkcs11/pkcs11-request.vala:106 src/import-dialog.vala:34
-#: src/key-manager.vala:270
+#: src/key-manager.vala:270 ssh/seahorse-ssh-generate.ui:193
 msgid "_Cancel"
 msgstr "Mé_gse"
 
@@ -439,16 +439,11 @@ msgid "Manage your passwords and encryption keys"
 msgstr "Jelszavak és titkosítási kulcsok kezelése"
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:9
-#| msgid "Seahorse is a GNOME application for managing encryption keys."
 msgid "Passwords and Keys is a GNOME application for managing encryption keys."
 msgstr ""
 "A Jelszavak és kulcsok egy GNOME alkalmazás titkosítási kulcsok kezeléséhez."
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:12
-#| msgid ""
-#| "With seahorse you can create and manage PGP keys, create and manage SSH "
-#| "keys, publish and retrieve keys from key servers, cache your passphrase "
-#| "so you don’t have to keep typing it and backup your keys and keyring."
 msgid ""
 "With Passwords and Keys you can create and manage PGP keys, create and "
 "manage SSH keys, publish and retrieve keys from key servers, cache your "
@@ -461,13 +456,12 @@ msgstr ""
 "állandóan begépelnie azt, valamint biztonsági mentést készíthet a kulcsairól "
 "és a kulcstartójáról."
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:202
+#: data/org.gnome.seahorse.Application.appdata.xml.in:220
 msgid "The GNOME Project"
 msgstr "A GNOME projekt"
 
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.seahorse.Application.desktop.in.in:6
-#| msgid "keyring;encryption;security;sign;ssh;"
 msgid "keyring;encryption;security;sign;ssh;gpg;pgp;"
 msgstr "kulcstartó;titkosítás;biztonság;aláírás;ssh;gpg;pgp;"
 
@@ -837,7 +831,7 @@ msgstr ""
 "A visszafejtés sikertelen. Valószínűleg nem rendelkezik a visszafejtési "
 "kulccsal."
 
-#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:477
+#: pgp/seahorse-gpgme.c:73
 msgid "The operation was cancelled"
 msgstr "A művelet megszakítva"
 
@@ -883,7 +877,7 @@ msgid "PGP keys"
 msgstr "PGP-kulcsok"
 
 #: pgp/seahorse-gpgme-generate-dialog.c:81 pkcs11/pkcs11-generate.vala:60
-#: ssh/seahorse-ssh-generate.ui:147
+#: ssh/seahorse-ssh-generate.ui:130
 msgid "RSA"
 msgstr "RSA"
 
@@ -944,11 +938,11 @@ msgstr "Spe_ciális kulcsbeállítások"
 msgid "_Comment"
 msgstr "_Megjegyzés"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:169 ssh/seahorse-ssh-generate.ui:127
+#: pgp/seahorse-gpgme-generate-dialog.ui:169 ssh/seahorse-ssh-generate.ui:110
 msgid "Encryption _Type"
 msgstr "_Titkosítás típusa"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:199 ssh/seahorse-ssh-generate.ui:164
+#: pgp/seahorse-gpgme-generate-dialog.ui:199 ssh/seahorse-ssh-generate.ui:147
 msgid "Key _Strength (bits)"
 msgstr "Kulcs _erőssége (bit)"
 
@@ -1292,17 +1286,6 @@ msgstr "Ismeretlen"
 #: pgp/seahorse-gpgme-subkey.c:86
 msgid "ElGamal"
 msgstr "ElGamal"
-
-#: pgp/seahorse-hkp-source.c:499
-#, c-format
-msgid "Search was not specific enough. Server “%s” found too many keys."
-msgstr ""
-"A keresés nem volt elég egyedi. A(z) „%s” kiszolgáló túl sok kulcsot talált."
-
-#: pgp/seahorse-hkp-source.c:503
-#, c-format
-msgid "Couldn’t communicate with server “%s”: %s"
-msgstr "Nem lehet kommunikálni a(z) „%s” kiszolgálóval: %s"
 
 #: pgp/seahorse-keyserver-results.c:62
 #, c-format
@@ -2002,12 +1985,12 @@ msgstr "Importálandó adatok"
 msgid "_Import"
 msgstr "_Importálás"
 
-#: src/import-dialog.vala:74
+#: src/import-dialog.vala:77
 msgid "Import failed"
 msgstr "Az importálás sikertelen"
 
 #. The prompt
-#: src/key-manager.vala:268 ssh/operation.vala:324
+#: src/key-manager.vala:268 ssh/operation.vala:216
 msgid "Import Key"
 msgstr "Kulcs importálása"
 
@@ -2140,11 +2123,16 @@ msgstr "Szűrő"
 msgid "This collection seems to be empty"
 msgstr "Ez a gyűjtemény üresnek tűnik"
 
-#: src/seahorse-key-manager.ui:525
+#: src/seahorse-key-manager.ui:521
+#| msgid "Add a new key or item"
+msgid "Add new items"
+msgstr "Új elemek hozzáadása"
+
+#: src/seahorse-key-manager.ui:536
 msgid "Keyring is locked"
 msgstr "Kulcstartó zárolva"
 
-#: src/seahorse-key-manager.ui:530
+#: src/seahorse-key-manager.ui:541
 msgid "Unlock"
 msgstr "Feloldás"
 
@@ -2219,17 +2207,17 @@ msgstr "SSH-kulcs"
 msgid "No public key file is available for this key."
 msgstr "Nem áll rendelkezésre nyilvános kulcsfájl ehhez a kulcshoz."
 
-#: ssh/generate.vala:94
+#: ssh/generate.vala:85
+msgid "Creating Secure Shell Key"
+msgstr "SSH-kulcs előállítása"
+
+#: ssh/generate.vala:93
 msgid "Couldn’t load newly generated Secure Shell key"
 msgstr "Nem sikerült az új SSH-kulcs betöltése"
 
-#: ssh/generate.vala:98
+#: ssh/generate.vala:96
 msgid "Couldn’t generate Secure Shell key"
 msgstr "Nem sikerült az SSH-kulcs előállítása"
-
-#: ssh/generate.vala:101
-msgid "Creating Secure Shell Key"
-msgstr "SSH-kulcs előállítása"
 
 #: ssh/key-length-chooser.vala:92
 msgid "1024 bits"
@@ -2281,26 +2269,26 @@ msgstr "(olvashatatlan SSH-kulcs)"
 msgid "Secure Shell Key"
 msgstr "SSH-kulcs"
 
-#: ssh/operation.vala:219
+#: ssh/operation.vala:111
 msgid "Remote Host Password"
 msgstr "Távoli gép jelszava"
 
-#: ssh/operation.vala:262
+#: ssh/operation.vala:154
 msgid "Enter Key Passphrase"
 msgstr "Írja be a kulcs jelmondatát"
 
-#: ssh/operation.vala:288
+#: ssh/operation.vala:180
 msgid "Passphrase for New Secure Shell Key"
 msgstr "Az új SSH-kulcs jelmondata"
 
 #. No filename specified, make one up
 #. Add the comment to the output
-#: ssh/operation.vala:321
+#: ssh/operation.vala:213
 #, c-format
 msgid "Importing key: %s"
 msgstr "Kulcs importálása: %s"
 
-#: ssh/operation.vala:321
+#: ssh/operation.vala:213
 msgid "Importing key. Enter passphrase"
 msgstr "Kulcs importálása. Írja be a jelmondatot"
 
@@ -2331,36 +2319,36 @@ msgstr "Írja be az új jelmondatot %s számára"
 msgid "Enter the new passphrase again: %s"
 msgstr "Írja be ismét az új jelmondatot: %s"
 
-#: ssh/seahorse-ssh-generate.ui:8
+#: ssh/seahorse-ssh-generate.ui:7
 msgid "New Secure Shell Key"
 msgstr "Új SSH-kulcs"
 
-#: ssh/seahorse-ssh-generate.ui:55
+#: ssh/seahorse-ssh-generate.ui:38
 msgid "A Secure Shell (SSH) key lets you connect securely to other computers."
 msgstr ""
 "Az SSH-kulcs lehetővé teszi a biztonságos csatlakozást más számítógépekhez."
 
-#: ssh/seahorse-ssh-generate.ui:78
+#: ssh/seahorse-ssh-generate.ui:61
 msgid "_Description"
 msgstr "_Leírás"
 
-#: ssh/seahorse-ssh-generate.ui:111
+#: ssh/seahorse-ssh-generate.ui:94
 msgid "Your email address, or a reminder of what this key is for."
 msgstr "Az e-mail címe vagy valamilyen emlékeztető a kulcs funkciójáról."
 
-#: ssh/seahorse-ssh-generate.ui:148
+#: ssh/seahorse-ssh-generate.ui:131
 msgid "DSA"
 msgstr "DSA"
 
-#: ssh/seahorse-ssh-generate.ui:149
+#: ssh/seahorse-ssh-generate.ui:132
 msgid "ECDSA"
 msgstr "ECDSA"
 
-#: ssh/seahorse-ssh-generate.ui:150
+#: ssh/seahorse-ssh-generate.ui:133
 msgid "ED25519"
 msgstr "ED25519"
 
-#: ssh/seahorse-ssh-generate.ui:195
+#: ssh/seahorse-ssh-generate.ui:178
 msgid ""
 "If there is a computer you want to use this key with, you can set up that "
 "computer to recognize your new key."
@@ -2368,13 +2356,10 @@ msgstr ""
 "Ha van olyan számítógép, amelyhez a kulcsot kívánja használni, akkor "
 "beállíthatja a számítógépet az új kulcs felismerésére."
 
-#: ssh/seahorse-ssh-generate.ui:221
-msgid "_Just Create Key"
-msgstr "_Csak létrehozás"
-
-#: ssh/seahorse-ssh-generate.ui:235
-msgid "_Create and Set Up"
-msgstr "_Létrehozás és beállítás"
+#: ssh/seahorse-ssh-generate.ui:201
+#| msgid "Generating key"
+msgid "_Generate"
+msgstr "_Előállítás"
 
 #: ssh/seahorse-ssh-key-properties.ui:11
 msgid "SSH Key Properties"
