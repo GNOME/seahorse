@@ -9,18 +9,18 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2022-03-14 08:04+0000\n"
-"PO-Revision-Date: 2022-03-15 22:31+0100\n"
+"POT-Creation-Date: 2022-08-30 14:42+0000\n"
+"PO-Revision-Date: 2022-08-31 20:44+0200\n"
 "Last-Translator: Matej Urbančič <mateju@src.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
-"%100==4 ? 3 : 0);\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || "
+"n%100==4 ? 3 : 0);\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #: common/add-keyserver-dialog.vala:32
 msgid "Add Key Server"
@@ -69,7 +69,7 @@ msgstr "Izbor datuma iz koledarja"
 #: pgp/seahorse-gpgme-revoke-dialog.ui:74 pgp/seahorse-keyserver-sync.ui:79
 #: pgp/seahorse-revoke.ui:73 pkcs11/pkcs11-request.vala:55
 #: pkcs11/pkcs11-request.vala:106 src/import-dialog.vala:34
-#: src/key-manager.vala:270
+#: src/key-manager.vala:270 ssh/seahorse-ssh-generate.ui:193
 msgid "_Cancel"
 msgstr "_Prekliči"
 
@@ -451,7 +451,7 @@ msgstr ""
 "šifrirnih fraz, kar olajša vnos ob zahtevi. Omogoča ustvarjanje varnostnih "
 "kopij ključev in celotnih zbirk ključev."
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:202
+#: data/org.gnome.seahorse.Application.appdata.xml.in:220
 msgid "The GNOME Project"
 msgstr "Projekt GNOME"
 
@@ -828,7 +828,7 @@ msgstr "Ustvari nov ID uporabnika"
 msgid "Decryption failed. You probably do not have the decryption key."
 msgstr "Odšifriranje ni uspelo. Najverjetneje manjka odšifrirni ključ."
 
-#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:477
+#: pgp/seahorse-gpgme.c:73
 msgid "The operation was cancelled"
 msgstr "Opravilo je bilo preklicano."
 
@@ -874,7 +874,7 @@ msgid "PGP keys"
 msgstr "Ključi PGP"
 
 #: pgp/seahorse-gpgme-generate-dialog.c:81 pkcs11/pkcs11-generate.vala:60
-#: ssh/seahorse-ssh-generate.ui:147
+#: ssh/seahorse-ssh-generate.ui:130
 msgid "RSA"
 msgstr "RSA"
 
@@ -934,11 +934,11 @@ msgstr "_Napredne možnosti ključa"
 msgid "_Comment"
 msgstr "_Opomba"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:169 ssh/seahorse-ssh-generate.ui:127
+#: pgp/seahorse-gpgme-generate-dialog.ui:169 ssh/seahorse-ssh-generate.ui:110
 msgid "Encryption _Type"
 msgstr "Vrsta _šifriranja"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:199 ssh/seahorse-ssh-generate.ui:164
+#: pgp/seahorse-gpgme-generate-dialog.ui:199 ssh/seahorse-ssh-generate.ui:147
 msgid "Key _Strength (bits)"
 msgstr "_Moč ključa (v bitih):"
 
@@ -1287,17 +1287,6 @@ msgstr "Neznano"
 #: pgp/seahorse-gpgme-subkey.c:86
 msgid "ElGamal"
 msgstr "ElGamal"
-
-#: pgp/seahorse-hkp-source.c:499
-#, c-format
-msgid "Search was not specific enough. Server “%s” found too many keys."
-msgstr ""
-"Iskanje ni bilo dovolj podrobno. Strežnik »%s« je našel preveč ključev."
-
-#: pgp/seahorse-hkp-source.c:503
-#, c-format
-msgid "Couldn’t communicate with server “%s”: %s"
-msgstr "Ni se mogoče povezati s strežnikom »%s«: %s"
 
 #: pgp/seahorse-keyserver-results.c:62
 #, c-format
@@ -1997,12 +1986,12 @@ msgstr "Podatki za uvoz"
 msgid "_Import"
 msgstr "_Uvozi"
 
-#: src/import-dialog.vala:74
+#: src/import-dialog.vala:77
 msgid "Import failed"
 msgstr "Uvoz je spodletel"
 
 #. The prompt
-#: src/key-manager.vala:268 ssh/operation.vala:324
+#: src/key-manager.vala:268 ssh/operation.vala:216
 msgid "Import Key"
 msgstr "Uvozi ključ"
 
@@ -2135,11 +2124,15 @@ msgstr "Filter"
 msgid "This collection seems to be empty"
 msgstr "Kaže, da je zbirka prazna"
 
-#: src/seahorse-key-manager.ui:525
+#: src/seahorse-key-manager.ui:521
+msgid "Add new items"
+msgstr "Dodaj nove predmete"
+
+#: src/seahorse-key-manager.ui:536
 msgid "Keyring is locked"
 msgstr "Zbirka ključev je zaklenjena"
 
-#: src/seahorse-key-manager.ui:530
+#: src/seahorse-key-manager.ui:541
 msgid "Unlock"
 msgstr "Odkleni"
 
@@ -2216,17 +2209,17 @@ msgstr "Ključ SSH"
 msgid "No public key file is available for this key."
 msgstr "Za ta ključ ni na voljo nobenega javnega ključa."
 
-#: ssh/generate.vala:94
+#: ssh/generate.vala:85
+msgid "Creating Secure Shell Key"
+msgstr "Ustvarjanje ključa varne lupine"
+
+#: ssh/generate.vala:93
 msgid "Couldn’t load newly generated Secure Shell key"
 msgstr "Ni mogoče naložiti na novo ustvarjenega ključa varne lupine"
 
-#: ssh/generate.vala:98
+#: ssh/generate.vala:96
 msgid "Couldn’t generate Secure Shell key"
 msgstr "Ni mogoče ustvariti ključa varne lupine"
-
-#: ssh/generate.vala:101
-msgid "Creating Secure Shell Key"
-msgstr "Ustvarjanje ključa varne lupine"
 
 #: ssh/key-length-chooser.vala:92
 msgid "1024 bits"
@@ -2278,26 +2271,26 @@ msgstr "(Neprepoznaven ključ varne lupine)"
 msgid "Secure Shell Key"
 msgstr "Ključ varne lupine"
 
-#: ssh/operation.vala:219
+#: ssh/operation.vala:111
 msgid "Remote Host Password"
 msgstr "Geslo oddaljenega gostitelja"
 
-#: ssh/operation.vala:262
+#: ssh/operation.vala:154
 msgid "Enter Key Passphrase"
 msgstr "Vnesite šifrirno geslo ključa"
 
-#: ssh/operation.vala:288
+#: ssh/operation.vala:180
 msgid "Passphrase for New Secure Shell Key"
 msgstr "Šifrirno geslo za ključ nove varne lupine"
 
 #. No filename specified, make one up
 #. Add the comment to the output
-#: ssh/operation.vala:321
+#: ssh/operation.vala:213
 #, c-format
 msgid "Importing key: %s"
 msgstr "Uvažanje ključa: %s"
 
-#: ssh/operation.vala:321
+#: ssh/operation.vala:213
 msgid "Importing key. Enter passphrase"
 msgstr "Uvažanje ključa. Vnesite šifrirno geslo"
 
@@ -2328,36 +2321,36 @@ msgstr "Vnesite novo šifrirno geslo za: %s"
 msgid "Enter the new passphrase again: %s"
 msgstr "Ponovno vnesite novo šifrirno geslo: %s"
 
-#: ssh/seahorse-ssh-generate.ui:8
+#: ssh/seahorse-ssh-generate.ui:7
 msgid "New Secure Shell Key"
 msgstr "Nov ključ varne lupine"
 
-#: ssh/seahorse-ssh-generate.ui:55
+#: ssh/seahorse-ssh-generate.ui:38
 msgid "A Secure Shell (SSH) key lets you connect securely to other computers."
 msgstr ""
 "Ključ za varno lupino (SSH) omogoča varno povezovanje z drugimi računalniki."
 
-#: ssh/seahorse-ssh-generate.ui:78
+#: ssh/seahorse-ssh-generate.ui:61
 msgid "_Description"
 msgstr "_Opis"
 
-#: ssh/seahorse-ssh-generate.ui:111
+#: ssh/seahorse-ssh-generate.ui:94
 msgid "Your email address, or a reminder of what this key is for."
 msgstr "Elektronski naslov ali pa opomnik namena izbranega ključa."
 
-#: ssh/seahorse-ssh-generate.ui:148
+#: ssh/seahorse-ssh-generate.ui:131
 msgid "DSA"
 msgstr "DSA"
 
-#: ssh/seahorse-ssh-generate.ui:149
+#: ssh/seahorse-ssh-generate.ui:132
 msgid "ECDSA"
 msgstr "ECDSA"
 
-#: ssh/seahorse-ssh-generate.ui:150
+#: ssh/seahorse-ssh-generate.ui:133
 msgid "ED25519"
 msgstr "ED25519"
 
-#: ssh/seahorse-ssh-generate.ui:195
+#: ssh/seahorse-ssh-generate.ui:178
 msgid ""
 "If there is a computer you want to use this key with, you can set up that "
 "computer to recognize your new key."
@@ -2365,13 +2358,9 @@ msgstr ""
 "V kolikor računalnik, s katerim naj se uporabi ta ključ, že obstaja, je "
 "mogoče nastaviti računalnik, da ključ prepozna."
 
-#: ssh/seahorse-ssh-generate.ui:221
-msgid "_Just Create Key"
-msgstr "_Ustvari ključ"
-
-#: ssh/seahorse-ssh-generate.ui:235
-msgid "_Create and Set Up"
-msgstr "_Ustvarjanje in nastavitve"
+#: ssh/seahorse-ssh-generate.ui:201
+msgid "_Generate"
+msgstr "_Ustvari"
 
 #: ssh/seahorse-ssh-key-properties.ui:11
 msgid "SSH Key Properties"
@@ -2477,6 +2466,21 @@ msgstr "Ni mogoče nastaviti ključa varne lupine na oddaljenem računalniku."
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "Poteka nastavljanje ključev varne lupine …"
+
+#, c-format
+#~ msgid "Search was not specific enough. Server “%s” found too many keys."
+#~ msgstr ""
+#~ "Iskanje ni bilo dovolj podrobno. Strežnik »%s« je našel preveč ključev."
+
+#, c-format
+#~ msgid "Couldn’t communicate with server “%s”: %s"
+#~ msgstr "Ni se mogoče povezati s strežnikom »%s«: %s"
+
+#~ msgid "_Just Create Key"
+#~ msgstr "_Ustvari ključ"
+
+#~ msgid "_Create and Set Up"
+#~ msgstr "_Ustvarjanje in nastavitve"
 
 #~ msgid "Seahorse"
 #~ msgstr "Seahorse"
