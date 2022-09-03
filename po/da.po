@@ -23,8 +23,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2022-03-07 22:40+0000\n"
-"PO-Revision-Date: 2022-03-11 19:18+0100\n"
+"POT-Creation-Date: 2022-07-12 10:41+0000\n"
+"PO-Revision-Date: 2022-08-29 18:52+0200\n"
 "Last-Translator: Alan Mortensen <alanmortensen.am@gmail.com>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
 "Language: da\n"
@@ -81,7 +81,7 @@ msgstr "Vælg datoen fra en kalender"
 #: pgp/seahorse-gpgme-revoke-dialog.ui:74 pgp/seahorse-keyserver-sync.ui:79
 #: pgp/seahorse-revoke.ui:73 pkcs11/pkcs11-request.vala:55
 #: pkcs11/pkcs11-request.vala:106 src/import-dialog.vala:34
-#: src/key-manager.vala:270
+#: src/key-manager.vala:270 ssh/seahorse-ssh-generate.ui:193
 msgid "_Cancel"
 msgstr "_Annullér"
 
@@ -464,7 +464,7 @@ msgstr ""
 "din adgangsfrase, så du ikke behøver blive ved med at skrive den, samt "
 "sikkerhedskopiere dine nøgler og nøglering."
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:202
+#: data/org.gnome.seahorse.Application.appdata.xml.in:220
 msgid "The GNOME Project"
 msgstr "GNOME-projektet"
 
@@ -840,7 +840,7 @@ msgstr "Opret den nye bruger-ID"
 msgid "Decryption failed. You probably do not have the decryption key."
 msgstr "Dekryptering slog fejl. Du har sandsynligvis ikke dekrypteringsnøglen."
 
-#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:477
+#: pgp/seahorse-gpgme.c:73
 msgid "The operation was cancelled"
 msgstr "Handlingen blev annulleret"
 
@@ -886,7 +886,7 @@ msgid "PGP keys"
 msgstr "PGP-nøgler"
 
 #: pgp/seahorse-gpgme-generate-dialog.c:81 pkcs11/pkcs11-generate.vala:60
-#: ssh/seahorse-ssh-generate.ui:147
+#: ssh/seahorse-ssh-generate.ui:130
 msgid "RSA"
 msgstr "RSA"
 
@@ -947,11 +947,11 @@ msgstr "_Avancerede nøgleindstillinger"
 msgid "_Comment"
 msgstr "_Kommentar"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:169 ssh/seahorse-ssh-generate.ui:127
+#: pgp/seahorse-gpgme-generate-dialog.ui:169 ssh/seahorse-ssh-generate.ui:110
 msgid "Encryption _Type"
 msgstr "Krypterings_type"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:199 ssh/seahorse-ssh-generate.ui:164
+#: pgp/seahorse-gpgme-generate-dialog.ui:199 ssh/seahorse-ssh-generate.ui:147
 msgid "Key _Strength (bits)"
 msgstr "Nøgle_styrke (bit)"
 
@@ -1301,18 +1301,6 @@ msgstr "Ukendt"
 #: pgp/seahorse-gpgme-subkey.c:86
 msgid "ElGamal"
 msgstr "ElGamal"
-
-#: pgp/seahorse-hkp-source.c:499
-#, c-format
-msgid "Search was not specific enough. Server “%s” found too many keys."
-msgstr ""
-"Søgningen var ikke tilstrækkeligt specifik. Serveren “%s” fandt for mange "
-"nøgler."
-
-#: pgp/seahorse-hkp-source.c:503
-#, c-format
-msgid "Couldn’t communicate with server “%s”: %s"
-msgstr "Kunne ikke kommunikere med serveren “%s”: %s"
 
 #: pgp/seahorse-keyserver-results.c:62
 #, c-format
@@ -2014,12 +2002,12 @@ msgstr "Data som skal importeres"
 msgid "_Import"
 msgstr "_Importér"
 
-#: src/import-dialog.vala:74
+#: src/import-dialog.vala:77
 msgid "Import failed"
 msgstr "Import mislykkedes"
 
 #. The prompt
-#: src/key-manager.vala:268 ssh/operation.vala:324
+#: src/key-manager.vala:268 ssh/operation.vala:216
 msgid "Import Key"
 msgstr "Importér nøgle"
 
@@ -2152,11 +2140,15 @@ msgstr "Filter"
 msgid "This collection seems to be empty"
 msgstr "Denne samling lader til at være tom"
 
-#: src/seahorse-key-manager.ui:525
+#: src/seahorse-key-manager.ui:521
+msgid "Add new items"
+msgstr "Tilføj nye elementer"
+
+#: src/seahorse-key-manager.ui:536
 msgid "Keyring is locked"
 msgstr "Nøgleringen er låst"
 
-#: src/seahorse-key-manager.ui:530
+#: src/seahorse-key-manager.ui:541
 msgid "Unlock"
 msgstr "Lås op"
 
@@ -2233,17 +2225,17 @@ msgstr "SSH-nøgle"
 msgid "No public key file is available for this key."
 msgstr "Der er ingen tilgængelig offentlig nøglefil for denne nøgle."
 
-#: ssh/generate.vala:94
+#: ssh/generate.vala:85
+msgid "Creating Secure Shell Key"
+msgstr "Genererer SSH-nøgle"
+
+#: ssh/generate.vala:93
 msgid "Couldn’t load newly generated Secure Shell key"
 msgstr "Kunne ikke indlæse nylig oprettet SSH-nøgle"
 
-#: ssh/generate.vala:98
+#: ssh/generate.vala:96
 msgid "Couldn’t generate Secure Shell key"
 msgstr "Kunne ikke generere SSH-nøgle"
-
-#: ssh/generate.vala:101
-msgid "Creating Secure Shell Key"
-msgstr "Genererer SSH-nøgle"
 
 #: ssh/key-length-chooser.vala:92
 msgid "1024 bits"
@@ -2295,26 +2287,26 @@ msgstr "(Ulæselig SSH-nøgle)"
 msgid "Secure Shell Key"
 msgstr "SSH-nøgle"
 
-#: ssh/operation.vala:219
+#: ssh/operation.vala:111
 msgid "Remote Host Password"
 msgstr "Adgangskode for ekstern vært"
 
-#: ssh/operation.vala:262
+#: ssh/operation.vala:154
 msgid "Enter Key Passphrase"
 msgstr "Skriv nøgleadgangsfrase"
 
-#: ssh/operation.vala:288
+#: ssh/operation.vala:180
 msgid "Passphrase for New Secure Shell Key"
 msgstr "Adgangsfrase til ny SSH-nøgle"
 
 #. No filename specified, make one up
 #. Add the comment to the output
-#: ssh/operation.vala:321
+#: ssh/operation.vala:213
 #, c-format
 msgid "Importing key: %s"
 msgstr "Importerer nøgle: %s"
 
-#: ssh/operation.vala:321
+#: ssh/operation.vala:213
 msgid "Importing key. Enter passphrase"
 msgstr "Importerer nøgle. Skriv adgangsfrase"
 
@@ -2345,38 +2337,38 @@ msgstr "Skriv den nye adgangsfrase til: %s"
 msgid "Enter the new passphrase again: %s"
 msgstr "Skriv den nye adgangsfrase igen: %s"
 
-#: ssh/seahorse-ssh-generate.ui:8
+#: ssh/seahorse-ssh-generate.ui:7
 msgid "New Secure Shell Key"
 msgstr "Ny SSH-nøgle"
 
-#: ssh/seahorse-ssh-generate.ui:55
+#: ssh/seahorse-ssh-generate.ui:38
 msgid "A Secure Shell (SSH) key lets you connect securely to other computers."
 msgstr ""
 "En Secure Shell-nøgle (SSH-nøgle) lader dig forbinde sikkert til andre "
 "computere."
 
-#: ssh/seahorse-ssh-generate.ui:78
+#: ssh/seahorse-ssh-generate.ui:61
 msgid "_Description"
 msgstr "_Beskrivelse"
 
-#: ssh/seahorse-ssh-generate.ui:111
+#: ssh/seahorse-ssh-generate.ui:94
 msgid "Your email address, or a reminder of what this key is for."
 msgstr ""
 "Din e-mailadresse, eller en påmindelse om hvad denne nøgle er beregnet til."
 
-#: ssh/seahorse-ssh-generate.ui:148
+#: ssh/seahorse-ssh-generate.ui:131
 msgid "DSA"
 msgstr "DSA"
 
-#: ssh/seahorse-ssh-generate.ui:149
+#: ssh/seahorse-ssh-generate.ui:132
 msgid "ECDSA"
 msgstr "ECDSA"
 
-#: ssh/seahorse-ssh-generate.ui:150
+#: ssh/seahorse-ssh-generate.ui:133
 msgid "ED25519"
 msgstr "ED25519"
 
-#: ssh/seahorse-ssh-generate.ui:195
+#: ssh/seahorse-ssh-generate.ui:178
 msgid ""
 "If there is a computer you want to use this key with, you can set up that "
 "computer to recognize your new key."
@@ -2384,13 +2376,9 @@ msgstr ""
 "Hvis der er en computer, du vil bruge denne nøgle med, kan du sætte den "
 "computer op til at genkende din nye nøgle."
 
-#: ssh/seahorse-ssh-generate.ui:221
-msgid "_Just Create Key"
-msgstr "Opret _kun nøgle"
-
-#: ssh/seahorse-ssh-generate.ui:235
-msgid "_Create and Set Up"
-msgstr "_Opret og konfigurér"
+#: ssh/seahorse-ssh-generate.ui:201
+msgid "_Generate"
+msgstr "_Generér"
 
 #: ssh/seahorse-ssh-key-properties.ui:11
 msgid "SSH Key Properties"
@@ -2495,6 +2483,20 @@ msgstr "Kunne ikke konfigurere SSH-nøgler på den eksterne computer."
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "Konfigurerer SSH-nøgler …"
+
+#~ msgid "Search was not specific enough. Server “%s” found too many keys."
+#~ msgstr ""
+#~ "Søgningen var ikke tilstrækkeligt specifik. Serveren “%s” fandt for mange "
+#~ "nøgler."
+
+#~ msgid "Couldn’t communicate with server “%s”: %s"
+#~ msgstr "Kunne ikke kommunikere med serveren “%s”: %s"
+
+#~ msgid "_Just Create Key"
+#~ msgstr "Opret _kun nøgle"
+
+#~ msgid "_Create and Set Up"
+#~ msgstr "_Opret og konfigurér"
 
 #~ msgid "Seahorse"
 #~ msgstr "Seahorse"
