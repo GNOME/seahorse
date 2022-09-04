@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2022-02-13 08:25+0000\n"
-"PO-Revision-Date: 2022-03-02 20:42+0900\n"
+"POT-Creation-Date: 2022-07-12 10:41+0000\n"
+"PO-Revision-Date: 2022-09-03 23:10+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Korean <gnome-kr@googlegroups.com>\n"
 "Language: ko\n"
@@ -72,7 +72,7 @@ msgstr "달력에서 날짜 선택"
 #: pgp/seahorse-gpgme-revoke-dialog.ui:74 pgp/seahorse-keyserver-sync.ui:79
 #: pgp/seahorse-revoke.ui:73 pkcs11/pkcs11-request.vala:55
 #: pkcs11/pkcs11-request.vala:106 src/import-dialog.vala:34
-#: src/key-manager.vala:270
+#: src/key-manager.vala:270 ssh/seahorse-ssh-generate.ui:193
 msgid "_Cancel"
 msgstr "취소(_C)"
 
@@ -447,16 +447,14 @@ msgstr ""
 "할 수 있고, 키 서버에 키를 공개하거나 가져올 수 있고, 암호를 임시 저장해서 반"
 "복해서 타이핑할 필요가 없게 해 주고, 키와 키 모음을 백업할 수 있습니다."
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:202
+#: data/org.gnome.seahorse.Application.appdata.xml.in:220
 msgid "The GNOME Project"
 msgstr "그놈 프로젝트"
 
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.seahorse.Application.desktop.in.in:6
-msgid "keyring;encryption;security;sign;ssh;"
-msgstr ""
-"keyring;키모음;키링;encryption;암호화;security;보안;sign;서명;사인;ssh;보안"
-"셸;보안쉘;"
+msgid "keyring;encryption;security;sign;ssh;gpg;pgp;"
+msgstr "keyring;키모음;키링;encryption;암호화;security;보안;sign;서명;사인;ssh;보안셸;보안쉘;gpg;pgp;"
 
 #: gkr/gkr-backend.vala:43
 msgid "Stored personal passwords, credentials and secrets"
@@ -820,7 +818,7 @@ msgstr "새 사용자 아이디를 만듭니다"
 msgid "Decryption failed. You probably do not have the decryption key."
 msgstr "암호화 해제가 실패했습니다. 해제 키를 가지고 있지 않은 것 같습니다."
 
-#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:477
+#: pgp/seahorse-gpgme.c:73
 msgid "The operation was cancelled"
 msgstr "작업이 취소되었습니다"
 
@@ -867,7 +865,7 @@ msgid "PGP keys"
 msgstr "PGP 키"
 
 #: pgp/seahorse-gpgme-generate-dialog.c:81 pkcs11/pkcs11-generate.vala:60
-#: ssh/seahorse-ssh-generate.ui:147
+#: ssh/seahorse-ssh-generate.ui:130
 msgid "RSA"
 msgstr "RSA"
 
@@ -929,11 +927,11 @@ msgstr "고급 키 옵션(_A)"
 msgid "_Comment"
 msgstr "설명(_C)"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:169 ssh/seahorse-ssh-generate.ui:127
+#: pgp/seahorse-gpgme-generate-dialog.ui:169 ssh/seahorse-ssh-generate.ui:110
 msgid "Encryption _Type"
 msgstr "암호화 종류(_T)"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:199 ssh/seahorse-ssh-generate.ui:164
+#: pgp/seahorse-gpgme-generate-dialog.ui:199 ssh/seahorse-ssh-generate.ui:147
 msgid "Key _Strength (bits)"
 msgstr "키 강도(_S) (비트수)"
 
@@ -1276,18 +1274,6 @@ msgstr "알 수 없음"
 #: pgp/seahorse-gpgme-subkey.c:86
 msgid "ElGamal"
 msgstr "ElGamal"
-
-#: pgp/seahorse-hkp-source.c:499
-#, c-format
-msgid "Search was not specific enough. Server “%s” found too many keys."
-msgstr ""
-"검색 기준이 구체적이지 않습니다. “%s” 서버에서 해당 기준에 맞는 키가 너무 많"
-"습니다."
-
-#: pgp/seahorse-hkp-source.c:503
-#, c-format
-msgid "Couldn’t communicate with server “%s”: %s"
-msgstr "“%s” 서버와 통신할 수 없습니다: %s"
 
 #: pgp/seahorse-keyserver-results.c:62
 #, c-format
@@ -1979,12 +1965,12 @@ msgstr "가져온 데이터"
 msgid "_Import"
 msgstr "가져오기(_I)"
 
-#: src/import-dialog.vala:74
+#: src/import-dialog.vala:77
 msgid "Import failed"
 msgstr "가져오기 실패"
 
 #. The prompt
-#: src/key-manager.vala:268 ssh/operation.vala:324
+#: src/key-manager.vala:268 ssh/operation.vala:216
 msgid "Import Key"
 msgstr "키 가져오기"
 
@@ -2117,11 +2103,15 @@ msgstr "필터"
 msgid "This collection seems to be empty"
 msgstr "이 모음은 비어 있습니다"
 
-#: src/seahorse-key-manager.ui:525
+#: src/seahorse-key-manager.ui:521
+msgid "Add new items"
+msgstr "새 항목 추가"
+
+#: src/seahorse-key-manager.ui:536
 msgid "Keyring is locked"
 msgstr "키 모음이 잠겨 있습니다"
 
-#: src/seahorse-key-manager.ui:530
+#: src/seahorse-key-manager.ui:541
 msgid "Unlock"
 msgstr "풀기"
 
@@ -2195,17 +2185,17 @@ msgstr "SSH 키"
 msgid "No public key file is available for this key."
 msgstr "이 키에 대해 공개 키 파일이 없습니다."
 
-#: ssh/generate.vala:94
+#: ssh/generate.vala:85
+msgid "Creating Secure Shell Key"
+msgstr "보안 셸 키를 만드는 중"
+
+#: ssh/generate.vala:93
 msgid "Couldn’t load newly generated Secure Shell key"
 msgstr "새로 만든 보안 셸 키를 읽어들일 수 없습니다"
 
-#: ssh/generate.vala:98
+#: ssh/generate.vala:96
 msgid "Couldn’t generate Secure Shell key"
 msgstr "보안 셸 키를 만들 수 없습니다"
-
-#: ssh/generate.vala:101
-msgid "Creating Secure Shell Key"
-msgstr "보안 셸 키를 만드는 중"
 
 #: ssh/key-length-chooser.vala:92
 msgid "1024 bits"
@@ -2257,26 +2247,26 @@ msgstr "(보안 셸 키를 읽을 수 없습니다)"
 msgid "Secure Shell Key"
 msgstr "보안 셸 키"
 
-#: ssh/operation.vala:219
+#: ssh/operation.vala:111
 msgid "Remote Host Password"
 msgstr "원격 호스트 암호"
 
-#: ssh/operation.vala:262
+#: ssh/operation.vala:154
 msgid "Enter Key Passphrase"
 msgstr "키 암호를 입력하십시오"
 
-#: ssh/operation.vala:288
+#: ssh/operation.vala:180
 msgid "Passphrase for New Secure Shell Key"
 msgstr "새 보안 셸 키의 암호"
 
 #. No filename specified, make one up
 #. Add the comment to the output
-#: ssh/operation.vala:321
+#: ssh/operation.vala:213
 #, c-format
 msgid "Importing key: %s"
 msgstr "키를 가져오는 중: %s"
 
-#: ssh/operation.vala:321
+#: ssh/operation.vala:213
 msgid "Importing key. Enter passphrase"
 msgstr "키를 가져오는 중입니다. 암호를 입력하십시오"
 
@@ -2307,39 +2297,39 @@ msgstr "다음에 대한 새 암호를 입력하십시오: %s"
 msgid "Enter the new passphrase again: %s"
 msgstr "새 암호를 다시 입력하십시오: %s"
 
-#: ssh/seahorse-ssh-generate.ui:8
+#: ssh/seahorse-ssh-generate.ui:7
 msgid "New Secure Shell Key"
 msgstr "새 보안 셸 키"
 
-#: ssh/seahorse-ssh-generate.ui:55
+#: ssh/seahorse-ssh-generate.ui:38
 msgid "A Secure Shell (SSH) key lets you connect securely to other computers."
 msgstr ""
 "보안 셸(SSH) 키를 이용하면 신뢰하는 컴퓨터에 안전하게 SSH를 이용해 연결할 수 "
 "있습니다."
 
-#: ssh/seahorse-ssh-generate.ui:78
+#: ssh/seahorse-ssh-generate.ui:61
 msgid "_Description"
 msgstr "설명(_D)"
 
-#: ssh/seahorse-ssh-generate.ui:111
+#: ssh/seahorse-ssh-generate.ui:94
 msgid "Your email address, or a reminder of what this key is for."
 msgstr ""
 "자기 전자메일 주소를 사용하거나, 기타 이 키의 용도가 무엇인지 알 수 있는 말"
 "을 사용하십시오."
 
-#: ssh/seahorse-ssh-generate.ui:148
+#: ssh/seahorse-ssh-generate.ui:131
 msgid "DSA"
 msgstr "DSA"
 
-#: ssh/seahorse-ssh-generate.ui:149
+#: ssh/seahorse-ssh-generate.ui:132
 msgid "ECDSA"
 msgstr "ECDSA"
 
-#: ssh/seahorse-ssh-generate.ui:150
+#: ssh/seahorse-ssh-generate.ui:133
 msgid "ED25519"
 msgstr "ED25519"
 
-#: ssh/seahorse-ssh-generate.ui:195
+#: ssh/seahorse-ssh-generate.ui:178
 msgid ""
 "If there is a computer you want to use this key with, you can set up that "
 "computer to recognize your new key."
@@ -2347,13 +2337,9 @@ msgstr ""
 "이 키를 어떤 컴퓨터에서 이용하려면, 지금 그 컴퓨터를 설정해서 이 키를 인식하"
 "도록 하십시오."
 
-#: ssh/seahorse-ssh-generate.ui:221
-msgid "_Just Create Key"
-msgstr "키만 만들기(_J)"
-
-#: ssh/seahorse-ssh-generate.ui:235
-msgid "_Create and Set Up"
-msgstr "만들고 설정(_C)"
+#: ssh/seahorse-ssh-generate.ui:201
+msgid "_Generate"
+msgstr "만들기(_G)"
 
 #: ssh/seahorse-ssh-key-properties.ui:11
 msgid "SSH Key Properties"
