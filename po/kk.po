@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2022-03-07 22:40+0000\n"
-"PO-Revision-Date: 2022-03-12 23:00+0500\n"
+"POT-Creation-Date: 2022-07-12 10:41+0000\n"
+"PO-Revision-Date: 2022-09-18 09:49+0600\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <kk_KZ@googlegroups.com>\n"
 "Language: kk\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.1.1\n"
 
 #: common/add-keyserver-dialog.vala:32
 msgid "Add Key Server"
@@ -65,7 +65,7 @@ msgstr "Күнтізбеден күнді таңдаңыз"
 #: pgp/seahorse-gpgme-revoke-dialog.ui:74 pgp/seahorse-keyserver-sync.ui:79
 #: pgp/seahorse-revoke.ui:73 pkcs11/pkcs11-request.vala:55
 #: pkcs11/pkcs11-request.vala:106 src/import-dialog.vala:34
-#: src/key-manager.vala:270
+#: src/key-manager.vala:270 ssh/seahorse-ssh-generate.ui:193
 msgid "_Cancel"
 msgstr "Ба_с тарту"
 
@@ -437,7 +437,7 @@ msgstr ""
 "кэштеу, кілттер және кілттер бауының қор көшірмелерін жасау әрекеттерін "
 "жасай аласыз."
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:202
+#: data/org.gnome.seahorse.Application.appdata.xml.in:220
 msgid "The GNOME Project"
 msgstr "GNOME жобасы"
 
@@ -810,7 +810,7 @@ msgstr ""
 msgid "Decryption failed. You probably do not have the decryption key."
 msgstr ""
 
-#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:477
+#: pgp/seahorse-gpgme.c:73
 msgid "The operation was cancelled"
 msgstr "Әрекеттен бас тартылды"
 
@@ -856,7 +856,7 @@ msgid "PGP keys"
 msgstr "PGP кілттері"
 
 #: pgp/seahorse-gpgme-generate-dialog.c:81 pkcs11/pkcs11-generate.vala:60
-#: ssh/seahorse-ssh-generate.ui:147
+#: ssh/seahorse-ssh-generate.ui:130
 msgid "RSA"
 msgstr "RSA"
 
@@ -911,11 +911,11 @@ msgstr ""
 msgid "_Comment"
 msgstr "Тү_сіндірме"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:169 ssh/seahorse-ssh-generate.ui:127
+#: pgp/seahorse-gpgme-generate-dialog.ui:169 ssh/seahorse-ssh-generate.ui:110
 msgid "Encryption _Type"
 msgstr "Шифрлеу _түрі"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:199 ssh/seahorse-ssh-generate.ui:164
+#: pgp/seahorse-gpgme-generate-dialog.ui:199 ssh/seahorse-ssh-generate.ui:147
 msgid "Key _Strength (bits)"
 msgstr "Кілт қа_таңдығы (бит)"
 
@@ -1154,7 +1154,7 @@ msgstr ""
 
 #: pgp/seahorse-gpgme-sign-dialog.ui:6
 msgid "Sign Key"
-msgstr ""
+msgstr "Кілтке қолтаңба қою"
 
 #: pgp/seahorse-gpgme-sign-dialog.ui:25
 msgid "By signing you indicate your trust that this key belongs to:"
@@ -1240,16 +1240,6 @@ msgstr "Белгісіз"
 msgid "ElGamal"
 msgstr "ElGamal"
 
-#: pgp/seahorse-hkp-source.c:499
-#, c-format
-msgid "Search was not specific enough. Server “%s” found too many keys."
-msgstr ""
-
-#: pgp/seahorse-hkp-source.c:503
-#, c-format
-msgid "Couldn’t communicate with server “%s”: %s"
-msgstr ""
-
 #: pgp/seahorse-keyserver-results.c:62
 #, c-format
 msgid "Couldn’t import key: %s"
@@ -1257,7 +1247,7 @@ msgstr ""
 
 #: pgp/seahorse-keyserver-results.c:66
 msgid "Key import succeeded"
-msgstr ""
+msgstr "Кілтті импорттау сәтті аяқталды"
 
 #: pgp/seahorse-keyserver-results.c:154
 msgid "Import"
@@ -1265,11 +1255,11 @@ msgstr "Импорттау"
 
 #: pgp/seahorse-keyserver-results.c:156
 msgid "Can’t import key"
-msgstr ""
+msgstr "Кілтті импорттау мүмкін емес"
 
 #: pgp/seahorse-keyserver-results.c:226
 msgid "Remote keys"
-msgstr ""
+msgstr "Қашықтағы кілттер"
 
 #: pgp/seahorse-keyserver-results.c:228
 #, c-format
@@ -1930,12 +1920,12 @@ msgstr "Импортталатын деректер"
 msgid "_Import"
 msgstr "И_мпорттау"
 
-#: src/import-dialog.vala:74
+#: src/import-dialog.vala:77
 msgid "Import failed"
 msgstr "Импорттау сәтсіз аяқталды"
 
 #. The prompt
-#: src/key-manager.vala:268 ssh/operation.vala:324
+#: src/key-manager.vala:268 ssh/operation.vala:216
 msgid "Import Key"
 msgstr "Кілтті импорттау"
 
@@ -2068,11 +2058,15 @@ msgstr "Сүзгі"
 msgid "This collection seems to be empty"
 msgstr ""
 
-#: src/seahorse-key-manager.ui:525
+#: src/seahorse-key-manager.ui:521
+msgid "Add new items"
+msgstr "Жаңа элементтерді қосу"
+
+#: src/seahorse-key-manager.ui:536
 msgid "Keyring is locked"
 msgstr "Кілттер бауы бұғатталған"
 
-#: src/seahorse-key-manager.ui:530
+#: src/seahorse-key-manager.ui:541
 msgid "Unlock"
 msgstr "Босату"
 
@@ -2146,17 +2140,17 @@ msgstr "SSH кілті"
 msgid "No public key file is available for this key."
 msgstr ""
 
-#: ssh/generate.vala:94
+#: ssh/generate.vala:85
+msgid "Creating Secure Shell Key"
+msgstr "Қауіпсіз қоршам кілтін жасау"
+
+#: ssh/generate.vala:93
 msgid "Couldn’t load newly generated Secure Shell key"
 msgstr "Жаңа генерацияланған қауіпсіз қоршам кілтін жүктеу мүмкін емес"
 
-#: ssh/generate.vala:98
+#: ssh/generate.vala:96
 msgid "Couldn’t generate Secure Shell key"
 msgstr "Қауіпсіз қоршам кілтін генерациялау мүмкін емес"
-
-#: ssh/generate.vala:101
-msgid "Creating Secure Shell Key"
-msgstr "Қауіпсіз қоршам кілтін жасау"
 
 #: ssh/key-length-chooser.vala:92
 msgid "1024 bits"
@@ -2208,26 +2202,26 @@ msgstr ""
 msgid "Secure Shell Key"
 msgstr "Қауіпсіз қоршам кілті"
 
-#: ssh/operation.vala:219
+#: ssh/operation.vala:111
 msgid "Remote Host Password"
 msgstr "Қашықтағы хост паролі"
 
-#: ssh/operation.vala:262
+#: ssh/operation.vala:154
 msgid "Enter Key Passphrase"
 msgstr "Кілттік кілттік фразасын енгізіңіз"
 
-#: ssh/operation.vala:288
+#: ssh/operation.vala:180
 msgid "Passphrase for New Secure Shell Key"
 msgstr "Жаңа қауіпсіз қоршам кілті үшін кілттік фраза"
 
 #. No filename specified, make one up
 #. Add the comment to the output
-#: ssh/operation.vala:321
+#: ssh/operation.vala:213
 #, c-format
 msgid "Importing key: %s"
 msgstr "Кілтті импорттау: %s"
 
-#: ssh/operation.vala:321
+#: ssh/operation.vala:213
 msgid "Importing key. Enter passphrase"
 msgstr "Кілтті импорттау. Кілттік фразаны енгізіңіз"
 
@@ -2258,47 +2252,43 @@ msgstr ""
 msgid "Enter the new passphrase again: %s"
 msgstr ""
 
-#: ssh/seahorse-ssh-generate.ui:8
+#: ssh/seahorse-ssh-generate.ui:7
 msgid "New Secure Shell Key"
 msgstr "Жаңа қауіпсіз қоршам кілті"
 
-#: ssh/seahorse-ssh-generate.ui:55
+#: ssh/seahorse-ssh-generate.ui:38
 msgid "A Secure Shell (SSH) key lets you connect securely to other computers."
 msgstr ""
 
-#: ssh/seahorse-ssh-generate.ui:78
+#: ssh/seahorse-ssh-generate.ui:61
 msgid "_Description"
 msgstr "Си_паттамасы"
 
-#: ssh/seahorse-ssh-generate.ui:111
+#: ssh/seahorse-ssh-generate.ui:94
 msgid "Your email address, or a reminder of what this key is for."
 msgstr ""
 
-#: ssh/seahorse-ssh-generate.ui:148
+#: ssh/seahorse-ssh-generate.ui:131
 msgid "DSA"
 msgstr "DSA"
 
-#: ssh/seahorse-ssh-generate.ui:149
+#: ssh/seahorse-ssh-generate.ui:132
 msgid "ECDSA"
 msgstr "ECDSA"
 
-#: ssh/seahorse-ssh-generate.ui:150
+#: ssh/seahorse-ssh-generate.ui:133
 msgid "ED25519"
 msgstr "ED25519"
 
-#: ssh/seahorse-ssh-generate.ui:195
+#: ssh/seahorse-ssh-generate.ui:178
 msgid ""
 "If there is a computer you want to use this key with, you can set up that "
 "computer to recognize your new key."
 msgstr ""
 
-#: ssh/seahorse-ssh-generate.ui:221
-msgid "_Just Create Key"
-msgstr "_Тек кілтті жасау"
-
-#: ssh/seahorse-ssh-generate.ui:235
-msgid "_Create and Set Up"
-msgstr "Жа_сау және баптау"
+#: ssh/seahorse-ssh-generate.ui:201
+msgid "_Generate"
+msgstr "_Генерациялау"
 
 #: ssh/seahorse-ssh-key-properties.ui:11
 msgid "SSH Key Properties"
@@ -2401,6 +2391,12 @@ msgstr "Қашықтағы компьютерде қауіпсіз қоршам 
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "Қауіпсіз қоршам кілттерін баптау…"
+
+#~ msgid "_Just Create Key"
+#~ msgstr "_Тек кілтті жасау"
+
+#~ msgid "_Create and Set Up"
+#~ msgstr "Жа_сау және баптау"
 
 #~ msgid "Seahorse"
 #~ msgstr "Seahorse"
