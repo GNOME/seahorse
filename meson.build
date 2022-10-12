@@ -83,7 +83,7 @@ avahi_client = dependency('avahi-client', required: get_option('key-sharing'))
 avahi_glib = dependency('avahi-glib', version: '>= 0.6', required: get_option('key-sharing'))
 
 if get_option('key-sharing')
-  message('NOTE: key-sharing over DNS-SD will possibly be removed in the feature')
+  message('NOTE: key-sharing over DNS-SD will possibly be removed in the future')
 endif
 
 
