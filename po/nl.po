@@ -35,8 +35,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2022-03-07 22:40+0000\n"
-"PO-Revision-Date: 2022-03-25 11:01+0100\n"
+"POT-Creation-Date: 2022-10-14 07:35+0000\n"
+"PO-Revision-Date: 2022-11-02 00:26+0100\n"
 "Last-Translator: Nathan Follens <nfollens@gnome.org>\n"
 "Language-Team: Dutch <gnome-nl-list@gnome.org>\n"
 "Language: nl\n"
@@ -45,7 +45,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Launchpad-Export-Date: 2013-02-02 09:00+0000\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.1.1\n"
 
 #: common/add-keyserver-dialog.vala:32
 msgid "Add Key Server"
@@ -94,7 +94,7 @@ msgstr "De datum van een kalender selecteren"
 #: pgp/seahorse-gpgme-revoke-dialog.ui:74 pgp/seahorse-keyserver-sync.ui:79
 #: pgp/seahorse-revoke.ui:73 pkcs11/pkcs11-request.vala:55
 #: pkcs11/pkcs11-request.vala:106 src/import-dialog.vala:34
-#: src/key-manager.vala:270
+#: src/key-manager.vala:270 ssh/seahorse-ssh-generate.ui:193
 msgid "_Cancel"
 msgstr "Annu_leren"
 
@@ -478,7 +478,7 @@ msgstr ""
 "bewaren zodat u dit niet steeds hoeft in te typen, en een reservekopie maken "
 "van uw sleutels en sleutelbos."
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:202
+#: data/org.gnome.seahorse.Application.appdata.xml.in:241
 msgid "The GNOME Project"
 msgstr "Het Gnome-project"
 
@@ -857,7 +857,7 @@ msgstr ""
 "Ontsleutelen mislukt. Waarschijnlijk is de sleutel voor ontsleutelen niet "
 "beschikbaar."
 
-#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:477
+#: pgp/seahorse-gpgme.c:73
 msgid "The operation was cancelled"
 msgstr "De bewerking werd geannuleerd"
 
@@ -903,7 +903,7 @@ msgid "PGP keys"
 msgstr "PGP-sleutels"
 
 #: pgp/seahorse-gpgme-generate-dialog.c:81 pkcs11/pkcs11-generate.vala:60
-#: ssh/seahorse-ssh-generate.ui:147
+#: ssh/seahorse-ssh-generate.ui:130
 msgid "RSA"
 msgstr "RSA"
 
@@ -965,11 +965,11 @@ msgstr "Ge_avanceerde sleutelopties"
 msgid "_Comment"
 msgstr "_Commentaar"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:169 ssh/seahorse-ssh-generate.ui:127
+#: pgp/seahorse-gpgme-generate-dialog.ui:169 ssh/seahorse-ssh-generate.ui:110
 msgid "Encryption _Type"
 msgstr "Versleutelings_type"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:199 ssh/seahorse-ssh-generate.ui:164
+#: pgp/seahorse-gpgme-generate-dialog.ui:199 ssh/seahorse-ssh-generate.ui:147
 msgid "Key _Strength (bits)"
 msgstr "_Sleutelsterkte (bits)"
 
@@ -1326,16 +1326,6 @@ msgstr "Onbekend"
 #: pgp/seahorse-gpgme-subkey.c:86
 msgid "ElGamal"
 msgstr "ElGamal"
-
-#: pgp/seahorse-hkp-source.c:499
-#, c-format
-msgid "Search was not specific enough. Server “%s” found too many keys."
-msgstr "Te algemene zoekopdracht; te veel sleutels gevonden op server ‘%s’."
-
-#: pgp/seahorse-hkp-source.c:503
-#, c-format
-msgid "Couldn’t communicate with server “%s”: %s"
-msgstr "Communiceren met server ‘%s’ mislukt: %s"
 
 #: pgp/seahorse-keyserver-results.c:62
 #, c-format
@@ -2051,12 +2041,12 @@ msgstr "Gegevens om te importeren"
 msgid "_Import"
 msgstr "_Importeren"
 
-#: src/import-dialog.vala:74
+#: src/import-dialog.vala:77
 msgid "Import failed"
 msgstr "Importeren mislukt"
 
 #. The prompt
-#: src/key-manager.vala:268 ssh/operation.vala:324
+#: src/key-manager.vala:268 ssh/operation.vala:216
 msgid "Import Key"
 msgstr "Sleutel importeren"
 
@@ -2189,11 +2179,15 @@ msgstr "Filter"
 msgid "This collection seems to be empty"
 msgstr "Deze verzameling lijkt leeg te zijn"
 
-#: src/seahorse-key-manager.ui:525
+#: src/seahorse-key-manager.ui:521
+msgid "Add new items"
+msgstr "Nieuwe items toevoegen"
+
+#: src/seahorse-key-manager.ui:536
 msgid "Keyring is locked"
 msgstr "Sleutelbos is vergrendeld"
 
-#: src/seahorse-key-manager.ui:530
+#: src/seahorse-key-manager.ui:541
 msgid "Unlock"
 msgstr "Ontgrendelen"
 
@@ -2268,17 +2262,17 @@ msgstr "SSH-sleutel"
 msgid "No public key file is available for this key."
 msgstr "Er is geen publiekesleutelbestand beschikbaar voor deze sleutel."
 
-#: ssh/generate.vala:94
+#: ssh/generate.vala:85
+msgid "Creating Secure Shell Key"
+msgstr "Secure Shell-sleutel aanmaken"
+
+#: ssh/generate.vala:93
 msgid "Couldn’t load newly generated Secure Shell key"
 msgstr "Kon pas gegenereerde Secure Shell-sleutel niet laden"
 
-#: ssh/generate.vala:98
+#: ssh/generate.vala:96
 msgid "Couldn’t generate Secure Shell key"
 msgstr "Genereren van Secure Shell-sleutel mislukt"
-
-#: ssh/generate.vala:101
-msgid "Creating Secure Shell Key"
-msgstr "Secure Shell-sleutel aanmaken"
 
 #: ssh/key-length-chooser.vala:92
 msgid "1024 bits"
@@ -2330,26 +2324,26 @@ msgstr "(Onleesbare Secure Shell-sleutel)"
 msgid "Secure Shell Key"
 msgstr "Secure Shell-sleutel"
 
-#: ssh/operation.vala:219
+#: ssh/operation.vala:111
 msgid "Remote Host Password"
 msgstr "Wachtwoord voor machine op afstand"
 
-#: ssh/operation.vala:262
+#: ssh/operation.vala:154
 msgid "Enter Key Passphrase"
 msgstr "Voer wachtwoord in"
 
-#: ssh/operation.vala:288
+#: ssh/operation.vala:180
 msgid "Passphrase for New Secure Shell Key"
 msgstr "Wachtwoord voor nieuwe Secure Shell-sleutel"
 
 #. No filename specified, make one up
 #. Add the comment to the output
-#: ssh/operation.vala:321
+#: ssh/operation.vala:213
 #, c-format
 msgid "Importing key: %s"
 msgstr "Sleutel importeren: %s"
 
-#: ssh/operation.vala:321
+#: ssh/operation.vala:213
 msgid "Importing key. Enter passphrase"
 msgstr "Sleutel importeren. Voer wachtwoord in"
 
@@ -2380,39 +2374,39 @@ msgstr "Voer het nieuwe wachtwoord in voor: %s"
 msgid "Enter the new passphrase again: %s"
 msgstr "Voer het nieuwe wachtwoord nogmaals in voor: %s"
 
-#: ssh/seahorse-ssh-generate.ui:8
+#: ssh/seahorse-ssh-generate.ui:7
 msgid "New Secure Shell Key"
 msgstr "Nieuwe Secure Shell-sleutel"
 
-#: ssh/seahorse-ssh-generate.ui:55
+#: ssh/seahorse-ssh-generate.ui:38
 msgid "A Secure Shell (SSH) key lets you connect securely to other computers."
 msgstr ""
 "Met een Secure Shell (SSH)-sleutel kunt u op veilige wijze verbinden met "
 "andere computers."
 
-#: ssh/seahorse-ssh-generate.ui:78
+#: ssh/seahorse-ssh-generate.ui:61
 msgid "_Description"
 msgstr "_Beschrijving"
 
-#: ssh/seahorse-ssh-generate.ui:111
+#: ssh/seahorse-ssh-generate.ui:94
 msgid "Your email address, or a reminder of what this key is for."
 msgstr ""
 "Gebruik uw e-mailadres en eventueel  andere geheugensteuntjes om te "
 "onthouden waar deze sleutel voor dient."
 
-#: ssh/seahorse-ssh-generate.ui:148
+#: ssh/seahorse-ssh-generate.ui:131
 msgid "DSA"
 msgstr "DSA"
 
-#: ssh/seahorse-ssh-generate.ui:149
+#: ssh/seahorse-ssh-generate.ui:132
 msgid "ECDSA"
 msgstr "ECDSA"
 
-#: ssh/seahorse-ssh-generate.ui:150
+#: ssh/seahorse-ssh-generate.ui:133
 msgid "ED25519"
 msgstr "ED25519"
 
-#: ssh/seahorse-ssh-generate.ui:195
+#: ssh/seahorse-ssh-generate.ui:178
 msgid ""
 "If there is a computer you want to use this key with, you can set up that "
 "computer to recognize your new key."
@@ -2420,13 +2414,9 @@ msgstr ""
 "Als er een computer is waarvoor u deze sleutel wilt gebruiken, kunt u die "
 "computer nu instellen om uw sleutel te herkennen."
 
-#: ssh/seahorse-ssh-generate.ui:221
-msgid "_Just Create Key"
-msgstr "Alleen sleutel aan_maken"
-
-#: ssh/seahorse-ssh-generate.ui:235
-msgid "_Create and Set Up"
-msgstr "_Aanmaken en instellen"
+#: ssh/seahorse-ssh-generate.ui:201
+msgid "_Generate"
+msgstr "_Genereren"
 
 #: ssh/seahorse-ssh-key-properties.ui:11
 msgid "SSH Key Properties"
@@ -2531,6 +2521,20 @@ msgstr "Instellen van Secure Shell-sleutels op andere computer mislukt."
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "Secure Shell-sleutels configureren…"
+
+#, c-format
+#~ msgid "Search was not specific enough. Server “%s” found too many keys."
+#~ msgstr "Te algemene zoekopdracht; te veel sleutels gevonden op server ‘%s’."
+
+#, c-format
+#~ msgid "Couldn’t communicate with server “%s”: %s"
+#~ msgstr "Communiceren met server ‘%s’ mislukt: %s"
+
+#~ msgid "_Just Create Key"
+#~ msgstr "Alleen sleutel aan_maken"
+
+#~ msgid "_Create and Set Up"
+#~ msgstr "_Aanmaken en instellen"
 
 #~ msgid "Seahorse"
 #~ msgstr "Seahorse"
