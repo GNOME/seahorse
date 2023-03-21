@@ -52,7 +52,7 @@ public interface Seahorse.Place : Gcr.Collection {
     public abstract string description { owned get; }
     public abstract string uri { owned get; }
     public abstract Icon icon { owned get; }
-    public abstract Category category { owned get; }
+    public abstract Category category { get; }
 
     /**
      * In some cases, we do not want to show the Place in the sidebar
