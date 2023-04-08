@@ -4,14 +4,14 @@
 # This file is distributed under the same license as the seahorse package.
 # Nguyễn Thái Ngọc Duy <pclouds@gmail.com>, 2007,2011-2013.
 # Clytie Siddall <clytie@riverland.net.au>, 2006-2009.
-# Trần Ngọc Quân <vnwildman@gmail.com>, 2013-2018, 2020-2022.
+# Trần Ngọc Quân <vnwildman@gmail.com>, 2013-2018, 2020-2023.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: seahorse master\n"
+"Project-Id-Version: seahorse main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2022-03-25 17:10+0000\n"
-"PO-Revision-Date: 2022-04-03 08:22+0700\n"
+"POT-Creation-Date: 2023-03-21 14:45+0000\n"
+"PO-Revision-Date: 2023-04-08 09:06+0700\n"
 "Last-Translator: Trần Ngọc Quân <vnwildman@gmail.com>\n"
 "Language-Team: Vietnamese <gnome-vi-list@gnome.org>\n"
 "Language: vi\n"
@@ -68,7 +68,7 @@ msgstr "Chọn ngày tháng trong một lịch"
 #: pgp/seahorse-gpgme-revoke-dialog.ui:74 pgp/seahorse-keyserver-sync.ui:79
 #: pgp/seahorse-revoke.ui:73 pkcs11/pkcs11-request.vala:55
 #: pkcs11/pkcs11-request.vala:106 src/import-dialog.vala:34
-#: src/key-manager.vala:270
+#: src/key-manager.vala:270 ssh/seahorse-ssh-generate.ui:193
 msgid "_Cancel"
 msgstr "_Thôi"
 
@@ -349,8 +349,8 @@ msgid ""
 "Filter which items to show. If empty, show all items, if “personal” show "
 "personal keys, if “trusted” show trusted."
 msgstr ""
-"Lọc các mục cần hiển thị. Nếu trống, hiển thị tất cả các mục, nếu \"cá nhân"
-"\" hiển thị khóa cá nhân, nếu \"đáng tin cậy\" hiển thị đáng tin cậy."
+"Lọc các mục cần hiển thị. Nếu trống, hiển thị tất cả các mục, nếu \"cá "
+"nhân\" hiển thị khóa cá nhân, nếu \"đáng tin cậy\" hiển thị đáng tin cậy."
 
 #: data/org.gnome.seahorse.manager.gschema.xml:16
 msgid "Width of the side pane"
@@ -379,8 +379,9 @@ msgid ""
 "front of the column name to sort in descending order."
 msgstr ""
 "Chỉ rõ cột để sắp xếp cửa sổ chính của trình quản lý khóa Seahorse theo đó. "
-"Cột là: \"tên\", \"id\", \"hiệu lực\", \"hết hạn\", \"tin tưởng\" và \"kiểu"
-"\". Đặt một \"-\" ở phía trước của tên cột để sắp xếp theo thứ tự giảm dần."
+"Cột là: \"tên\", \"id\", \"hiệu lực\", \"hết hạn\", \"tin tưởng\" và "
+"\"kiểu\". Đặt một \"-\" ở phía trước của tên cột để sắp xếp theo thứ tự giảm "
+"dần."
 
 #: data/org.gnome.seahorse.manager.gschema.xml:34
 msgid "Show validity column"
@@ -449,7 +450,7 @@ msgstr ""
 "mật khẩu mở tập tin khóa do đó bạn không cần phải gõ nó và sao lưu dự phòng "
 "khóa và chùm khóa cho bạn."
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:202
+#: data/org.gnome.seahorse.Application.appdata.xml.in:241
 msgid "The GNOME Project"
 msgstr "Dự án GNOME"
 
@@ -824,7 +825,7 @@ msgstr "Tạo ID người dùng mới"
 msgid "Decryption failed. You probably do not have the decryption key."
 msgstr "Gặp lỗi khi giải mã. Rất có thể là bạn không có khóa giải mã."
 
-#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:477
+#: pgp/seahorse-gpgme.c:73
 msgid "The operation was cancelled"
 msgstr "Thao tác bị hủy"
 
@@ -870,7 +871,7 @@ msgid "PGP keys"
 msgstr "Khóa PGP"
 
 #: pgp/seahorse-gpgme-generate-dialog.c:81 pkcs11/pkcs11-generate.vala:60
-#: ssh/seahorse-ssh-generate.ui:147
+#: ssh/seahorse-ssh-generate.ui:130
 msgid "RSA"
 msgstr "RSA"
 
@@ -931,11 +932,11 @@ msgstr "Tùy chọn khó_a cấp cao"
 msgid "_Comment"
 msgstr "_Chú thích"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:169 ssh/seahorse-ssh-generate.ui:127
+#: pgp/seahorse-gpgme-generate-dialog.ui:169 ssh/seahorse-ssh-generate.ui:110
 msgid "Encryption _Type"
 msgstr "_Kiểu mã hóa"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:199 ssh/seahorse-ssh-generate.ui:164
+#: pgp/seahorse-gpgme-generate-dialog.ui:199 ssh/seahorse-ssh-generate.ui:147
 msgid "Key _Strength (bits)"
 msgstr "Độ _mạnh khóa (bít)"
 
@@ -1279,18 +1280,6 @@ msgstr "Không rõ"
 #: pgp/seahorse-gpgme-subkey.c:86
 msgid "ElGamal"
 msgstr "ElGamal"
-
-#: pgp/seahorse-hkp-source.c:499
-#, c-format
-msgid "Search was not specific enough. Server “%s” found too many keys."
-msgstr ""
-"Chuỗi tìm kiếm không đủ thu hẹp phạm vi nên máy phục vụ “%s” tìm thấy quá "
-"nhiều khóa."
-
-#: pgp/seahorse-hkp-source.c:503
-#, c-format
-msgid "Couldn’t communicate with server “%s”: %s"
-msgstr "Không thể liên lạc với máy phục vụ “%s”: %s"
 
 #: pgp/seahorse-keyserver-results.c:62
 #, c-format
@@ -1981,12 +1970,12 @@ msgstr "Ngày nhập"
 msgid "_Import"
 msgstr "_Nhập vào"
 
-#: src/import-dialog.vala:74
+#: src/import-dialog.vala:77
 msgid "Import failed"
 msgstr "Gặp lỗi khi nhập dữ liệu vào"
 
 #. The prompt
-#: src/key-manager.vala:268 ssh/operation.vala:324
+#: src/key-manager.vala:268 ssh/operation.vala:216
 msgid "Import Key"
 msgstr "Nhập khóa"
 
@@ -2119,11 +2108,15 @@ msgstr "Bộ lọc"
 msgid "This collection seems to be empty"
 msgstr "Bộ sưu tập này có vẻ là đang trống rỗng"
 
-#: src/seahorse-key-manager.ui:525
+#: src/seahorse-key-manager.ui:521
+msgid "Add new items"
+msgstr "Tạo mục mới"
+
+#: src/seahorse-key-manager.ui:536
 msgid "Keyring is locked"
 msgstr "Chùm chìa khóa bị khóa"
 
-#: src/seahorse-key-manager.ui:530
+#: src/seahorse-key-manager.ui:541
 msgid "Unlock"
 msgstr "Mở khóa"
 
@@ -2197,17 +2190,17 @@ msgstr "Khóa SSH"
 msgid "No public key file is available for this key."
 msgstr "Không có khóa công nào sẵn sàng cho khóa này."
 
-#: ssh/generate.vala:94
+#: ssh/generate.vala:85
+msgid "Creating Secure Shell Key"
+msgstr "Đang tạo khóa SSH"
+
+#: ssh/generate.vala:93
 msgid "Couldn’t load newly generated Secure Shell key"
 msgstr "Không thể tải khóa Hệ vỏ bảo mật mới đây"
 
-#: ssh/generate.vala:98
+#: ssh/generate.vala:96
 msgid "Couldn’t generate Secure Shell key"
 msgstr "Không thể tạo ra khóa Hệ vỏ bảo mật"
-
-#: ssh/generate.vala:101
-msgid "Creating Secure Shell Key"
-msgstr "Đang tạo khóa SSH"
 
 #: ssh/key-length-chooser.vala:92
 msgid "1024 bits"
@@ -2259,26 +2252,26 @@ msgstr "(Khóa SSH không đọc được)"
 msgid "Secure Shell Key"
 msgstr "Khóa SSH"
 
-#: ssh/operation.vala:219
+#: ssh/operation.vala:111
 msgid "Remote Host Password"
 msgstr "Mật khẩu máy ở xa"
 
-#: ssh/operation.vala:262
+#: ssh/operation.vala:154
 msgid "Enter Key Passphrase"
 msgstr "Gõ cụm từ mật khẩu khóa"
 
-#: ssh/operation.vala:288
+#: ssh/operation.vala:180
 msgid "Passphrase for New Secure Shell Key"
 msgstr "Cụm từ mật khẩu cho khóa SSH mới"
 
 #. No filename specified, make one up
 #. Add the comment to the output
-#: ssh/operation.vala:321
+#: ssh/operation.vala:213
 #, c-format
 msgid "Importing key: %s"
 msgstr "Đang nhập vào khóa: %s"
 
-#: ssh/operation.vala:321
+#: ssh/operation.vala:213
 msgid "Importing key. Enter passphrase"
 msgstr "Đang nhập vào khóa — gõ cụm từ mật khẩu"
 
@@ -2309,39 +2302,39 @@ msgstr "Gõ cụm từ mật khẩu mới cho: %s"
 msgid "Enter the new passphrase again: %s"
 msgstr "Gõ cụm từ mật khẩu mới lần nữa: %s"
 
-#: ssh/seahorse-ssh-generate.ui:8
+#: ssh/seahorse-ssh-generate.ui:7
 msgid "New Secure Shell Key"
 msgstr "Khóa SSH mới"
 
-#: ssh/seahorse-ssh-generate.ui:55
+#: ssh/seahorse-ssh-generate.ui:38
 msgid "A Secure Shell (SSH) key lets you connect securely to other computers."
 msgstr ""
 "Khóa hệ vỏ bảo mật (SSH) giúp bạn tạo kết nối một cách an toàn đến máy tính "
 "khác."
 
-#: ssh/seahorse-ssh-generate.ui:78
+#: ssh/seahorse-ssh-generate.ui:61
 msgid "_Description"
 msgstr "_Mô tả"
 
-#: ssh/seahorse-ssh-generate.ui:111
+#: ssh/seahorse-ssh-generate.ui:94
 msgid "Your email address, or a reminder of what this key is for."
 msgstr ""
 "Địa chỉ thư điện tử của bạn, hoặc bất cứ lời nhắc nhở nào khác cần thiết để "
 "nhớ mục đích của khóa này."
 
-#: ssh/seahorse-ssh-generate.ui:148
+#: ssh/seahorse-ssh-generate.ui:131
 msgid "DSA"
 msgstr "DSA"
 
-#: ssh/seahorse-ssh-generate.ui:149
+#: ssh/seahorse-ssh-generate.ui:132
 msgid "ECDSA"
 msgstr "ECDSA"
 
-#: ssh/seahorse-ssh-generate.ui:150
+#: ssh/seahorse-ssh-generate.ui:133
 msgid "ED25519"
 msgstr "ED25519"
 
-#: ssh/seahorse-ssh-generate.ui:195
+#: ssh/seahorse-ssh-generate.ui:178
 msgid ""
 "If there is a computer you want to use this key with, you can set up that "
 "computer to recognize your new key."
@@ -2349,13 +2342,9 @@ msgstr ""
 "Có một máy tính với đó bạn muốn sử dụng khóa này thì bạn có thể thiết lập "
 "máy đó để nhận diện khóa của bạn."
 
-#: ssh/seahorse-ssh-generate.ui:221
-msgid "_Just Create Key"
-msgstr "_Chỉ tạo khóa"
-
-#: ssh/seahorse-ssh-generate.ui:235
-msgid "_Create and Set Up"
-msgstr "Tạ_o và Cài đặt"
+#: ssh/seahorse-ssh-generate.ui:201
+msgid "_Generate"
+msgstr "Tạ_o"
 
 #: ssh/seahorse-ssh-key-properties.ui:11
 msgid "SSH Key Properties"
@@ -2460,6 +2449,22 @@ msgstr "Không thể cấu hình khóa SSH trên máy tính từ xa."
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "Đang cấu hình khóa SSH…"
+
+#, c-format
+#~ msgid "Search was not specific enough. Server “%s” found too many keys."
+#~ msgstr ""
+#~ "Chuỗi tìm kiếm không đủ thu hẹp phạm vi nên máy phục vụ “%s” tìm thấy quá "
+#~ "nhiều khóa."
+
+#, c-format
+#~ msgid "Couldn’t communicate with server “%s”: %s"
+#~ msgstr "Không thể liên lạc với máy phục vụ “%s”: %s"
+
+#~ msgid "_Just Create Key"
+#~ msgstr "_Chỉ tạo khóa"
+
+#~ msgid "_Create and Set Up"
+#~ msgstr "Tạ_o và Cài đặt"
 
 #~ msgid "Seahorse"
 #~ msgstr "Seahorse"
