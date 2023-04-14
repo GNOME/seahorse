@@ -43,8 +43,6 @@ enum {
 	PROP_LOADED,
 };
 
-void  seahorse_pkcs11_backend_initialize (void);
-
 static SeahorsePkcs11Backend *pkcs11_backend = NULL;
 
 struct _SeahorsePkcs11Backend {

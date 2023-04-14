@@ -43,4 +43,6 @@ SeahorsePkcs11Backend *  seahorse_pkcs11_backend_get           (void);
 GcrCollection *          seahorse_pkcs11_backend_get_writable_tokens (SeahorsePkcs11Backend *self,
                                                                       gulong with_mechanism);
 
+void  seahorse_pkcs11_backend_initialize (void);
+
 #endif /* SEAHORSE_PKCS11_BACKEND_H_ */
