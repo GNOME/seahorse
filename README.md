@@ -37,8 +37,8 @@ More information
 Seahorse has its own web page on https://wiki.gnome.org/Apps/Seahorse.
 
 To discuss issues with developers and other users, you can go to [GNOME's
-Discourse instance] and use the "seahorse" tag, or join [#seahorse] on
-irc.gnome.org.
+Discourse instance] and use the "seahorse" tag, or join [#gnome-seahorse] on
+irc.libera.chat.
 
 License
 -------
@@ -52,5 +52,5 @@ Seahorse is released under the GPL. See [COPYING] for more info.
 [issue tracker]: https://gitlab.gnome.org/GNOME/seahorse/issues
 [translation project wiki page]: https://wiki.gnome.org/TranslationProject/
 [GNOME's Discourse instance]: https://discourse.gnome.org
-[#seahorse]: irc://irc.gnome.org/seahorse
+[#seahorse]: irc://irc.libera.chat/gnome-seahorse
 [COPYING]: https://gitlab.gnome.org/GNOME/seahorse/COPYING
