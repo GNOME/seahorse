@@ -101,12 +101,12 @@ public class Seahorse.Ssh.KeyData : GLib.Object {
         return result;
     }
 
-    internal static string parse_key_blob (uchar[] bytes) throws GLib.Error {
+    internal static string parse_key_blob(uchar[] bytes) throws GLib.Error {
         string digest = Checksum.compute_for_data(ChecksumType.MD5, bytes);
         if (digest == null)
             throw new Error.GENERAL("Can't calculate fingerprint from key.");
 
-        StringBuilder fingerprint = new StringBuilder.sized((digest.length * 3) / 2);
+        var fingerprint = new StringBuilder.sized((digest.length * 3) / 2);
         for (size_t i = 0; i < digest.length; i += 2) {
             if (i > 0)
                 fingerprint.append_c(':');
@@ -147,7 +147,7 @@ public class Seahorse.Ssh.KeyData : GLib.Object {
         string contents;
         FileUtils.get_contents(filename, out contents);
 
-        StringBuilder results = new StringBuilder();
+        var results = new StringBuilder();
 
         // Load each line
         bool first = true;
@@ -204,54 +204,65 @@ public class Seahorse.Ssh.SecData : GLib.Object {
      *
      * @param data The data that contains a private key.
      */
-    public static SecData parse_data(StringBuilder data) throws GLib.Error {
-        SecData secdata = new SecData();
+    public static SecData parse_data(DataInputStream data, string initial_line) throws GLib.Error {
+        var secdata = new SecData();
 
         // Get the comment
-        if (data.str.has_prefix(SSH_KEY_SECRET_SIG)) {
-            string comment = data.str.split("\n", 2)[0];
-            secdata.comment = comment.substring(SSH_KEY_SECRET_SIG.length).strip();
+        if (initial_line.has_prefix(SSH_KEY_SECRET_SIG)) {
+            secdata.comment = initial_line.substring(SSH_KEY_SECRET_SIG.length).strip();
         }
 
         // First get our raw data (if there is none, don't bother)
-        string rawdata = parse_lines_block(data, SSH_PRIVATE_BEGIN, SSH_PRIVATE_END);
+        string rawdata = parse_lines_block(data, initial_line, SSH_PRIVATE_BEGIN, SSH_PRIVATE_END);
         if (rawdata == null || rawdata == "")
             throw new Error.GENERAL("Private key contains no data.");
 
         secdata.rawdata = rawdata;
 
-        // Guess at the algorithm type
-        secdata.algo = Algorithm.guess_from_string(rawdata);
+        // Guess the algorithm type by searching the base64 decoded data. (we
+        // should properly exclude the start/end line, but it shouldn't harm
+        // too much though afaik). Note that it's definitely not ideal though;
+        // but the openssh format isn't exactly obvious
+        var decoded = Base64.decode(rawdata.offset(initial_line.length));
+        for (uint i = 0; i < decoded.length - 3; i++) {
+            unowned var str = ((string) decoded).offset(i);
+            var algo = Algorithm.from_string(str);
+            if (algo != Algorithm.UNKNOWN) {
+                secdata.algo = algo;
+                break;
+            }
+        }
 
         return secdata;
     }
 
-    /**
-     * Takes everything between the start and end pattern and returns it.
-     * NOTE: The string (if found will) be removed from the argument.
-     */
-    private static string parse_lines_block(StringBuilder data, string start, string end) {
-        StringBuilder result = new StringBuilder();
+    /** Reads all lines from start until the end pattern and returns it */
+    private static string parse_lines_block(DataInputStream data,
+                                            string initial_line,
+                                            string start, string end)
+                                            throws GLib.Error {
+        var result = new StringBuilder();
+
+        string? line = initial_line;
 
         bool start_found = false;
-        string[] lines = data.str.split("\n");
-        foreach (string line in lines) {
+        do {
             // Look for the beginning
             if (!start_found) {
                 if (start in line) {
-                    result.append_printf("%s\n", line);
-                    result.erase(0, line.length + 1);
+                    result.append(line);
+                    result.append_c('\n');
                     start_found = true;
                     continue;
                 }
             } else {
                 // Look for the end
-                result.append_printf("%s\n", line);
-                result.erase(0, line.length + 1);
+                result.append(line);
+                result.append_c('\n');
                 if (end in line)
                     break;
             }
-        }
+        } while ((line = data.read_line_utf8()) != null);
 
         return result.str;
     }

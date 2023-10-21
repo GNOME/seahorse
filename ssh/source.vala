@@ -333,15 +333,12 @@ public class Seahorse.Ssh.Source : GLib.Object, Gcr.Collection, Seahorse.Place {
     /**
      * Parse an inputstream into a list of keys and import those keys.
      */
-    public async List<Key>? import_async(InputStream input, Gtk.Window transient_for,
+    public async List<Key>? import_async(InputStream input,
+                                         Gtk.Window? transient_for,
                                          Cancellable? cancellable = null) throws GLib.Error {
-        uint8[] buffer = new uint8[4096];
-        size_t bytes_read;
-        input.read_all(buffer, out bytes_read, cancellable);
+        var result = yield Key.parse(input, cancellable);
 
         string fullpath = other_keys_path();
-
-        var result = yield Key.parse((string) buffer, cancellable);
         foreach (unowned var keydata in result.public_keys) {
             yield import_public_async(keydata, fullpath, cancellable);
         }

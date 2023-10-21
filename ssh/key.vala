@@ -223,24 +223,36 @@ public class Seahorse.Ssh.Key : Seahorse.Object, Seahorse.Exportable, Seahorse.D
     }
 
     /**
-     * Parses a string into public/private keys.
+     * Parses an input stream into public/private keys.
      *
-     * @param data The string that needs to be parsed.
+     * @param input The input stream that needs to be parsed.
      * @param cancellable Can be used to cancel the parsing.
      */
-    public static async KeyParseResult parse(string data,
-                                             Cancellable? cancellable = null) throws GLib.Error {
-        return_if_fail (data != null || data != "");
-
+    public static async KeyParseResult parse(GLib.InputStream input,
+                                             Cancellable? cancellable = null)
+                                             throws GLib.Error {
         var pubkeys = new GenericArray<KeyData>();
         var seckeys = new GenericArray<SecData>();
 
-        StringBuilder toParse = new StringBuilder(data.chug());
-        while (toParse.str.length > 0) {
+        // Fetch the data into a string
+        var data = new DataInputStream(input);
+
+        while (true) {
+            // Read the next line, and remove leading whitespace
+            var raw_line = yield data.read_line_utf8_async(Priority.DEFAULT, cancellable, null);
+            if (raw_line == null)
+                break;
+
+            string line = raw_line.chug();
+
+            // Ignore comments and empty lines (not a parse error, but no data)
+            if (line == "" || line.has_prefix("#"))
+                continue;
+
             // First of all, check for a private key, as it can span several lines
-            if (SecData.contains_private_key(toParse.str)) {
+            if (SecData.contains_private_key(line)) {
                 try {
-                    var secdata = SecData.parse_data(toParse);
+                    var secdata = SecData.parse_data(data, line);
                     seckeys.add(secdata);
                     continue;
                 } catch (GLib.Error e) {
@@ -248,24 +260,9 @@ public class Seahorse.Ssh.Key : Seahorse.Object, Seahorse.Exportable, Seahorse.D
                 }
             }
 
-            // We're sure we'll have at least 1 element
-            string[] lines = toParse.str.split("\n", 2);
-            string line = lines[0];
-            toParse.erase(0, line.length);
-            if (lines.length == 2) // There was a \n, so don't forget to erase it as well
-                toParse.erase(0, 1);
-
-            // Comments and empty lines, not a parse error, but no data
-            if (line.strip() == "" || line.has_prefix("#"))
-                continue;
-
             // See if we have a public key
-            try {
-                KeyData keydata = KeyData.parse_line(line);
-                pubkeys.add(keydata);
-            } catch (GLib.Error e) {
-                warning(e.message);
-            }
+            var keydata = KeyData.parse_line(line);
+            pubkeys.add(keydata);
         }
 
         var result = KeyParseResult();
@@ -282,9 +279,8 @@ public class Seahorse.Ssh.Key : Seahorse.Object, Seahorse.Exportable, Seahorse.D
      */
     public static async KeyParseResult parse_file(string filename,
                                                   Cancellable? cancellable = null) throws GLib.Error {
-        string contents;
-        FileUtils.get_contents(filename, out contents);
-
-        return yield parse(contents, cancellable);
+        var file = GLib.File.new_for_path(filename);
+        var file_stream = yield file.read_async();
+        return yield parse(file_stream, cancellable);
     }
 }

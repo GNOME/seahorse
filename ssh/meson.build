@@ -58,3 +58,23 @@ ssh_askpass = executable('ssh-askpass',
   install: true,
   install_dir: libexecbindir,
 )
+
+# Tests
+ssh_test_names = [
+  'key-parse',
+]
+
+foreach _test : ssh_test_names
+  test_bin = executable(_test,
+    files('test-@0@.vala'.format(_test)),
+    dependencies: [
+      ssh_dep,
+      ssh_dependencies,
+    ],
+    include_directories: include_directories('..'),
+  )
+
+  test(_test, test_bin,
+    suite: 'ssh',
+  )
+endforeach
