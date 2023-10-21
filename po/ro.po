@@ -7,9 +7,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2021-08-21 10:41+0000\n"
-"PO-Revision-Date: 2021-09-06 19:45+0200\n"
-"Last-Translator: Florentina Mușat <florentina.musat.28@gmail.com>\n"
+"POT-Creation-Date: 2023-01-25 21:56+0000\n"
+"PO-Revision-Date: 2023-10-21 16:12+0300\n"
+"Last-Translator: Florentina Mușat <florentina [dot] musat [dot] 28 [at] "
+"gmail [dot] com>\n"
 "Language-Team: Romanian Gnome Team <gnomero-list@lists.sourceforge.net>\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
@@ -17,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2);\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Poedit 3.4\n"
 "X-Launchpad-Export-Date: 2009-10-03 17:48+0000\n"
 "X-Project-Style: gnome\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -69,13 +70,13 @@ msgstr "Alegeți data dintr-un calendar"
 #: pgp/seahorse-gpgme-revoke-dialog.ui:74 pgp/seahorse-keyserver-sync.ui:79
 #: pgp/seahorse-revoke.ui:73 pkcs11/pkcs11-request.vala:55
 #: pkcs11/pkcs11-request.vala:106 src/import-dialog.vala:34
-#: src/key-manager.vala:270
+#: src/key-manager.vala:270 ssh/seahorse-ssh-generate.ui:193
 msgid "_Cancel"
 msgstr "_Anulează"
 
 #. Delete item
 #: common/delete-dialog.vala:91 pgp/seahorse-gpgme-photos.c:319
-#: pgp/seahorse-pgp-uid-list-box-row.ui:15 src/sidebar.vala:393
+#: pgp/seahorse-pgp-uid-list-box-row.ui:15 src/sidebar.vala:390
 msgid "_Delete"
 msgstr "Ș_terge"
 
@@ -425,8 +426,10 @@ msgid "Height (in pixels) of the window."
 msgstr "Înălțimea (în pixeli) a ferestrei."
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:6
-msgid "Seahorse"
-msgstr "Seahorse"
+#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:174
+#: src/seahorse-key-manager.ui:291
+msgid "Passwords and Keys"
+msgstr "Parole și chei"
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:7
 #: data/org.gnome.seahorse.Application.desktop.in.in:4
@@ -434,41 +437,38 @@ msgid "Manage your passwords and encryption keys"
 msgstr "Administează parolele și cheile de criptare"
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:9
-msgid "Seahorse is a GNOME application for managing encryption keys."
+msgid "Passwords and Keys is a GNOME application for managing encryption keys."
 msgstr ""
-"Seahorse este o aplicație GNOME pentru gestionarea cheilor de criptare."
+"Parole și chei este o aplicație GNOME pentru gestionarea cheilor de criptare."
 
 #: data/org.gnome.seahorse.Application.appdata.xml.in:12
 msgid ""
-"With seahorse you can create and manage PGP keys, create and manage SSH "
-"keys, publish and retrieve keys from key servers, cache your passphrase so "
-"you don’t have to keep typing it and backup your keys and keyring."
+"With Passwords and Keys you can create and manage PGP keys, create and "
+"manage SSH keys, publish and retrieve keys from key servers, cache your "
+"passphrase so you don’t have to keep typing it and backup your keys and "
+"keyring."
 msgstr ""
-"Cu seahorse puteți crea și administra chei PGP, crea și administra chei SSH, "
-"publica și obține chei de la serverele de chei, păstrați în memoria cache "
-"parola de tip frază pentru a nu fi nevoie de a o tasta și puteți crea o "
-"copie de rezervă a cheilor și inelului de chei."
+"Cu Parole și chei puteți crea și administra chei PGP, crea și administra "
+"chei SSH, publica și obține chei de la serverele de chei, păstrați în "
+"memoria cache parola de tip frază pentru a nu fi nevoie de a o tasta și "
+"puteți crea o copie de rezervă a cheilor și inelului de chei."
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:171
+#: data/org.gnome.seahorse.Application.appdata.xml.in:241
 msgid "The GNOME Project"
 msgstr "Proiectul GNOME"
 
-#: data/org.gnome.seahorse.Application.desktop.in.in:3 src/application.vala:171
-#: src/seahorse-key-manager.ui:291
-msgid "Passwords and Keys"
-msgstr "Parole și chei"
-
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.seahorse.Application.desktop.in.in:6
-msgid "keyring;encryption;security;sign;ssh;"
+msgid "keyring;encryption;security;sign;ssh;gpg;pgp;"
 msgstr ""
-"keyring;encryption;security;sign;ssh;inel de chei;criptare;securitate;semn;"
+"keyring;encryption;security;sign;ssh;gpg;pgp;inel de chei;criptare;"
+"securitate;semnătură;"
 
 #: gkr/gkr-backend.vala:43
 msgid "Stored personal passwords, credentials and secrets"
 msgstr "Parole, certificări și secrete personale stocate"
 
-#: gkr/gkr-item-add.vala:113 src/sidebar.vala:451
+#: gkr/gkr-item-add.vala:113 src/sidebar.vala:448
 msgid "Couldn’t unlock"
 msgstr "Nu s-a putut debloca"
 
@@ -830,7 +830,7 @@ msgstr "Creează un nou ID utilizator"
 msgid "Decryption failed. You probably do not have the decryption key."
 msgstr "Decriptarea a eșuat. Probabil nu dețineți cheia de decriptare."
 
-#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:477
+#: pgp/seahorse-gpgme.c:73
 msgid "The operation was cancelled"
 msgstr "Operația a fost anulată"
 
@@ -876,7 +876,7 @@ msgid "PGP keys"
 msgstr "Chei PGP"
 
 #: pgp/seahorse-gpgme-generate-dialog.c:81 pkcs11/pkcs11-generate.vala:60
-#: ssh/seahorse-ssh-generate.ui:147
+#: ssh/seahorse-ssh-generate.ui:130
 msgid "RSA"
 msgstr "RSA"
 
@@ -938,11 +938,11 @@ msgstr "Opțiuni _avansate pentru cheie"
 msgid "_Comment"
 msgstr "_Comentariu"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:169 ssh/seahorse-ssh-generate.ui:127
+#: pgp/seahorse-gpgme-generate-dialog.ui:169 ssh/seahorse-ssh-generate.ui:110
 msgid "Encryption _Type"
 msgstr "_Tip de criptare"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:199 ssh/seahorse-ssh-generate.ui:164
+#: pgp/seahorse-gpgme-generate-dialog.ui:199 ssh/seahorse-ssh-generate.ui:147
 msgid "Key _Strength (bits)"
 msgstr "Com_plexitate cheie (biți)"
 
@@ -1292,17 +1292,6 @@ msgstr "Necunoscut"
 #: pgp/seahorse-gpgme-subkey.c:86
 msgid "ElGamal"
 msgstr "ElGamal"
-
-#: pgp/seahorse-hkp-source.c:499
-#, c-format
-msgid "Search was not specific enough. Server “%s” found too many keys."
-msgstr ""
-"Căutarea nu a fost destul de precisă. Serverul „%s” a găsit prea multe chei."
-
-#: pgp/seahorse-hkp-source.c:503
-#, c-format
-msgid "Couldn’t communicate with server “%s”: %s"
-msgstr "Nu s-a putut comunica cu serverul „%s”: %s"
 
 #: pgp/seahorse-keyserver-results.c:62
 #, c-format
@@ -1881,7 +1870,7 @@ msgstr "Nedenumit"
 msgid "Failed to export certificate"
 msgstr "Nu s-a putut exporta certificatul"
 
-#: pkcs11/pkcs11-properties.vala:154 src/sidebar.vala:467
+#: pkcs11/pkcs11-properties.vala:154 src/sidebar.vala:464
 msgid "Couldn’t delete"
 msgstr "Nu s-a putut șterge"
 
@@ -1982,12 +1971,12 @@ msgstr "Contribuții:"
 msgid "Version of this application"
 msgstr "Versiunea aceastei aplicații"
 
-#: src/application.vala:173
+#: src/application.vala:176
 msgid "translator-credits"
 msgstr ""
 "Daniel Șerbănescu <daniel [at] serbanescu [dot] dk>, 2018-2021\n"
 "Florentina Mușat <florentina [dot] musat [dot] 28 [at] gmail [dot] com>, "
-"2020-2021\n"
+"2020-2021, 2023\n"
 "\n"
 "Launchpad Contributions:\n"
 "  Adi Roiban https://launchpad.net/~adiroiban\n"
@@ -1998,7 +1987,7 @@ msgstr ""
 "  Lucian Adrian Grijincu https://launchpad.net/~lucian.grijincu\n"
 "  ProMIX https://launchpad.net/~promix89-gmail"
 
-#: src/application.vala:176
+#: src/application.vala:179
 msgid "Seahorse Project Homepage"
 msgstr "Pagina proiectului Seahorse"
 
@@ -2010,12 +1999,12 @@ msgstr "Date de importat"
 msgid "_Import"
 msgstr "_Importă"
 
-#: src/import-dialog.vala:74
+#: src/import-dialog.vala:77
 msgid "Import failed"
 msgstr "Importarea a eșuat"
 
 #. The prompt
-#: src/key-manager.vala:268 ssh/operation.vala:324
+#: src/key-manager.vala:268 ssh/operation.vala:216
 msgid "Import Key"
 msgstr "Importă chei"
 
@@ -2148,11 +2137,15 @@ msgstr "Filtru"
 msgid "This collection seems to be empty"
 msgstr "Această colecție pare să fie goală"
 
-#: src/seahorse-key-manager.ui:525
+#: src/seahorse-key-manager.ui:521
+msgid "Add new items"
+msgstr "Adaugă elemente noi"
+
+#: src/seahorse-key-manager.ui:536
 msgid "Keyring is locked"
 msgstr "Inelul de chei este blocat"
 
-#: src/seahorse-key-manager.ui:530
+#: src/seahorse-key-manager.ui:541
 msgid "Unlock"
 msgstr "Deblochează"
 
@@ -2174,20 +2167,20 @@ msgid "Configure Key for Secure Shell…"
 msgstr "Configurează cheia pentru shell securizat (ssh)…"
 
 #. Lock and unlock items
-#: src/sidebar.vala:380
+#: src/sidebar.vala:377
 msgid "_Lock"
 msgstr "B_lochează"
 
-#: src/sidebar.vala:385
+#: src/sidebar.vala:382
 msgid "_Unlock"
 msgstr "_Deblochează"
 
 #. Properties item
-#: src/sidebar.vala:402
+#: src/sidebar.vala:399
 msgid "_Properties"
 msgstr "_Proprietăți"
 
-#: src/sidebar.vala:432
+#: src/sidebar.vala:429
 msgid "Couldn’t lock"
 msgstr "Nu s-a putut bloca"
 
@@ -2229,18 +2222,18 @@ msgid "No public key file is available for this key."
 msgstr ""
 "Nu este disponibil niciun fișier de cheie publică pentru această cheie."
 
-#: ssh/generate.vala:94
+#: ssh/generate.vala:85
+msgid "Creating Secure Shell Key"
+msgstr "Se creează cheia pentru shell securizat (ssh)"
+
+#: ssh/generate.vala:93
 msgid "Couldn’t load newly generated Secure Shell key"
 msgstr ""
 "Nu s-a putut încărca cheia pentru shell securizat (ssh) generată recent"
 
-#: ssh/generate.vala:98
+#: ssh/generate.vala:96
 msgid "Couldn’t generate Secure Shell key"
 msgstr "Nu s-a putut genera cheia pentru shell securizat (ssh)"
-
-#: ssh/generate.vala:101
-msgid "Creating Secure Shell Key"
-msgstr "Se creează cheia pentru shell securizat (ssh)"
 
 #: ssh/key-length-chooser.vala:92
 msgid "1024 bits"
@@ -2292,26 +2285,26 @@ msgstr "(cheie shell securizat necitibilă)"
 msgid "Secure Shell Key"
 msgstr "Cheie pentru shell securizat (ssh)"
 
-#: ssh/operation.vala:219
+#: ssh/operation.vala:111
 msgid "Remote Host Password"
 msgstr "Parola calculatorului la distanță"
 
-#: ssh/operation.vala:262
+#: ssh/operation.vala:154
 msgid "Enter Key Passphrase"
 msgstr "Introduceți fraza secretă"
 
-#: ssh/operation.vala:288
+#: ssh/operation.vala:180
 msgid "Passphrase for New Secure Shell Key"
 msgstr "Fraza secretă pentru noua cheie pentru shell securizat (ssh)"
 
 #. No filename specified, make one up
 #. Add the comment to the output
-#: ssh/operation.vala:321
+#: ssh/operation.vala:213
 #, c-format
 msgid "Importing key: %s"
 msgstr "Se importă cheia: %s"
 
-#: ssh/operation.vala:321
+#: ssh/operation.vala:213
 msgid "Importing key. Enter passphrase"
 msgstr "Se importă cheia. Introduceți fraza secretă"
 
@@ -2342,39 +2335,39 @@ msgstr "Introduceți noua frază secretă pentru: %s"
 msgid "Enter the new passphrase again: %s"
 msgstr "Introduceți noua frază secretă din nou: %s"
 
-#: ssh/seahorse-ssh-generate.ui:8
+#: ssh/seahorse-ssh-generate.ui:7
 msgid "New Secure Shell Key"
 msgstr "Cheie pentru shell securizat nouă"
 
-#: ssh/seahorse-ssh-generate.ui:55
+#: ssh/seahorse-ssh-generate.ui:38
 msgid "A Secure Shell (SSH) key lets you connect securely to other computers."
 msgstr ""
 "Cheia pentru shellul securizat (SSH) vă permite să vă conectați în siguranță "
 "la alte calculatoare."
 
-#: ssh/seahorse-ssh-generate.ui:78
+#: ssh/seahorse-ssh-generate.ui:61
 msgid "_Description"
 msgstr "_Descriere"
 
-#: ssh/seahorse-ssh-generate.ui:111
+#: ssh/seahorse-ssh-generate.ui:94
 msgid "Your email address, or a reminder of what this key is for."
 msgstr ""
 "Folosiți adresa de email sau un alt memento pentru a ști pentru ce este "
 "această cheie."
 
-#: ssh/seahorse-ssh-generate.ui:148
+#: ssh/seahorse-ssh-generate.ui:131
 msgid "DSA"
 msgstr "DSA"
 
-#: ssh/seahorse-ssh-generate.ui:149
+#: ssh/seahorse-ssh-generate.ui:132
 msgid "ECDSA"
 msgstr "ECDSA"
 
-#: ssh/seahorse-ssh-generate.ui:150
+#: ssh/seahorse-ssh-generate.ui:133
 msgid "ED25519"
 msgstr "ED25519"
 
-#: ssh/seahorse-ssh-generate.ui:195
+#: ssh/seahorse-ssh-generate.ui:178
 msgid ""
 "If there is a computer you want to use this key with, you can set up that "
 "computer to recognize your new key."
@@ -2382,13 +2375,9 @@ msgstr ""
 "Dacă există deja un calculator pe care doriți să-l utilizați folosind "
 "această cheie, puteți să-l configurați să recunoască noua cheie."
 
-#: ssh/seahorse-ssh-generate.ui:221
-msgid "_Just Create Key"
-msgstr "D_oar creează cheia"
-
-#: ssh/seahorse-ssh-generate.ui:235
-msgid "_Create and Set Up"
-msgstr "_Creează și configurează"
+#: ssh/seahorse-ssh-generate.ui:201
+msgid "_Generate"
+msgstr "_Generează"
 
 #: ssh/seahorse-ssh-key-properties.ui:11
 msgid "SSH Key Properties"
@@ -2496,6 +2485,25 @@ msgstr ""
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "Se configurează cheile pentru shell securizat (ssh)…"
+
+#~ msgid "Seahorse"
+#~ msgstr "Seahorse"
+
+#, c-format
+#~ msgid "Search was not specific enough. Server “%s” found too many keys."
+#~ msgstr ""
+#~ "Căutarea nu a fost destul de precisă. Serverul „%s” a găsit prea multe "
+#~ "chei."
+
+#, c-format
+#~ msgid "Couldn’t communicate with server “%s”: %s"
+#~ msgstr "Nu s-a putut comunica cu serverul „%s”: %s"
+
+#~ msgid "_Just Create Key"
+#~ msgstr "D_oar creează cheia"
+
+#~ msgid "_Create and Set Up"
+#~ msgstr "_Creează și configurează"
 
 #~ msgid "[Unknown]"
 #~ msgstr "[Nescunoscut]"
