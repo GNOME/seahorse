@@ -49,7 +49,7 @@ public abstract class Operation : GLib.Object {
     protected async string? operation_async(string command,
                                             string? input,
                                             Cancellable? cancellable) throws GLib.Error {
-        return_val_if_fail (command != null && command != "", null);
+        return_val_if_fail (command != null && command != "", false);
 
         // Strip the command name for logging purposes
         string[] args;
