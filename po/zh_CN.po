@@ -10,22 +10,22 @@
 # YunQiang Su <wzssyqa@gmail.com>, 2012, 2015.
 # Mingcong Bai <jeffbai@aosc.xyz>, 2018.
 # Dingzhong Chen <wsxy162@gmail.com>, 2019-2021.
-# lumingzh <lumingzh@qq.com>, 2022.
+# lumingzh <lumingzh@qq.com>, 2022-2024.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse master\n"
-"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2022-06-06 12:37+0000\n"
-"PO-Revision-Date: 2022-06-12 12:23+0800\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues/\n"
+"POT-Creation-Date: 2024-03-31 17:24+0000\n"
+"PO-Revision-Date: 2024-05-20 20:10+0800\n"
 "Last-Translator: lumingzh <lumingzh@qq.com>\n"
-"Language-Team: Chinese - China <i18n-zh@googlegroups.com>\n"
+"Language-Team: Chinese (China) <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0\n"
-"X-Generator: Gtranslator 42.0\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Gtranslator 46.1\n"
 
 #: common/add-keyserver-dialog.vala:32
 msgid "Add Key Server"
@@ -114,7 +114,7 @@ msgstr "密码"
 msgid "Keys"
 msgstr "密钥"
 
-#: common/place.vala:44 pkcs11/seahorse-pkcs11-backend.c:207
+#: common/place.vala:44 pkcs11/seahorse-pkcs11-backend.c:205
 msgid "Certificates"
 msgstr "证书"
 
@@ -448,16 +448,17 @@ msgstr ""
 "您可以通过密码和密钥创建和管理 PGP 密钥 、SSH 密钥，将密钥发送或取回到密钥服"
 "务器，缓存您的口令以免重复输入，以及备份您的密钥和密钥环。"
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:220
+#. developer_name tag deprecated with Appstream 1.0
+#: data/org.gnome.seahorse.Application.appdata.xml.in:242
 msgid "The GNOME Project"
 msgstr "GNOME 项目"
 
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.seahorse.Application.desktop.in.in:6
-msgid "keyring;encryption;security;sign;ssh;gpg;pgp;"
+msgid "keyring;encryption;security;sign;ssh;gpg;pgp;seahorse;"
 msgstr ""
-"keyring;encryption;security;sign;ssh;gpg;pgp;密钥环;加密;安全;签名;密码;密钥;"
-"证书;密钥串;"
+"keyring;encryption;security;sign;ssh;gpg;pgp;seahorse;密钥环;加密;安全;签名;"
+"密码;密钥;证书;密钥串;"
 
 #: gkr/gkr-backend.vala:43
 msgid "Stored personal passwords, credentials and secrets"
@@ -821,7 +822,7 @@ msgstr "创建新用户 ID"
 msgid "Decryption failed. You probably do not have the decryption key."
 msgstr "解密失败。您可能没有解密密钥。"
 
-#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:477
+#: pgp/seahorse-gpgme.c:73
 msgid "The operation was cancelled"
 msgstr "操作被取消"
 
@@ -1265,16 +1266,6 @@ msgstr "未知"
 #: pgp/seahorse-gpgme-subkey.c:86
 msgid "ElGamal"
 msgstr "ElGamal"
-
-#: pgp/seahorse-hkp-source.c:499
-#, c-format
-msgid "Search was not specific enough. Server “%s” found too many keys."
-msgstr "搜索范围过宽。服务器“%s”中找到太多密钥。"
-
-#: pgp/seahorse-hkp-source.c:503
-#, c-format
-msgid "Couldn’t communicate with server “%s”: %s"
-msgstr "无法与服务器“%s”通讯：%s"
 
 #: pgp/seahorse-keyserver-results.c:62
 #, c-format
@@ -1878,7 +1869,7 @@ msgctxt "Label"
 msgid "Unknown"
 msgstr "未知"
 
-#: pkcs11/seahorse-pkcs11-backend.c:213
+#: pkcs11/seahorse-pkcs11-backend.c:211
 msgid "X.509 certificates and related keys"
 msgstr "X.509 证书和相关的密钥"
 
@@ -2444,6 +2435,14 @@ msgstr "无法配置远程服务器上的 SSH 密钥。"
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "正在配置 SSH 密钥……"
+
+#, c-format
+#~ msgid "Search was not specific enough. Server “%s” found too many keys."
+#~ msgstr "搜索范围过宽。服务器“%s”中找到太多密钥。"
+
+#, c-format
+#~ msgid "Couldn’t communicate with server “%s”: %s"
+#~ msgstr "无法与服务器“%s”通讯：%s"
 
 #~ msgid "_Just Create Key"
 #~ msgstr "仅创建密钥(_J)"
