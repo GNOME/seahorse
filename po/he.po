@@ -7,18 +7,18 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
-"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2022-06-06 12:37+0000\n"
-"PO-Revision-Date: 2022-06-16 13:40+0300\n"
-"Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues/\n"
+"POT-Creation-Date: 2024-03-31 17:24+0000\n"
+"PO-Revision-Date: 2024-05-29 12:30+0300\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n==1 ? 0 : n==2 ? 1 : n>10 && n%10==0 ? "
-"2 : 3)\n"
-"X-Generator: Gtranslator 40.0\n"
+"2 : 3);\n"
+"X-Generator: Poedit 3.4.4\n"
 
 #: common/add-keyserver-dialog.vala:32
 msgid "Add Key Server"
@@ -107,7 +107,7 @@ msgstr "סיסמאות"
 msgid "Keys"
 msgstr "מפתחות"
 
-#: common/place.vala:44 pkcs11/seahorse-pkcs11-backend.c:207
+#: common/place.vala:44 pkcs11/seahorse-pkcs11-backend.c:205
 msgid "Certificates"
 msgstr "אישורים"
 
@@ -446,14 +446,17 @@ msgstr ""
 "לפרסם ולקבל מפתחות משרתי מפתחות, לשמור את מילות הצופן שלך במטמון כדי שלא "
 "יהיה עליך להקליד אותן שוב ושוב ולגבות את המפתחות ואת קבוצות המפתחות שלך."
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:220
+#. developer_name tag deprecated with Appstream 1.0
+#: data/org.gnome.seahorse.Application.appdata.xml.in:242
 msgid "The GNOME Project"
 msgstr "מיזם GNOME"
 
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.seahorse.Application.desktop.in.in:6
-msgid "keyring;encryption;security;sign;ssh;gpg;pgp;"
-msgstr "קבוצת מפתחות;הצפנה;אבטחה;חתימה;חיבור מוצפן;gpg;pgp;מחזיק מפתחות;"
+msgid "keyring;encryption;security;sign;ssh;gpg;pgp;seahorse;"
+msgstr ""
+"קבוצת מפתחות;הצפנה;אבטחה;חתימה;חיבור מוצפן;gpg;pgp;מחזיק מפתחות;סוס ים;סוסון "
+"ים;סוס־ים;סוסון־ים;"
 
 #: gkr/gkr-backend.vala:43
 msgid "Stored personal passwords, credentials and secrets"
@@ -820,7 +823,7 @@ msgstr "יצירת מזהה משתמש חדש"
 msgid "Decryption failed. You probably do not have the decryption key."
 msgstr "הפענוח נכשל. כנראה שמפתח הפענוח לא קיים."
 
-#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:477
+#: pgp/seahorse-gpgme.c:73
 msgid "The operation was cancelled"
 msgstr "הפעולה בוטלה"
 
@@ -1278,16 +1281,6 @@ msgstr "לא ידוע"
 #: pgp/seahorse-gpgme-subkey.c:86
 msgid "ElGamal"
 msgstr "אל־גמאל"
-
-#: pgp/seahorse-hkp-source.c:499
-#, c-format
-msgid "Search was not specific enough. Server “%s” found too many keys."
-msgstr "החיפוש לא היה מספיק מדויק. השרת „%s” מצא יותר מדי מפתחות."
-
-#: pgp/seahorse-hkp-source.c:503
-#, c-format
-msgid "Couldn’t communicate with server “%s”: %s"
-msgstr "לא ניתן לתקשר עם השרת „%s”: ‏%s"
 
 #: pgp/seahorse-keyserver-results.c:62
 #, c-format
@@ -1904,7 +1897,7 @@ msgctxt "Label"
 msgid "Unknown"
 msgstr "לא ידועה"
 
-#: pkcs11/seahorse-pkcs11-backend.c:213
+#: pkcs11/seahorse-pkcs11-backend.c:211
 msgid "X.509 certificates and related keys"
 msgstr "אישורי X.509 וכאלה שקשורים אליהם"
 
@@ -2128,7 +2121,6 @@ msgid "This collection seems to be empty"
 msgstr "נראה כי אוסף זה ריק"
 
 #: src/seahorse-key-manager.ui:521
-#| msgid "Add a new key or item"
 msgid "Add new items"
 msgstr "הוספת פריטים חדשים"
 
@@ -2468,6 +2460,14 @@ msgstr "לא ניתן להגדיר מפתחות SSH על המחשב המרוחק
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "מפתחות SSH מוגדרים…"
+
+#, c-format
+#~ msgid "Search was not specific enough. Server “%s” found too many keys."
+#~ msgstr "החיפוש לא היה מספיק מדויק. השרת „%s” מצא יותר מדי מפתחות."
+
+#, c-format
+#~ msgid "Couldn’t communicate with server “%s”: %s"
+#~ msgstr "לא ניתן לתקשר עם השרת „%s”: ‏%s"
 
 #~ msgid "_Just Create Key"
 #~ msgstr "יצירת מפתח _בלבד"
