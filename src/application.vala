@@ -101,6 +101,9 @@ public class Seahorse.Application : Gtk.Application {
         // Opt-in to Color Scheme user preference
         Hdy.StyleManager.get_default ().color_scheme = Hdy.ColorScheme.PREFER_LIGHT;
 
+        Environment.set_prgname(Config.APPLICATION_ID);
+        Environment.set_application_name(_("Passwords and Keys"));
+
         // Insert Icons into Stock
         icons_init();
 
