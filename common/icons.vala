@@ -39,6 +39,6 @@ namespace Seahorse {
 
 		var path = GLib.Path.build_filename(Config.PKGDATADIR, "icons");
 		Gtk.IconTheme.get_default().append_search_path (path);
-		Gtk.Window.set_default_icon_name ("seahorse");
+		Gtk.Window.set_default_icon_name (Config.APPLICATION_ID);
 	}
 }
