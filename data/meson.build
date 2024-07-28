@@ -18,7 +18,13 @@ resources_src = gnome.compile_resources('seahorse-resources',
 
 # The appdata file
 appdata_file = i18n.merge_file(
-  input: 'org.gnome.seahorse.Application.appdata.xml.in',
+  input: configure_file(
+    input: 'org.gnome.seahorse.Application.appdata.xml.in.in',
+    output: '@BASENAME@',
+    configuration: {
+      'appid': application_id,
+    },
+  ),
   output: '@0@.appdata.xml'.format(application_id),
   type: 'xml',
   po_dir: po_dir,
