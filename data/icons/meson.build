@@ -3,6 +3,7 @@ icons_install_dir = get_option('datadir') / 'icons'
 # special case for symbolic
 icon_subfolder = 'hicolor' / 'symbolic' / 'apps'
 install_data(icon_subfolder / 'org.gnome.seahorse.Application-symbolic.svg',
+  rename: '@0@.svg'.format(application_id),
   install_dir: icons_install_dir / icon_subfolder,
 )
 icon_subfolder = 'hicolor' / 'scalable' / 'apps'
