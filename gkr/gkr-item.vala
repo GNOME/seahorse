@@ -291,6 +291,7 @@ private struct MappingEntry {
 private const MappingEntry[] MAPPING_ENTRIES = {
     /* Map some known schema's to their application IDs */
     { "org.gnome.Polari.Identify", "org.gnome.Polari" },
+    { "org.remmina.Password", "org.remmina.Remmina" },
     { "_chrome_dummy_schema_for_unlocking", "google-chrome" },
     { "chrome_libsecret_os_crypt_password_v2", "chromium-browser" },
 
