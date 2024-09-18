@@ -227,6 +227,21 @@ public class GkrNetworkPassInfo : ItemInfo {
     }
 }
 
+/** Used for Evolution-Data-Server (E-D-S) passwordss */
+public class EdsPassInfo : ItemInfo {
+
+    public EdsPassInfo(string label, HashTable<string, string>? attrs) {
+        base(label, attrs, null);
+
+        // Set the Epiphany icon
+        query_installed_apps("org.gnome.Evolution");
+
+        unowned string? uri = get_attribute_string(attrs, "e-source-uid");
+        if (uri != null)
+            this.details = uri;
+    }
+}
+
 /** Used for GNOME Web (epiphany) passwordss */
 public class EpiphanyPassInfo : ItemInfo {
 

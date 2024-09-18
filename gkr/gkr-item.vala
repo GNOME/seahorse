@@ -177,6 +177,8 @@ public class Item : Secret.Item, Deletable, Viewable {
                 return new EpiphanyPassInfo(label, attrs);
             case CHROME_PASSWORD:
                 return new ChromePassInfo(label, attrs);
+            case EDS_PASSWORD:
+                return new EdsPassInfo(label, attrs);
             case GOA_PASSWORD:
                 return new GoaInfo(label, attrs);
             case TELEPATHY_PASSWORD:
@@ -271,6 +273,7 @@ private const string CHAINED_KEYRING = "org.gnome.keyring.ChainedKeyring";
 private const string ENCRYPTION_KEY = "org.gnome.keyring.EncryptionKey";
 private const string PK_STORAGE = "org.gnome.keyring.PkStorage";
 private const string CHROME_PASSWORD = "x.internal.Chrome";
+private const string EDS_PASSWORD = "org.gnome.Evolution.Data.Source";
 private const string EPIPHANY_PASSWORD = "x.internal.Epiphany";
 private const string GOA_PASSWORD = "org.gnome.OnlineAccounts";
 private const string TELEPATHY_PASSWORD = "org.freedesktop.Telepathy";
