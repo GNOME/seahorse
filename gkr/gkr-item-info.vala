@@ -170,9 +170,13 @@ public class GkrNetworkPassInfo : ItemInfo {
             object = "";
 
         if (server != null && protocol != null) {
-            this.details = GLib.Markup.printf_escaped("%s://%s%s%s/%s",
+            var full_url = GLib.Markup.printf_escaped("%s://%s%s%s/%s",
                                                       protocol, user, symbol,
                                                       server, object);
+            if (this.label == null || this.label == "")
+                this.label = full_url;
+            else
+                this.details = full_url;
         }
     }
 
