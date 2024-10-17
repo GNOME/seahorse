@@ -7,15 +7,15 @@
 # Sérgio Cardeira <cardeira.sergio@gmail.com>, 2016.
 # João Nuno Matos <joaonmatos@gmail.com>, 2019.
 # José Vieira <jvieira33@sapo.pt>, 2020.
-# Hugo Carvalho <hugokarvalho@hotmail.com>, 2020, 2021, 2022.
+# Hugo Carvalho <hugokarvalho@hotmail.com>, 2020, 2021, 2022, 2023, 2024.
 # Juliano de Souza Camargo <julianosc@protonmail.com>, 2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: 3.10\n"
-"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues\n"
-"POT-Creation-Date: 2022-06-06 12:37+0000\n"
-"PO-Revision-Date: 2022-06-07 14:48+0100\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues/\n"
+"POT-Creation-Date: 2024-03-31 17:24+0000\n"
+"PO-Revision-Date: 2024-10-17 14:59+0100\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Portuguese < https://l10n.gnome.org/teams/pt/>\n"
 "Language: pt\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-DamnedLies-Scope: partial\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.5\n"
 "X-DL-Team: pt\n"
 "X-DL-Module: seahorse\n"
 "X-DL-Branch: master\n"
@@ -118,7 +118,7 @@ msgstr "Palavras-passe"
 msgid "Keys"
 msgstr "Chaves"
 
-#: common/place.vala:44 pkcs11/seahorse-pkcs11-backend.c:207
+#: common/place.vala:44 pkcs11/seahorse-pkcs11-backend.c:205
 msgid "Certificates"
 msgstr "Certificados"
 
@@ -465,14 +465,15 @@ msgstr ""
 "palavras-passe de forma a que não tenha de inseri-las continuamente e fazer "
 "cópias de segurança das suas chaves e chaveiros."
 
-#: data/org.gnome.seahorse.Application.appdata.xml.in:220
+#. developer_name tag deprecated with Appstream 1.0
+#: data/org.gnome.seahorse.Application.appdata.xml.in:242
 msgid "The GNOME Project"
 msgstr "Projeto GNOME"
 
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.seahorse.Application.desktop.in.in:6
-msgid "keyring;encryption;security;sign;ssh;gpg;pgp;"
-msgstr "chaveiro;encriptação;segurança;assinar;ssh;gpg;pgp;"
+msgid "keyring;encryption;security;sign;ssh;gpg;pgp;seahorse;"
+msgstr "chaveiro;encriptação;segurança;assinar;ssh;gpg;pgp;seahorse;"
 
 #: gkr/gkr-backend.vala:43
 msgid "Stored personal passwords, credentials and secrets"
@@ -841,7 +842,7 @@ msgid "Decryption failed. You probably do not have the decryption key."
 msgstr ""
 "Falha ao desencriptar. Provavelmente não possui a chave de desencriptação."
 
-#: pgp/seahorse-gpgme.c:73 pgp/seahorse-hkp-source.c:477
+#: pgp/seahorse-gpgme.c:73
 msgid "The operation was cancelled"
 msgstr "A operação foi cancelada"
 
@@ -1302,18 +1303,6 @@ msgstr "Desconhecido"
 #: pgp/seahorse-gpgme-subkey.c:86
 msgid "ElGamal"
 msgstr "ElGamal"
-
-#: pgp/seahorse-hkp-source.c:499
-#, c-format
-msgid "Search was not specific enough. Server “%s” found too many keys."
-msgstr ""
-"A procura não foi suficientemente específica. O servidor “%s” encontrou "
-"demasiadas chaves."
-
-#: pgp/seahorse-hkp-source.c:503
-#, c-format
-msgid "Couldn’t communicate with server “%s”: %s"
-msgstr "Não foi possível comunicar com o servidor “%s”: %s"
 
 #: pgp/seahorse-keyserver-results.c:62
 #, c-format
@@ -1932,7 +1921,7 @@ msgctxt "Label"
 msgid "Unknown"
 msgstr "Desconhecida"
 
-#: pkcs11/seahorse-pkcs11-backend.c:213
+#: pkcs11/seahorse-pkcs11-backend.c:211
 msgid "X.509 certificates and related keys"
 msgstr "Certificados X.509 e chaves relacionadas"
 
@@ -2492,6 +2481,16 @@ msgstr "Não foi possível configurar as chaves SSH no computador remoto."
 #: ssh/upload.vala:71
 msgid "Configuring Secure Shell Keys…"
 msgstr "A configurar chaves SSH…"
+
+#, c-format
+#~ msgid "Search was not specific enough. Server “%s” found too many keys."
+#~ msgstr ""
+#~ "A procura não foi suficientemente específica. O servidor “%s” encontrou "
+#~ "demasiadas chaves."
+
+#, c-format
+#~ msgid "Couldn’t communicate with server “%s”: %s"
+#~ msgstr "Não foi possível comunicar com o servidor “%s”: %s"
 
 #~ msgid "_Just Create Key"
 #~ msgstr "_Apenas criar a chave"
