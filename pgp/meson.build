@@ -95,6 +95,7 @@ xloadimage = executable('xloadimage',
   'seahorse-xloadimage.c',
   install: true,
   install_dir: libexecbindir,
+  dependencies: config,
 )
 
 

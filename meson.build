@@ -140,17 +140,12 @@ if get_option('pgp-support')
   conf.set('GPG_MICRO', gpg_version_split[2])
 endif
 
-vcs_tag(
+config_file = vcs_tag(
   input: configure_file(
     output: 'config.h.in',
     configuration: conf
   ),
   output: 'config.h'
-)
-
-config_file = configure_file(
-  output: 'config.h',
-  configuration: conf,
 )
 
 config = declare_dependency(
