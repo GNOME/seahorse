@@ -22,6 +22,11 @@ style-check:
     paths:
       - "style-check-junit-report.xml"
 
+check-potfiles:
+  stage: review
+  script:
+    - ./.gitlab/ci/check-potfiles.sh
+
 flatpak:
   variables:
     MANIFEST_PATH: 'build-aux/org.gnome.seahorse.ApplicationDevel.json'
