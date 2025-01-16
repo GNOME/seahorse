@@ -27,13 +27,13 @@
 #include "seahorse-common.h"
 
 /**
- * SECTION:seahorse-keyserver-search
- * @short_description: Contains the functions to start a search for keys on a
- * keyserver.
+ * SeahorseKeyserverSearch:
+ *
+ * Contains the functions to start a search for keys on a keyserver.
  */
 
 struct _SeahorseKeyserverSearch {
-    GtkApplicationWindow parent_instance;
+    AdwDialog parent_instance;
 
     GPtrArray *selected_servers; /* (element-type SeahorseServerSource) */
     gboolean selected_servers_changed;
@@ -42,7 +42,7 @@ struct _SeahorseKeyserverSearch {
     GtkWidget *key_server_list;
 };
 
-G_DEFINE_TYPE (SeahorseKeyserverSearch, seahorse_keyserver_search, GTK_TYPE_APPLICATION_WINDOW)
+G_DEFINE_TYPE (SeahorseKeyserverSearch, seahorse_keyserver_search, ADW_TYPE_DIALOG)
 
 /* Enables the "search" button if the edit-field contains text and at least a
  * server is selected */
@@ -75,6 +75,7 @@ search_action (GtkWidget *widget, const char *action_name, GVariant *param)
     SeahorseKeyserverSearch *self = SEAHORSE_KEYSERVER_SEARCH (widget);
     SeahorseAppSettings *app_settings;
     const char *search_text = NULL;
+    GtkRoot *root;
 
     app_settings = seahorse_app_settings_instance ();
 
@@ -106,9 +107,11 @@ search_action (GtkWidget *widget, const char *action_name, GVariant *param)
 
     search_text = gtk_editable_get_text (GTK_EDITABLE (self->search_row));
     seahorse_app_settings_set_last_search_text (app_settings, search_text);
-    gtk_window_close (GTK_WINDOW (self));
+    adw_dialog_close (ADW_DIALOG (self));
+
+    root = gtk_widget_get_root (GTK_WIDGET (self));
     seahorse_keyserver_results_show (search_text,
-                                     gtk_window_get_transient_for (GTK_WINDOW (self)));
+                                     GTK_IS_WINDOW (root)? GTK_WINDOW (root) : NULL);
 }
 
 static void
@@ -258,16 +261,8 @@ seahorse_keyserver_search_class_init (SeahorseKeyserverSearchClass *klass)
     gtk_widget_class_bind_template_callback (widget_class, on_keyserver_search_control_changed);
 }
 
-/**
- * seahorse_keyserver_search_show:
- * @parent: the parent window to connect this window to
- *
- * Shows a remote search window.
- *
- * Returns: the new window.
- */
 SeahorseKeyserverSearch *
-seahorse_keyserver_search_new (GtkWindow *parent)
+seahorse_keyserver_search_new ()
 {
     g_autoptr(SeahorseKeyserverSearch) self = NULL;
 
