@@ -183,7 +183,7 @@ public class Seahorse.Pkcs11.CertificateWidget : Gtk.Box {
 
     private void add_ski(Adw.PreferencesGroup group,
                          Gcr.CertificateExtensionSubjectKeyIdentifier ext) {
-        var keyid = bytes_to_hex(ext.get_key_id());
+        var keyid = bytes_to_hex(ext.get_key_id(), ":");
         var row = create_property_row(_("Subject Key Identifier"), keyid);
         row.add_css_class("monospace");
         group.add(row);
@@ -203,6 +203,7 @@ public class Seahorse.Pkcs11.CertificateWidget : Gtk.Box {
                                        Gcr.CertificateExtension ext) {
         var value_str = bytes_to_hex(ext.value);
         var row = create_property_row(_("Raw value"), value_str);
+        row.add_css_class("monospace");
         group.add(row);
     }
 
@@ -222,9 +223,9 @@ public class Seahorse.Pkcs11.CertificateWidget : Gtk.Box {
         var result = new StringBuilder();
         unowned var data = bytes.get_data();
         for (uint i = 0; i < data.length; i++) {
-            if (sep2char != null && i > 0 && (i % 2) == 0)
+            if (sep2char != null && i > 0)
                 result.append(sep2char);
-            result.append_printf("%x", data[i]);
+            result.append_printf("%02x", data[i]);
         }
         return result.free_and_steal();
     }
