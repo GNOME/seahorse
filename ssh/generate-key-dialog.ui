@@ -77,14 +77,21 @@
                           <object class="AdwComboRow" id="algo_row">
                             <property name="title" translatable="yes">Encryption _Type</property>
                             <property name="use_underline">True</property>
+                            <property name="expression">
+                              <closure type="gchararray" function="algo_to_string">
+                                <lookup name="value" type="AdwEnumListItem"/>
+                              </closure>
+                            </property>
                             <property name="model">
-                              <object class="GtkStringList">
-                                <items>
-                                  <item translatable="yes">RSA</item>
-                                  <item translatable="yes">DSA</item>
-                                  <item translatable="yes">ECDSA</item>
-                                  <item translatable="yes">ED25519</item>
-                                </items>
+                              <object class="GtkFilterListModel">
+                                <property name="filter">
+                                  <object class="GtkCustomFilter" id="algo_filter"/>
+                                </property>
+                                <property name="model">
+                                  <object class="AdwEnumListModel">
+                                    <property name="enum-type">SeahorseSshAlgorithm</property>
+                                  </object>
+                                </property>
                               </object>
                             </property>
                             <signal name="notify::selected" handler="on_algo_row_selected_changed"/>

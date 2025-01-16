@@ -22,7 +22,6 @@
 [GtkTemplate (ui = "/org/gnome/Seahorse/ssh-generate-key-dialog.ui")]
 public class Seahorse.Ssh.GenerateKeyDialog : Adw.Dialog {
 
-    public const int DEFAULT_DSA_SIZE = 1024;
     public const int DEFAULT_RSA_SIZE = 2048;
 
     public Ssh.Source source { get; construct set; }
@@ -31,11 +30,14 @@ public class Seahorse.Ssh.GenerateKeyDialog : Adw.Dialog {
     private KeyLengthChooser key_length_chooser;
     [GtkChild] private unowned Adw.EntryRow email_row;
     [GtkChild] private unowned Adw.ComboRow algo_row;
+    [GtkChild] private unowned Gtk.CustomFilter algo_filter;
 
     // Fired if a key was successfully created
     public signal void key_created(Ssh.Key key);
 
     static construct {
+        typeof(Ssh.Algorithm).ensure();
+
         install_action("generate-key", null, (Gtk.WidgetActionActivateFunc) action_generate_key);
     }
 
@@ -44,6 +46,10 @@ public class Seahorse.Ssh.GenerateKeyDialog : Adw.Dialog {
         this.key_length_chooser.valign = Gtk.Align.CENTER;
         this.key_strength_row.add_suffix(this.key_length_chooser);
 
+        this.algo_filter.set_filter_func((item) => {
+            var algo = (Ssh.Algorithm) ((Adw.EnumListItem) item).value;
+            return algo != Algorithm.UNKNOWN && !algo.is_deprecated();
+        });
         // on_algo_changed() gets called, bits chooser is setup
         this.algo_row.selected = 0;
     }
@@ -53,9 +59,13 @@ public class Seahorse.Ssh.GenerateKeyDialog : Adw.Dialog {
     }
 
     [GtkCallback]
+    private string algo_to_string(Ssh.Algorithm algo) {
+        return algo.to_string();
+    }
+
+    [GtkCallback]
     private void on_algo_row_selected_changed(GLib.Object obj, ParamSpec pspec) {
-        var t = ((Gtk.StringObject) this.algo_row.selected_item).string;
-        this.key_length_chooser.algorithm = Algorithm.from_string(t);
+        this.key_length_chooser.algorithm = get_selected_algo();
     }
 
     private void action_generate_key(string action_name, Variant? param) {
@@ -63,6 +73,10 @@ public class Seahorse.Ssh.GenerateKeyDialog : Adw.Dialog {
             generate_key.end(res);
             close();
         });
+    }
+
+    private Ssh.Algorithm get_selected_algo() {
+        return (Algorithm) ((Adw.EnumListItem) this.algo_row.selected_item).value;
     }
 
     /**
@@ -76,8 +90,7 @@ public class Seahorse.Ssh.GenerateKeyDialog : Adw.Dialog {
         string email = this.email_row.text;
 
         // The algorithm
-        var t = ((Gtk.StringObject) this.algo_row.selected_item).string;
-        Algorithm type = Algorithm.from_string(t);
+        var type = get_selected_algo();
         assert(type != Algorithm.UNKNOWN);
 
         uint bits = this.key_length_chooser.get_length();
@@ -87,7 +100,7 @@ public class Seahorse.Ssh.GenerateKeyDialog : Adw.Dialog {
 
         // We start creation
         try {
-            debug("Generating %s key '%s' (file '%s')", t, email, filename);
+            debug("Generating %s key '%s' (file '%s')", type.to_string(), email, filename);
             GenerateOperation op = new GenerateOperation();
             Cancellable cancellable = new Cancellable();
             Seahorse.Progress.show(cancellable, _("Creating Secure Shell Key"), false);

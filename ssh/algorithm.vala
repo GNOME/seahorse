@@ -50,6 +50,20 @@ public enum Seahorse.Ssh.Algorithm {
         };
     }
 
+    /** Returns whether the algorihm is considered deprecated */
+    public bool is_deprecated() {
+        switch(this) {
+            case RSA:
+            case ECDSA:
+            case ED25519:
+                return false;
+            case DSA:
+                return true;
+            default:
+                assert_not_reached();
+        };
+    }
+
     /**
      * Converts a string representation into a Algorithm.
      *
