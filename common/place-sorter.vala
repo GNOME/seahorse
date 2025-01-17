@@ -24,11 +24,11 @@ public class Seahorse.PlaceSorter : Gtk.Sorter {
   }
 
   public override Gtk.Ordering compare(GLib.Object? item1, GLib.Object? item2) {
-    unowned var obj1 = (Seahorse.Object) item1;
-    unowned var obj2 = (Seahorse.Object) item2;
+    unowned var obj1 = (Seahorse.Item) item1;
+    unowned var obj2 = (Seahorse.Item) item2;
 
-    unowned var place1 = obj1.place;
-    unowned var place2 = obj2.place;
+    var place1 = obj1.place;
+    var place2 = obj2.place;
 
     if (place1 == place2)
         return Gtk.Ordering.EQUAL;

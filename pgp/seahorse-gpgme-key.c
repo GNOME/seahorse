@@ -347,12 +347,8 @@ seahorse_gpgme_key_realize (SeahorseGpgmeKey *self)
         usage = SEAHORSE_USAGE_PUBLIC_KEY;
     }
 
-    g_object_set (self,
-                  "usage", usage,
-                  "object-flags", flags,
-                  NULL);
-
-    seahorse_pgp_key_realize (SEAHORSE_PGP_KEY (self));
+    seahorse_pgp_key_set_usage (SEAHORSE_PGP_KEY (self), usage);
+    seahorse_pgp_key_set_item_flags (SEAHORSE_PGP_KEY (self), flags);
 }
 
 void

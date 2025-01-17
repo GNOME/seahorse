@@ -23,40 +23,60 @@
 /**
  * Represents an item in the KeyManager's (i.e. the main window) list of items.
  */
+[GtkTemplate (ui = "/org/gnome/Seahorse/key-manager-item-row.ui")]
 public class Seahorse.KeyManagerItemRow : Gtk.ListBoxRow {
 
-    public GLib.Object object { get; construct set; }
+    private Seahorse.Item? _item;
+    public Seahorse.Item? item {
+        get { return this._item; }
+        set {
+            if (this._item == value)
+                return;
 
-    construct {
-        var grid = new Gtk.Grid();
-        grid.add_css_class("seahorse-item-listbox-row");
-        set_child(grid);
-
-        GLib.Icon? icon = null;
-        object.get("icon", out icon);
-        if (icon != null) {
-            var img = new Gtk.Image.from_gicon(icon);
-            img.pixel_size = 16;
-            grid.attach(img, 0, 0, 1, 2);
+            unbind();
+            this._item = value;
+            bind();
         }
+    }
+    private ulong notify_handler = 0;
 
-        var markup_label = new Gtk.Label(null);
-        object.bind_property("label", markup_label, "label", BindingFlags.SYNC_CREATE);
-        markup_label.halign = Gtk.Align.START;
-        markup_label.xalign = 0.0f;
-        markup_label.hexpand = true;
-        markup_label.ellipsize = Pango.EllipsizeMode.END;
-        grid.attach(markup_label, 1, 0);
+    [GtkChild] private unowned Gtk.Image icon;
+    [GtkChild] private unowned Gtk.Label title_label;
+    [GtkChild] private unowned Gtk.Label subtitle_label;
+    [GtkChild] private unowned Gtk.Label description_label;
 
-        var description_label = new Gtk.Label(null);
-        object.bind_property("description", description_label, "label", BindingFlags.SYNC_CREATE);
-        description_label.xalign = 1.0f;
-        description_label.valign = Gtk.Align.START;
-        description_label.add_css_class("seahorse-item-listbox-row-description");
-        grid.attach(description_label, 2, 0);
+    public KeyManagerItemRow(Seahorse.Item item) {
+        Object(item: item);
     }
 
-    public KeyManagerItemRow(GLib.Object object) {
-        GLib.Object(object: object);
+    private void bind() {
+        this.notify_handler = item.notify.connect((obj, pspec) => {
+            update_details();
+        });
+        update_details();
+    }
+
+    private void update_details() {
+        if (this.item.icon != null)
+            this.icon.gicon = this.item.icon;
+
+        this.title_label.label = this.item.title;
+
+        var subtitle = this.item.subtitle;
+        if (subtitle != null && subtitle != "") {
+            this.subtitle_label.label = this.item.subtitle;
+            this.subtitle_label.visible = true;
+        } else {
+            this.subtitle_label.label = "";
+            this.subtitle_label.visible = false;
+        }
+
+        this.description_label.label = this.item.description;
+    }
+
+    private void unbind() {
+        if (this.notify_handler != 0)
+            this.item.disconnect(this.notify_handler);
+        this.notify_handler = 0;
     }
 }

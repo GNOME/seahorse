@@ -55,7 +55,7 @@ public class Pgp.Backend : GLib.Object, GLib.ListModel, Place {
     public void add_remote(string uri, bool persist);
     public void remove_remote(string uri);
 
-    public Seahorse.Object create_key_for_parsed(Gcr.Parsed parsed);
+    public Seahorse.Item create_key_for_parsed(Gcr.Parsed parsed);
 }
 
 [CCode (cheader_filename = "pgp/seahorse-server-source.h")]

@@ -28,13 +28,13 @@ public abstract class Catalog : Adw.ApplicationWindow {
     protected MenuModel context_menu;
     private GLib.Settings _settings;
 
-    public abstract GLib.List<GLib.Object> get_selected_objects();
+    public abstract GLib.List<Seahorse.Item> get_selected_items();
 
     private const ActionEntry[] ACTION_ENTRIES = {
-        { "file-export",         on_key_export_file },
-        { "copy",                on_key_export_clipboard },
-        { "edit-delete",         on_object_delete },
-        { "properties-object",   on_properties_object },
+        { "file-export", on_key_export_file },
+        { "copy", on_key_export_clipboard },
+        { "edit-delete", on_item_delete },
+        { "properties-item", on_properties_item },
     };
 
     construct {
@@ -62,53 +62,49 @@ public abstract class Catalog : Adw.ApplicationWindow {
     }
 
     public virtual signal void selection_changed() {
-        bool can_properties = false;
         bool can_delete = false;
         bool can_export = false;
 
-        var objects = this.get_selected_objects();
-        foreach (var object in objects) {
-            if (Exportable.can_export(object))
+        var items = this.get_selected_items();
+        foreach (var item in items) {
+            if (Exportable.can_export(item))
                 can_export = true;
-            if (Deletable.can_delete(object))
+            if (Deletable.can_delete(item))
                 can_delete = true;
-            if (Viewable.can_view(object))
-                can_properties = true;
-            if (can_export && can_delete && can_properties)
+            if (can_export && can_delete)
                 break;
         }
 
-        ((SimpleAction) lookup_action("properties-object")).set_enabled(can_properties);
         ((SimpleAction) lookup_action("edit-delete")).set_enabled(can_delete);;
         ((SimpleAction) lookup_action("copy")).set_enabled(can_export);
 
         // FIXME: for now, we only allow exporting a single item at a time
-        ((SimpleAction) lookup_action("file-export")).set_enabled(can_export && objects.length() == 1);
+        ((SimpleAction) lookup_action("file-export")).set_enabled(can_export && items.length() == 1);
     }
 
-    public void show_properties(GLib.Object obj) {
-        Viewable.view(obj, this);
+    public void show_properties(Seahorse.Item item) {
+        item.view(this);
     }
 
-    private void on_object_delete(SimpleAction action, Variant? param) {
-        var objects = this.get_selected_objects();
-        if (objects.length() == 0)
+    private void on_item_delete(SimpleAction action, Variant? param) {
+        var items = this.get_selected_items();
+        if (items.length() == 0)
             return;
 
         // Sanity check
         unowned Deletable first = null;
-        foreach (unowned var object in objects) {
-            if (!(object is Deletable)) {
-                objects.remove(object);
+        foreach (unowned var item in items) {
+            if (!(item is Deletable)) {
+                items.remove(item);
                 continue;
             }
             if (first == null)
-                first = (Deletable) object;
+                first = (Deletable) item;
         }
 
         var delete_op = first.create_delete_operation();
         // XXX
-        // foreach (unowned var obj in objects.next()) {
+        // foreach (unowned var obj in items.next()) {
         //     delete_op.add_item();
         // }
 
@@ -123,10 +119,10 @@ public abstract class Catalog : Adw.ApplicationWindow {
         });
     }
 
-    private void on_properties_object(SimpleAction action, Variant? param) {
-        var objects = get_selected_objects();
-        if (objects.length() > 0)
-            show_properties(objects.data);
+    private void on_properties_item(SimpleAction action, Variant? param) {
+        var items = get_selected_items();
+        if (items.length() > 0)
+            show_properties(items.data);
     }
 
     private void on_key_export_file(SimpleAction action, Variant? param) {
@@ -134,7 +130,7 @@ public abstract class Catalog : Adw.ApplicationWindow {
     }
 
     private async void export_file_async() {
-        var exportable = get_selected_objects().data as Exportable;
+        var exportable = get_selected_items().data as Exportable;
         var export_op = exportable.create_export_operation();
 
         try {
@@ -160,7 +156,7 @@ public abstract class Catalog : Adw.ApplicationWindow {
         var output = new MemoryOutputStream.resizable();
 
         // Do the export
-        var exportable = get_selected_objects().data as Exportable;
+        var exportable = get_selected_items().data as Exportable;
         var export_op = exportable.create_export_operation();
         export_op.output = output;
 

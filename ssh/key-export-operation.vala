@@ -69,7 +69,7 @@ public class Seahorse.Ssh.KeyExportOperation : ExportOperation {
                 return Path.get_basename(location);
         }
 
-        unowned var basename = this.key.nickname ?? _("SSH Key");
+        unowned var basename = parse_first_word(this.key.comment) ?? this.key.algo.to_string();
         if (this.secret) {
             var filename = "id_%s".printf(basename).strip();
             filename.delimit(BAD_FILENAME_CHARS, '_');
@@ -79,6 +79,16 @@ public class Seahorse.Ssh.KeyExportOperation : ExportOperation {
             filename.delimit(BAD_FILENAME_CHARS, '_');
             return filename;
         }
+    }
+
+    private string? parse_first_word(string? line) {
+        if (line == null)
+            return null;
+
+        const string PARSE_CHARS = "\t \n@;,.\\?()[]{}+/";
+
+        string[] words = line.split_set(PARSE_CHARS, 2);
+        return (words.length == 2)? words[0] : null;
     }
 
     public override async bool execute(Cancellable? cancellable = null)

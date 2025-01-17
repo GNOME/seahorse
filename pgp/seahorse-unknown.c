@@ -26,7 +26,7 @@
 #include <glib/gi18n.h>
 
 struct _SeahorseUnknown {
-    SeahorseObject parent;
+    GObject parent;
 
     char *keyid;
 };
@@ -38,7 +38,7 @@ enum {
 };
 static GParamSpec *properties[N_PROPS] = { NULL, };
 
-G_DEFINE_TYPE (SeahorseUnknown, seahorse_unknown, SEAHORSE_TYPE_OBJECT);
+G_DEFINE_TYPE (SeahorseUnknown, seahorse_unknown, G_TYPE_OBJECT);
 
 static void
 seahorse_unknown_get_property (GObject *object,
@@ -56,8 +56,10 @@ seahorse_unknown_get_property (GObject *object,
 }
 
 static void
-seahorse_unknown_set_property (GObject *object, guint prop_id, const GValue *value,
-                                 GParamSpec *pspec)
+seahorse_unknown_set_property (GObject *object,
+                               unsigned int prop_id,
+                               const GValue *value,
+                               GParamSpec *pspec)
 {
     SeahorseUnknown *self = SEAHORSE_UNKNOWN (object);
 

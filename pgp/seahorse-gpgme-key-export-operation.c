@@ -158,7 +158,7 @@ get_suggested_filename (SeahorseGpgmeKeyExportOperation *self)
     const char *basename = NULL;
     char *filename;
 
-    basename = seahorse_object_get_nickname (SEAHORSE_OBJECT (self->key));
+    basename = seahorse_pgp_key_get_primary_name (SEAHORSE_PGP_KEY (self->key));
     if (basename == NULL)
         basename = _("Key Data");
 

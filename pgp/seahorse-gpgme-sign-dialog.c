@@ -33,7 +33,7 @@
 struct _SeahorseGpgmeSignDialog {
     GtkApplicationWindow parent_instance;
 
-    SeahorseObject *to_sign;
+    SeahorseItem *to_sign;
 
     GtkWidget *to_sign_name_label;
 
@@ -126,7 +126,7 @@ sign_action (GtkWidget *widget, const char *action_name, GVariant *param)
     signer = adw_combo_row_get_selected_item (ADW_COMBO_ROW (self->signer_row));
 
     g_assert (!signer || (SEAHORSE_GPGME_IS_KEY (signer) &&
-                          seahorse_object_get_usage (SEAHORSE_OBJECT (signer)) == SEAHORSE_USAGE_PRIVATE_KEY));
+                          seahorse_pgp_key_is_private_key (signer)));
 
     if (SEAHORSE_GPGME_IS_UID (self->to_sign))
         err = seahorse_gpgme_key_op_sign_uid (SEAHORSE_GPGME_UID (self->to_sign), SEAHORSE_GPGME_KEY (signer), check, options);
@@ -139,13 +139,13 @@ sign_action (GtkWidget *widget, const char *action_name, GVariant *param)
     if (!GPG_IS_OK (err)) {
         if (gpgme_err_code (err) == GPG_ERR_EALREADY) {
             AdwDialog *dialog;
-            const char *label;
+            const char *title;
 
-            label = seahorse_object_get_label (SEAHORSE_OBJECT (signer));
+            title = seahorse_item_get_title (SEAHORSE_ITEM (signer));
             dialog = adw_alert_dialog_new (NULL, NULL);
             adw_alert_dialog_format_body (ADW_ALERT_DIALOG (dialog),
                                           _("This key was already signed by\n“%s”"),
-                                          label);
+                                          title);
             adw_dialog_present (ADW_DIALOG (dialog), GTK_WIDGET (self));
         } else
             seahorse_gpgme_handle_error (err, _("Couldn’t sign key"));
@@ -209,7 +209,7 @@ seahorse_gpgme_sign_dialog_constructed (GObject *obj)
     G_OBJECT_CLASS (seahorse_gpgme_sign_dialog_parent_class)->constructed (obj);
 
     gtk_label_set_text (GTK_LABEL (self->to_sign_name_label),
-                        seahorse_object_get_label (self->to_sign));
+                        seahorse_item_get_title (self->to_sign));
 
     /* Initial choice */
     on_gpgme_sign_choice_toggled (NULL, self);
@@ -239,7 +239,7 @@ seahorse_gpgme_sign_dialog_class_init (SeahorseGpgmeSignDialogClass *klass)
     obj_props[PROP_TO_SIGN] =
         g_param_spec_object ("to-sign", "Item to be signed",
                              "The GPGME key or uid you want to sign",
-                             SEAHORSE_TYPE_OBJECT,
+                             SEAHORSE_TYPE_ITEM,
                              G_PARAM_READWRITE |
                              G_PARAM_CONSTRUCT_ONLY |
                              G_PARAM_STATIC_STRINGS);
@@ -264,7 +264,7 @@ seahorse_gpgme_sign_dialog_class_init (SeahorseGpgmeSignDialogClass *klass)
 }
 
 SeahorseGpgmeSignDialog *
-seahorse_gpgme_sign_dialog_new (SeahorseObject *to_sign)
+seahorse_gpgme_sign_dialog_new (SeahorseItem *to_sign)
 {
     g_autoptr(SeahorseGpgmeSignDialog) self = NULL;
     g_autoptr(GListModel) model = NULL;

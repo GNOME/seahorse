@@ -180,7 +180,7 @@ seahorse_pgp_subkey_list_box_constructed (GObject *obj)
     on_key_subkeys_changed (subkeys, 0, 0, g_list_model_get_n_items (subkeys), self);
 
     /* If applicable, add a button to add a new subkey too */
-    usage = seahorse_object_get_usage (SEAHORSE_OBJECT (self->key));
+    usage = seahorse_item_get_usage (SEAHORSE_ITEM (self->key));
     if (usage == SEAHORSE_USAGE_PRIVATE_KEY) {
         GtkWidget *button_content;
         GtkWidget *button;
@@ -437,7 +437,7 @@ update_row (SeahorsePgpSubkeyListBoxRow *row)
     gtk_label_set_text (GTK_LABEL (row->created_label), created_str);
 
     parent_key = seahorse_pgp_subkey_get_parent_key (SEAHORSE_PGP_SUBKEY (row->subkey));
-    if (seahorse_object_get_usage (SEAHORSE_OBJECT (parent_key)) != SEAHORSE_USAGE_PRIVATE_KEY)
+    if (seahorse_item_get_usage (SEAHORSE_ITEM (parent_key)) != SEAHORSE_USAGE_PRIVATE_KEY)
         gtk_widget_set_visible (row->actions_button, FALSE);
 }
 

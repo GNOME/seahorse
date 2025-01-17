@@ -98,7 +98,6 @@ seahorse_pgp_uid_list_box_constructed (GObject *object)
 {
     SeahorsePgpUidListBox *self = SEAHORSE_PGP_UID_LIST_BOX (object);
     GListModel *uids;
-    SeahorseUsage usage;
 
     G_OBJECT_CLASS (seahorse_pgp_uid_list_box_parent_class)->constructed (object);
 
@@ -112,8 +111,7 @@ seahorse_pgp_uid_list_box_constructed (GObject *object)
     on_key_uids_changed (uids, 0, 0, g_list_model_get_n_items (uids), self);
 
     /* If applicable, add a button to add a new uid too */
-    usage = seahorse_object_get_usage (SEAHORSE_OBJECT (self->key));
-    if (usage == SEAHORSE_USAGE_PRIVATE_KEY) {
+    if (seahorse_pgp_key_is_private_key (self->key)) {
         GtkWidget *button_content;
         GtkWidget *button;
 
@@ -290,7 +288,7 @@ on_only_trusted_changed (GSimpleAction *action,
     for (unsigned int i = 0; i < n_signatures; i++) {
         g_autoptr(SeahorsePgpSignature) sig = NULL;
         GtkListBoxRow *sig_row;
-        SeahorseObject *signer;
+        SeahorseItem *signer;
         gboolean trusted = FALSE;
         gboolean should_show;
 
@@ -299,9 +297,9 @@ on_only_trusted_changed (GSimpleAction *action,
 
         signer = g_object_get_data (G_OBJECT (sig_row), "signer");
         if (signer) {
-            if (seahorse_object_get_usage (signer) == SEAHORSE_USAGE_PRIVATE_KEY)
+            if (seahorse_item_get_usage (signer) == SEAHORSE_USAGE_PRIVATE_KEY)
                 trusted = TRUE;
-            else if (seahorse_object_get_flags (signer) & SEAHORSE_FLAG_TRUSTED)
+            else if (seahorse_item_get_item_flags (signer) & SEAHORSE_FLAG_TRUSTED)
                 trusted = TRUE;
         }
 
@@ -401,7 +399,7 @@ on_uid_sign (GSimpleAction *action, GVariant *param, void *user_data)
 
     g_return_if_fail (SEAHORSE_GPGME_IS_UID (row->uid));
 
-    dialog = seahorse_gpgme_sign_dialog_new (SEAHORSE_OBJECT (row->uid));
+    dialog = seahorse_gpgme_sign_dialog_new (SEAHORSE_ITEM (row->uid));
     gtk_window_present (GTK_WINDOW (dialog));
 }
 

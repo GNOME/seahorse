@@ -210,7 +210,7 @@ seahorse_gpgme_uid_set_actual_index (SeahorseGpgmeUid *self, guint actual_index)
     g_object_notify (G_OBJECT (self), "actual-index");
 }
 
-gchar*
+char *
 seahorse_gpgme_uid_calc_label (gpgme_user_id_t userid)
 {
     g_return_val_if_fail (userid, NULL);
@@ -222,20 +222,6 @@ seahorse_gpgme_uid_calc_name (gpgme_user_id_t userid)
 {
     g_return_val_if_fail (userid, NULL);
     return convert_string (userid->name);
-}
-
-gchar*
-seahorse_gpgme_uid_calc_markup (gpgme_user_id_t userid, guint flags)
-{
-    g_autofree gchar *email = NULL, *name = NULL, *comment = NULL;
-
-    g_return_val_if_fail (userid, NULL);
-
-    name = convert_string (userid->name);
-    email = convert_string (userid->email);
-    comment = convert_string (userid->comment);
-
-    return seahorse_pgp_uid_calc_markup (name, email, comment, flags);
 }
 
 gboolean

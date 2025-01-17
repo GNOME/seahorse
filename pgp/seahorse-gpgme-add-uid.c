@@ -180,7 +180,7 @@ seahorse_gpgme_add_uid_constructed (GObject *obj)
 
     G_OBJECT_CLASS (seahorse_gpgme_add_uid_parent_class)->constructed (obj);
 
-    user = seahorse_object_get_label (SEAHORSE_OBJECT (self->key));
+    user = seahorse_item_get_title (SEAHORSE_ITEM (self->key));
     gtk_window_set_title (GTK_WINDOW (self),
                           g_strdup_printf (_("Add user ID to %s"), user));
 }

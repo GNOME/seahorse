@@ -35,10 +35,10 @@ public enum Use {
  * constructor, so to add specific info for certain categories of items, we
  * stuff everything into the {@link ItemInfo} field.
  */
-public class Item : Secret.Item, Deletable, Viewable {
+public class Item : Secret.Item, Deletable, Viewable, Seahorse.Item {
 
     public string description {
-        owned get {
+        get {
             ensure_item_info();
             return this._info.description;
         }
@@ -53,44 +53,39 @@ public class Item : Secret.Item, Deletable, Viewable {
         }
     }
 
+    private Secret.Value? _item_secret = null;
     public bool has_secret {
-        get { return _item_secret != null; }
+        get { return this._item_secret != null; }
     }
 
-    public Keyring place {
-        owned get { return (Keyring)_place.get(); }
-        set { _place.set(value); }
+    private GLib.WeakRef _keyring;
+    public Place? place {
+        owned get { return (Keyring) this._keyring.get(); }
+        set { this._keyring.set(value); }
     }
 
-    public Flags object_flags {
+    public Flags item_flags {
         get { return Flags.PERSONAL; }
     }
 
-    public GLib.Icon icon {
-        owned get {
+    public GLib.Icon? icon {
+        get {
             ensure_item_info();
-            return this._info.icon ?? new GLib.ThemedIcon("secret-item-symbolic");
+            return this._info.icon;
         }
     }
 
-    public new string label {
-        owned get {
+    public string title {
+        get {
             ensure_item_info ();
             return this._info.label ?? "";
         }
     }
 
-    public string markup {
+    public string? subtitle {
         owned get {
             ensure_item_info ();
-            var result = new StringBuilder("");
-            result.append(Markup.escape_text(this._info.label ?? ""));
-            if (this._info.details != null && this._info.details != "") {
-                result.append("<span size='small' rise='0' foreground='#555555'>\n");
-                result.append(this._info.details);
-                result.append("</span>");
-            }
-            return result.str;
+            return this._info.details;
         }
     }
 
@@ -102,9 +97,7 @@ public class Item : Secret.Item, Deletable, Viewable {
         get { return true; }
     }
 
-    private Secret.Value? _item_secret = null;
     private ItemInfo? _info = null;
-    private GLib.WeakRef _place;
     private GLib.Cancellable? _req_secret = null;
 
     construct {
@@ -112,12 +105,10 @@ public class Item : Secret.Item, Deletable, Viewable {
             this._info = null;
             freeze_notify();
             notify_property("has-secret");
-            notify_property("use");
-            notify_property("label");
             notify_property("icon");
-            notify_property("markup");
+            notify_property("title");
+            notify_property("subtitle");
             notify_property("description");
-            notify_property("object-flags");
             thaw_notify();
         });
     }

@@ -19,7 +19,9 @@
  * 02111-1307, USA.
  */
 
-public class Seahorse.Pkcs11.CertKeyPair : Object, Deletable, Exportable, Viewable {
+public class Seahorse.Pkcs11.CertKeyPair : GLib.Object,
+                                           Deletable, Exportable, Viewable,
+                                           Seahorse.Item {
 
     public Gck.Attribute* id { get; set; default = null; }
 
@@ -27,15 +29,12 @@ public class Seahorse.Pkcs11.CertKeyPair : Object, Deletable, Exportable, Viewab
     public Certificate? certificate {
         get { return this._certificate; }
         set {
+            if (this._certificate == value)
+                return;
             this._certificate = value;
-            update_flags();
-            update_label();
-            update_icon();
             notify_property("certificate");
-            notify_property("label");
-            notify_property("icon");
-            notify_property("description");
             notify_property("is-pair");
+            update_details();
         }
     }
 
@@ -43,15 +42,12 @@ public class Seahorse.Pkcs11.CertKeyPair : Object, Deletable, Exportable, Viewab
     public PrivateKey? private_key {
         get { return this._private_key; }
         set {
+            if (this._private_key == value)
+                return;
             this._private_key = value;
-            update_flags();
-            update_label();
-            update_icon();
             notify_property("private-key");
-            notify_property("label");
-            notify_property("icon");
-            notify_property("description");
             notify_property("is-pair");
+            update_details();
         }
     }
 
@@ -59,9 +55,76 @@ public class Seahorse.Pkcs11.CertKeyPair : Object, Deletable, Exportable, Viewab
         get { return this._certificate != null && this._private_key != null; }
     }
 
+    private unowned Token? _token;
+    public Place? place {
+        owned get { return this._token; }
+        set { this._token = (Token) value; }
+    }
+    public Token? token {
+        get { return this._token; }
+    }
+
+    private GLib.Icon _icon;
+    public GLib.Icon? icon {
+        get { return this._icon; }
+    }
+
+    private string _title = "";
+    public string title {
+        get { return this._title; }
+    }
+
+    private string _subtitle = "";
+    public string? subtitle {
+        owned get { return this._subtitle; }
+    }
+
+    public string description {
+        get {
+            if (this.is_pair)
+                return _("Personal certificate and key");
+
+            if (this._certificate != null) {
+                if (Flags.PERSONAL in this.item_flags)
+                    return _("Personal certificate");
+                return _("Certificate");
+            }
+            return _("Private key");
+        }
+    }
+
+    public Usage usage {
+        get { return Usage.NONE; }
+    }
+
+    public Flags item_flags {
+        get {
+            // If a matching private key, then this is personal
+            if (this._private_key != null)
+                return Flags.PERSONAL | Flags.TRUSTED;
+
+            var cert_attributes = this.certificate.attributes;
+            ulong category = 0;
+            if (cert_attributes != null &&
+                cert_attributes.find_ulong(CKA.CERTIFICATE_CATEGORY, out category)) {
+
+                if (category == 2)
+                    return Flags.NONE;
+                if (category == 1)
+                    return Flags.PERSONAL;
+            }
+
+            bool is_ca;
+            if (this.certificate.get_basic_constraints(out is_ca, null))
+                return is_ca ? Flags.NONE : Flags.PERSONAL;
+
+            return Flags.PERSONAL;
+        }
+    }
+
     public bool deletable {
         get {
-            unowned var token = (Token?) this.place;
+            unowned var token = (Token?) this.token;
             if (token == null || token.is_write_protected())
                 return false;
 
@@ -80,27 +143,12 @@ public class Seahorse.Pkcs11.CertKeyPair : Object, Deletable, Exportable, Viewab
         }
     }
 
-    public string description {
-        owned get {
-            if (this.is_pair) {
-                return _("Personal certificate and key");
-            } else if (this._certificate != null) {
-                if (Flags.PERSONAL in this.object_flags)
-                    return _("Personal certificate");
-                else
-                    return _("Certificate");
-            } else {
-                return _("Private key");
-            }
-        }
-    }
-
     public CertKeyPair.for_cert(Token? token, Certificate certificate) {
-        GLib.Object(place: token, certificate: certificate);
+        Object(place: token, certificate: certificate);
     }
 
     public CertKeyPair.for_private_key(Token? token, PrivateKey key) {
-        GLib.Object(place: token, private_key: key);
+        Object(place: token, private_key: key);
     }
 
     public Seahorse.Panel create_panel() {
@@ -126,69 +174,35 @@ public class Seahorse.Pkcs11.CertKeyPair : Object, Deletable, Exportable, Viewab
         return new Pkcs11.CertificateDerExportOperation(this.certificate);
     }
 
-    private void update_label() {
-        if (this.certificate != null) {
-            var sn = this.certificate.get_subject_name();
-            if (sn != null)
-                this.label = sn;
-        } else if (this.private_key != null) {
+    private void update_details() {
+        string? title = null, subtitle = null;
+
+        if (this.private_key != null) {
             var cka_label = this.private_key.get_cka_label();
-            if (cka_label != null)
-                this.label = cka_label;
-        } else { // fall back
+            title = cka_label ?? _("Unnamed Private Key");
             if (this.certificate != null) {
-                this.label = _("Unnamed Certificate");
+                var icon = new GLib.ThemedIcon("application-certificate-symbolic");
+                var emblem = new GLib.Emblem(new ThemedIcon("key-item-symbolic"));
+                this._icon = new GLib.EmblemedIcon(icon, emblem);
             } else {
-                this.label = _("Unnamed Private Key");
+                this._icon = new ThemedIcon("key-item-symbolic");
             }
-        }
-    }
-
-    private void update_flags() {
-        // If a matching private key, then this is personal
-        if (this._private_key != null) {
-            this.object_flags = Flags.PERSONAL | Flags.TRUSTED;
-            return;
+        } else if (this.certificate != null) {
+            title = this.certificate.issuer_name ?? _("Unnamed Certificate");
+            subtitle = _("Issued by: %s").printf(this.certificate.issuer_name);
+            this._icon = new GLib.ThemedIcon("application-certificate-symbolic");
         }
 
-        var cert_attributes = this.certificate.attributes;
-        ulong category = 0;
-        if (cert_attributes != null &&
-            cert_attributes.find_ulong(CKA.CERTIFICATE_CATEGORY, out category)) {
-
-            if (category == 2) {
-                this.object_flags = 0;
-                return;
-            }
-            if (category == 1) {
-                this.object_flags = Flags.PERSONAL;
-                return;
-            }
+        if (title != this._title) {
+            this._title = title;
+            notify_property("title");
+        }
+        if (subtitle != this._subtitle) {
+            this._subtitle = subtitle;
+            notify_property("subtitle");
         }
 
-        bool is_ca;
-        if (this.certificate.get_basic_constraints(out is_ca, null)) {
-            this.object_flags = is_ca ? Flags.NONE : Flags.PERSONAL;
-            return;
-        }
-
-        this.object_flags = Flags.PERSONAL;
-    }
-
-    private void update_icon() {
-        if (this.certificate != null) {
-            var icon = new GLib.ThemedIcon("application-certificate-symbolic");
-            if (this.private_key != null) {
-                var eicon = new ThemedIcon("key-item-symbolic");
-                var emblem = new GLib.Emblem(eicon);
-                this.icon = new GLib.EmblemedIcon(icon, emblem);
-            } else {
-                this.icon = icon;
-            }
-        } else if (this.private_key != null) {
-            this.icon = new ThemedIcon("key-item-symbolic");
-        } else {
-            warning("Can't update icon for cert/key pair without either set");
-        }
+        notify_property("description");
+        notify_property("icon");
     }
 }

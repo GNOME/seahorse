@@ -77,8 +77,8 @@ on_remote_find (GSimpleAction *action,
 
 static void
 on_remote_sync (GSimpleAction *action,
-                GVariant *param,
-                gpointer user_data)
+                GVariant      *param,
+                void          *user_data)
 {
     SeahorseActionGroup *actions = SEAHORSE_ACTION_GROUP (user_data);
     g_autoptr(SeahorseCatalog) catalog = NULL;
@@ -87,12 +87,12 @@ on_remote_sync (GSimpleAction *action,
 
     catalog = seahorse_action_group_get_catalog (actions);
     if (catalog != NULL) {
-        g_autoptr(GList) objects = NULL;
+        g_autoptr(GList) items = NULL;
         g_autoptr(GListStore) store = NULL;
 
         store = g_list_store_new (SEAHORSE_PGP_TYPE_KEY);
-        objects = seahorse_catalog_get_selected_objects (catalog);
-        for (GList *l = objects; l != NULL; l = g_list_next (l)) {
+        items = seahorse_catalog_get_selected_items (catalog);
+        for (GList *l = items; l != NULL; l = g_list_next (l)) {
             if (SEAHORSE_PGP_IS_KEY (l->data))
                 g_list_store_append (store, l->data);
         }

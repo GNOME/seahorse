@@ -252,7 +252,7 @@ public class BackendActions : Seahorse.ActionGroup {
     private void action_copy_secret(SimpleAction action, Variant? param)
             requires(this.catalog != null) {
 
-        var selected = this.catalog.get_selected_objects();
+        var selected = this.catalog.get_selected_items();
         // We checked for this in set_actions_for_selected_objects()
         return_if_fail (selected.length() == 1);
 

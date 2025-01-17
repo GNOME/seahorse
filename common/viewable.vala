@@ -21,33 +21,26 @@
 
 public interface Seahorse.Viewable : GLib.Object {
 
-    public static bool can_view(GLib.Object object) {
-        return object is Viewable;
-    }
-
+    /**
+     * Creates a Panel widget that can be used in a PanelWindow, or in another
+     * widget (such as an import dialog).
+     */
     public abstract Seahorse.Panel create_panel();
 
-    public static bool view(GLib.Object object,
-                            Gtk.Window? parent) {
-        if (!Viewable.can_view(object))
-            return false;
-
-        Gtk.Window? window = null;
-
-        window = object.get_data("viewable-window");
+    /** Presents this item to the user */
+    public virtual void view(Gtk.Window? parent = null) {
+        Gtk.Window? window = get_data("viewable-window");
         if (window == null) {
-            unowned var viewable = (Viewable) object;
-            var panel = viewable.create_panel();
+            var panel = create_panel();
             window = new PanelWindow(panel, parent);
 
-            object.set_data("viewable-window", window);
-            window.close_request.connect(() => {
-                object.set_data_full("viewable-window", null, null);
+            set_data("viewable-window", window);
+            window.close_request.connect((w) => {
+                set_data_full("viewable-window", null, null);
                 return false;
             });
         }
 
         window.present();
-        return true;
     }
 }

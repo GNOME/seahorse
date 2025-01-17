@@ -80,7 +80,10 @@ public class Seahorse.KeyManager : Catalog {
 
         // Add new item list and bind our listbox to it
         this.item_list.items_changed.connect((idx, removed, added) => check_empty_state());
-        this.item_listbox.bind_model(this.item_list, (obj) => { return new KeyManagerItemRow(obj); });
+        this.item_listbox.bind_model(this.item_list, (obj) => {
+            unowned var item = (Item) obj;
+            return new KeyManagerItemRow(item);
+        });
 
         init_actions();
 
@@ -126,9 +129,8 @@ public class Seahorse.KeyManager : Catalog {
 
     [GtkCallback]
     private void on_item_listbox_row_activated(Gtk.ListBox item_listbox, Gtk.ListBoxRow row) {
-        unowned GLib.Object obj = ((KeyManagerItemRow) row).object;
-        assert(obj != null);
-        show_properties(obj);
+        unowned var item = ((KeyManagerItemRow) row).item;
+        item.view(this);
     }
 
     [GtkCallback]
@@ -165,7 +167,7 @@ public class Seahorse.KeyManager : Catalog {
         }
 
         // Show context menu (unless no row was right clicked or nothing was selected)
-        var objects = get_selected_item_listbox_items();
+        var objects = get_selected_items();
         debug("We have %u selected objects", objects.length());
         if (objects != null)
             show_context_menu((int) x, (int) y);
@@ -186,24 +188,14 @@ public class Seahorse.KeyManager : Catalog {
         menu.popup();
     }
 
-    private GLib.List<weak GLib.Object> get_selected_item_listbox_items() {
-        var rows = this.item_listbox.get_selected_rows();
-        var objects = new GLib.List<weak GLib.Object>();
-
-        foreach (var row in rows)
-            objects.prepend(((KeyManagerItemRow) row).object);
-
-        return objects;
-    }
-
     public override void selection_changed() {
         base.selection_changed();
 
-        var objects = get_selected_objects();
+        var items = get_selected_items();
         var backends = Backend.get_registered();
         for (uint i = 0; i < backends.get_n_items(); i++) {
             var backend = (Backend) backends.get_item(i);
-            backend.actions.set_actions_for_selected_objects(objects);
+            backend.actions.set_actions_for_selected_objects(items);
         }
     }
 
@@ -373,13 +365,13 @@ public class Seahorse.KeyManager : Catalog {
         update_view_filter(settings.get_string("item-filter"), false);
     }
 
-    public override GLib.List<GLib.Object> get_selected_objects() {
-        var objects = new GLib.List<GLib.Object>();
+    public override GLib.List<Seahorse.Item> get_selected_items() {
+        var items = new GLib.List<Seahorse.Item>();
 
         foreach (var row in this.item_listbox.get_selected_rows()) {
-            objects.append(((KeyManagerItemRow) row).object);
+            items.append(((KeyManagerItemRow) row).item);
         }
-        return objects;
+        return items;
     }
 
     private void on_focus_place(SimpleAction action, Variant? param) {
@@ -456,7 +448,7 @@ public class Seahorse.KeyManager : Catalog {
         uint pos;
         var place = this.sidebar.lookup_place_for_uri(uri, out pos) as Viewable;
         return_if_fail(place != null);
-        Viewable.view(place, this);
+        place.view(this);
     }
 
     private void setup_sidebar() {

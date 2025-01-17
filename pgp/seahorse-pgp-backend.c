@@ -720,7 +720,7 @@ seahorse_pgp_backend_transfer_async (SeahorsePgpBackend *self,
 
         /* Get the place were transferring frmo */
         first = g_list_model_get_item (G_LIST_MODEL (sorted_keys), current_pos);
-        from = seahorse_object_get_place (SEAHORSE_OBJECT (first));
+        from = seahorse_item_get_place (SEAHORSE_ITEM (first));
         g_return_if_fail (SEAHORSE_IS_PLACE (from));
 
         if (from != to) {

@@ -25,11 +25,11 @@
 
 #include "seahorse-pgp-types.h"
 
-#define SEAHORSE_PGP_TYPE_UID            (seahorse_pgp_uid_get_type ())
-G_DECLARE_DERIVABLE_TYPE (SeahorsePgpUid, seahorse_pgp_uid, SEAHORSE_PGP, UID, SeahorseObject)
+#define SEAHORSE_PGP_TYPE_UID (seahorse_pgp_uid_get_type ())
+G_DECLARE_DERIVABLE_TYPE (SeahorsePgpUid, seahorse_pgp_uid, SEAHORSE_PGP, UID, GObject)
 
 struct _SeahorsePgpUidClass {
-    SeahorseObjectClass parent_class;
+    GObjectClass parent_class;
 };
 
 SeahorsePgpUid*   seahorse_pgp_uid_new                  (SeahorsePgpKey *parent,

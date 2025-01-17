@@ -178,7 +178,7 @@ public class Seahorse.Gkr.Keyring : Secret.Collection, GLib.ListModel, Place,
             unowned var object_path = this._items[i].get_object_path();
             if (!seen.contains(object_path)) {
                 var item = lookup_by_path(object_path);
-                item.set("place", null);
+                item.place = null;
                 this._items.remove(item);
                 items_changed(i, 1, 0);
                 i--;

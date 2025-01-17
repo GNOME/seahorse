@@ -30,10 +30,10 @@ enum {
 };
 
 #define SEAHORSE_PGP_TYPE_KEY (seahorse_pgp_key_get_type ())
-G_DECLARE_DERIVABLE_TYPE (SeahorsePgpKey, seahorse_pgp_key, SEAHORSE_PGP, KEY, SeahorseObject)
+G_DECLARE_DERIVABLE_TYPE (SeahorsePgpKey, seahorse_pgp_key, SEAHORSE_PGP, KEY, GObject)
 
 struct _SeahorsePgpKeyClass {
-    SeahorseObjectClass parent_class;
+    GObjectClass parent_class;
 };
 
 SeahorsePgpKey *  seahorse_pgp_key_new                  (void);
@@ -87,9 +87,15 @@ gboolean          seahorse_pgp_key_is_private_key       (SeahorsePgpKey *self);
 
 const char*       seahorse_pgp_key_calc_identifier      (const char *keyid);
 
-const char *       seahorse_pgp_key_get_primary_name    (SeahorsePgpKey *self);
+const char *      seahorse_pgp_key_get_primary_name     (SeahorsePgpKey *self);
 
 guint             seahorse_pgp_keyid_hash               (gconstpointer v);
 
 gboolean          seahorse_pgp_keyid_equal              (gconstpointer v1,
                                                          gconstpointer v2);
+
+void              seahorse_pgp_key_set_usage            (SeahorsePgpKey *self,
+                                                         SeahorseUsage   usage);
+
+void              seahorse_pgp_key_set_item_flags       (SeahorsePgpKey *self,
+                                                         SeahorseFlags   flags);

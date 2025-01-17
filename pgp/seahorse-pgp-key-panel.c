@@ -123,11 +123,9 @@ static void
 action_change_password (GSimpleAction *action, GVariant *param, void *user_data)
 {
     SeahorsePgpKeyPanel *self = SEAHORSE_PGP_KEY_PANEL (user_data);
-    SeahorseUsage usage;
 
-    usage = seahorse_object_get_usage (SEAHORSE_OBJECT (self->key));
-    g_return_if_fail (usage == SEAHORSE_USAGE_PRIVATE_KEY);
     g_return_if_fail (SEAHORSE_GPGME_IS_KEY (self->key));
+    g_return_if_fail (seahorse_pgp_key_is_private_key (self->key));
 
     seahorse_gpgme_key_op_change_pass_async (SEAHORSE_GPGME_KEY (self->key),
                                              NULL,
@@ -146,7 +144,7 @@ do_owner (SeahorsePgpKeyPanel *self)
     GDateTime *expires;
     g_autofree char *expires_str = NULL;
 
-    flags = seahorse_object_get_flags (SEAHORSE_OBJECT (self->key));
+    flags = seahorse_item_get_item_flags (SEAHORSE_ITEM (self->key));
 
     /* Display appropriate warnings */
     gtk_widget_set_visible (self->expired_banner,
@@ -207,7 +205,7 @@ do_owner (SeahorsePgpKeyPanel *self)
             gtk_widget_set_visible (self->comment_label, FALSE);
         }
 
-        label = seahorse_object_get_identifier (SEAHORSE_OBJECT (self->key));
+        label = seahorse_pgp_key_get_keyid (self->key);
         gtk_label_set_text (GTK_LABEL (self->keyid_label), label);
     }
 
@@ -356,11 +354,8 @@ key_trust_filter_func (void *object, void *user_data)
     AdwEnumListItem *item = ADW_ENUM_LIST_ITEM (object);
     SeahorsePgpKeyPanel *self = SEAHORSE_PGP_KEY_PANEL (user_data);
     int trust;
-    SeahorseUsage usage;
 
     trust = adw_enum_list_item_get_value (item);
-    usage = seahorse_object_get_usage (SEAHORSE_OBJECT (self->key));
-
     switch (trust) {
     /* Never shown as an option */
     case SEAHORSE_VALIDITY_REVOKED:
@@ -368,7 +363,7 @@ key_trust_filter_func (void *object, void *user_data)
         return FALSE;
     /* Only for public keys */
     case SEAHORSE_VALIDITY_NEVER:
-        return (usage != SEAHORSE_USAGE_PRIVATE_KEY);
+        return ! seahorse_pgp_key_is_private_key (self->key);
     /* Shown for both public/private */
     case SEAHORSE_VALIDITY_UNKNOWN:
     case SEAHORSE_VALIDITY_MARGINAL:
@@ -376,7 +371,7 @@ key_trust_filter_func (void *object, void *user_data)
         return TRUE;
     /* Only for private keys */
     case SEAHORSE_VALIDITY_ULTIMATE:
-        return (usage == SEAHORSE_USAGE_PRIVATE_KEY);
+        return seahorse_pgp_key_is_private_key (self->key);
     }
 
     g_return_val_if_reached (FALSE);
@@ -411,7 +406,7 @@ do_details (SeahorsePgpKeyPanel *self)
                                 SEAHORSE_GPGME_IS_KEY (self->key));
     }
 
-    flags = seahorse_object_get_flags (SEAHORSE_OBJECT (self->key));
+    flags = seahorse_item_get_item_flags (SEAHORSE_ITEM (self->key));
     gtk_widget_set_sensitive (self->owner_trust_row,
                               !(flags & SEAHORSE_FLAG_DISABLED));
 
@@ -457,7 +452,7 @@ action_sign_key (GSimpleAction *action, GVariant *param, void *user_data)
 
     g_return_if_fail (SEAHORSE_GPGME_IS_KEY (self->key));
 
-    dialog = seahorse_gpgme_sign_dialog_new (SEAHORSE_OBJECT (self->key));
+    dialog = seahorse_gpgme_sign_dialog_new (SEAHORSE_ITEM (self->key));
     gtk_window_present (GTK_WINDOW (dialog));
 }
 
@@ -487,7 +482,7 @@ do_trust (SeahorsePgpKeyPanel *self)
 {
     gboolean sigpersonal;
 
-    if (seahorse_object_get_usage (SEAHORSE_OBJECT (self->key)) != SEAHORSE_USAGE_PUBLIC_KEY)
+    if (seahorse_pgp_key_is_private_key (self->key))
         return;
 
     /* Remote keys */
@@ -585,7 +580,7 @@ create_public_key_dialog (SeahorsePgpKeyPanel *self)
     do_trust (self);
 
     /* Fill in trust labels with name. */
-    user = seahorse_object_get_label (SEAHORSE_OBJECT (self->key));
+    user = seahorse_item_get_title (SEAHORSE_ITEM (self->key));
 
     sign_text = g_strdup_printf(_("I believe “%s” is the owner of this key"),
                                 user);
@@ -675,7 +670,6 @@ static void
 seahorse_pgp_key_panel_constructed (GObject *obj)
 {
     SeahorsePgpKeyPanel *self = SEAHORSE_PGP_KEY_PANEL (obj);
-    SeahorseUsage usage;
     GtkWidget *uids_listbox, *subkeys_listbox;
     const char *name;
     g_autofree char *title = NULL;
@@ -683,8 +677,7 @@ seahorse_pgp_key_panel_constructed (GObject *obj)
 
     G_OBJECT_CLASS (seahorse_pgp_key_panel_parent_class)->constructed (obj);
 
-    usage = seahorse_object_get_usage (SEAHORSE_OBJECT (self->key));
-    is_public_key = (usage == SEAHORSE_USAGE_PUBLIC_KEY);
+    is_public_key = ! seahorse_pgp_key_is_private_key (self->key);
     if (is_public_key)
         create_public_key_dialog (self);
     else

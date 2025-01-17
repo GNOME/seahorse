@@ -773,12 +773,9 @@ search_parse_key_from_ldap_entry (SeahorseLDAPSource *self,
 
         /* Now build them into a key */
         seahorse_pgp_key_add_subkey (key, subkey);
-        g_object_set (key,
-                      "object-flags", flags,
-                      "place", self,
-                      NULL);
+        seahorse_item_set_place (SEAHORSE_ITEM (key), SEAHORSE_PLACE (self));
+        seahorse_pgp_key_set_item_flags (key, flags);
 
-        seahorse_pgp_key_realize (key);
         g_list_store_append (results, key);
     }
 }

@@ -335,7 +335,7 @@ seahorse_hkp_parse_lookup_response (const char *response)
             /* create key */
             g_debug("HKP Parse: found new key");
             key = seahorse_pgp_key_new ();
-            g_object_set (key, "object-flags", flags, NULL);
+            seahorse_pgp_key_set_item_flags (key, flags);
 
             /* Add all the info to the key */
             subkey = seahorse_pgp_subkey_new ();
@@ -379,10 +379,6 @@ seahorse_hkp_parse_lookup_response (const char *response)
             seahorse_pgp_key_add_uid (key, uid);
         }
     }
-
-    /* Make sure the keys are realized */
-    for (GList *k = keys; k; k = g_list_next (k))
-        seahorse_pgp_key_realize (SEAHORSE_PGP_KEY (k->data));
 
     if (key_total != 0 && key_total != key_count) {
         g_warning ("HKP Parse: Could only parse %d keys out of %d", key_count, key_total);

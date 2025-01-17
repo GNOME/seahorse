@@ -108,10 +108,6 @@ public class Seahorse.Pkcs11.Token : GLib.Object, GLib.ListModel, Place, Lockabl
         owned get { return null; }
     }
 
-    public Flags object_flags {
-        get { return 0; }
-    }
-
     private GLib.Array<ulong> _mechanisms;
     public unowned GLib.Array<ulong> mechanisms {
         get {

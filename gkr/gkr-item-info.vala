@@ -31,7 +31,7 @@ public class ItemInfo : GLib.Object {
 
     public string details { get; protected set; default = ""; }
 
-    public GLib.Icon? icon { get; protected set; }
+    public GLib.Icon? icon { get; protected set; default = new GLib.ThemedIcon("secret-item-symbolic"); }
 
     public ItemInfo(string? label,
                     HashTable<string, string>? attrs,

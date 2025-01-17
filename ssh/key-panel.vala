@@ -79,15 +79,15 @@ public class Seahorse.Ssh.KeyPanel : Seahorse.Panel {
         this.updating_ui = true;
 
         // Name and title
-        this.comment_row.text = this.key.label;
+        this.comment_row.text = this.key.title;
 
         // Setup the check
         this.trust_check.active = (this.key.trust >= Seahorse.Validity.FULL);
 
         this.fingerprint_row.subtitle = "<span font=\"monospace\">%s</span>".printf(this.key.fingerprint);
-        this.algo_row.subtitle = this.key.get_algo().to_string() ?? _("Unknown type");
-        this.location_row.subtitle = this.key.get_location();
-        this.key_length_row.subtitle = "%u".printf(this.key.get_strength());
+        this.algo_row.subtitle = this.key.algo.to_string() ?? _("Unknown type");
+        this.location_row.subtitle = this.key.location;
+        this.key_length_row.subtitle = "%u".printf(this.key.strength);
         this.pubkey_label.label = this.key.pubkey;
 
         this.updating_ui = false;
@@ -209,7 +209,7 @@ public class Seahorse.Ssh.KeyPanel : Seahorse.Panel {
 
     private void action_generate_qr_code(SimpleAction action, Variant? param) {
         var qr_code_dialog = new QrCodeDialog(this.key.pubkey);
-        qr_code_dialog.title = this.key.label;
+        qr_code_dialog.title = this.key.title;
         qr_code_dialog.present(get_root() as Gtk.Window);
     }
 }

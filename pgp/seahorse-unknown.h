@@ -28,7 +28,7 @@ typedef struct _SeahorseUnknownSource SeahorseUnknownSource;
 
 
 #define SEAHORSE_TYPE_UNKNOWN (seahorse_unknown_get_type ())
-G_DECLARE_FINAL_TYPE (SeahorseUnknown, seahorse_unknown, SEAHORSE, UNKNOWN, SeahorseObject)
+G_DECLARE_FINAL_TYPE (SeahorseUnknown, seahorse_unknown, SEAHORSE, UNKNOWN, GObject)
 
 SeahorseUnknown *    seahorse_unknown_new              (SeahorseUnknownSource *usrc,
                                                         const char *keyid,

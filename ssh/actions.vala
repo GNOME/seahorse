@@ -69,8 +69,8 @@ public class Seahorse.Ssh.Actions : ActionGroup {
         List<Key> keys = new List<Key>();
 
         if (this.catalog != null) {
-            foreach (GLib.Object el in this.catalog.get_selected_objects()) {
-                Key key = el as Key;
+            foreach (Seahorse.Item item in this.catalog.get_selected_items()) {
+                unowned var key = item as Key;
                 if (key != null)
                     keys.prepend(key);
             }

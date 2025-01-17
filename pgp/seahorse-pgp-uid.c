@@ -47,7 +47,7 @@ typedef struct _SeahorsePgpUidPrivate {
     char *comment;
 } SeahorsePgpUidPrivate;
 
-G_DEFINE_TYPE_WITH_PRIVATE (SeahorsePgpUid, seahorse_pgp_uid, SEAHORSE_TYPE_OBJECT);
+G_DEFINE_TYPE_WITH_PRIVATE (SeahorsePgpUid, seahorse_pgp_uid, G_TYPE_OBJECT);
 
 /* -----------------------------------------------------------------------------
  * INTERNAL HELPERS
@@ -206,10 +206,6 @@ seahorse_pgp_uid_realize (SeahorsePgpUid *self)
         return;
 
     priv->realized = TRUE;
-
-    label = seahorse_pgp_uid_calc_label (priv->name, priv->email, priv->comment);
-    markup = seahorse_pgp_uid_calc_markup (priv->name, priv->email, priv->comment, 0);
-    g_object_set (self, "markup", markup, "label", label, NULL);
 }
 
 static void
@@ -218,7 +214,6 @@ seahorse_pgp_uid_init (SeahorsePgpUid *self)
     SeahorsePgpUidPrivate *priv = seahorse_pgp_uid_get_instance_private (self);
 
     priv->signatures = G_LIST_MODEL (g_list_store_new (SEAHORSE_PGP_TYPE_SIGNATURE));
-    g_object_set (self, "icon", NULL, "usage", SEAHORSE_USAGE_IDENTITY, NULL);
 }
 
 static void
@@ -605,39 +600,4 @@ seahorse_pgp_uid_calc_label (const char *name,
     }
 
     return g_string_free (string, FALSE);
-}
-
-char *
-seahorse_pgp_uid_calc_markup (const char  *name,
-                              const char  *email,
-                              const char  *comment,
-                              unsigned int flags)
-{
-    const char *format;
-    gboolean strike = FALSE;
-    gboolean grayed = FALSE;
-
-    g_return_val_if_fail (name, NULL);
-
-    if (flags & SEAHORSE_FLAG_EXPIRED || flags & SEAHORSE_FLAG_REVOKED ||
-        flags & SEAHORSE_FLAG_DISABLED)
-        strike = TRUE;
-    if (!(flags & SEAHORSE_FLAG_TRUSTED))
-        grayed = TRUE;
-
-    if (strike && grayed)
-        format = "<span strikethrough='true' foreground='#555555'>%s<span size='small' rise='0'>%s%s%s%s%s</span></span>";
-    else if (grayed)
-        format = "<span foreground='#555555'>%s<span size='small' rise='0'>%s%s%s%s%s</span></span>";
-    else if (strike)
-        format = "<span strikethrough='true'>%s<span foreground='#555555' size='small' rise='0'>%s%s%s%s%s</span></span>";
-    else
-        format = "%s<span foreground='#555555' size='small' rise='0'>%s%s%s%s%s</span>";
-
-    return g_markup_printf_escaped (format, name,
-                   email && email[0] ? "  " : "",
-                   email && email[0] ? email : "",
-                   comment && comment[0] ? "  '" : "",
-                   comment && comment[0] ? comment : "",
-                   comment && comment[0] ? "'" : "");
 }

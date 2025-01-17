@@ -77,20 +77,18 @@ public class Seahorse.KeyManagerFilter : Gtk.Filter {
     }
     private string _filter_text = "";
 
-    public override bool match(GLib.Object? item) {
+    public override bool match(GLib.Object? object) {
+        unowned var item = (Seahorse.Item) object;
         return matches_showfilter(item)
             && object_contains_filtered_text(item, this._filter_text);
     }
 
-    private bool matches_showfilter(GLib.Object? obj) {
-        Flags obj_flags = Flags.NONE;
-        obj.get("object-flags", out obj_flags, null);
-
+    private bool matches_showfilter(Seahorse.Item item) {
         switch (this.show_filter) {
             case ShowFilter.PERSONAL:
-                return Seahorse.Flags.PERSONAL in obj_flags;
+                return Seahorse.Flags.PERSONAL in item.item_flags;
             case ShowFilter.TRUSTED:
-                return Seahorse.Flags.TRUSTED in obj_flags;
+                return Seahorse.Flags.TRUSTED in item.item_flags;
             case ShowFilter.ANY:
                 return true;
         }
@@ -99,22 +97,17 @@ public class Seahorse.KeyManagerFilter : Gtk.Filter {
     }
 
     // Search through row for text
-    private bool object_contains_filtered_text(GLib.Object? object, string? text) {
+    private bool object_contains_filtered_text(Seahorse.Item item, string? text) {
         // Empty search text results in a match
         if (text == null || text == "")
             return true;
 
-        string? name = null;
-        object.get("label", out name, null);
-        if (name != null && (text in name.down()))
+        if (text in item.title.down())
             return true;
 
-        if (object.get_class().find_property("description") != null) {
-            string? description = null;
-            object.get("description", out description, null);
-            if (description != null && (text in description.down()))
-                return true;
-        }
+        var description = item.description;
+        if (description != null && (text in description.down()))
+            return true;
 
         return false;
     }

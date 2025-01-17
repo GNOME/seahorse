@@ -384,7 +384,7 @@ seahorse_gpgme_keyring_list_async (SeahorseGpgmeKeyring *self,
             SeahorsePgpKey *key = g_ptr_array_index (self->keys, i);
             SeahorseUsage usage;
 
-            usage = seahorse_object_get_usage (SEAHORSE_OBJECT (key));
+            usage = seahorse_item_get_usage (SEAHORSE_ITEM (key));
             if ((secret && usage == SEAHORSE_USAGE_PRIVATE_KEY) ||
                 (!secret && usage == SEAHORSE_USAGE_PUBLIC_KEY)) {
                 char *keyid;

@@ -21,11 +21,11 @@
 [DBus (name = "org.gnome.Shell.SearchProvider2")]
 public class Seahorse.SearchProvider : GLib.Object {
 
-    private GLib.ListModel backends;
+    private GLib.ListModel backends = Backend.get_registered();
     private Gtk.FilterListModel collection;
 
-    private HashTable<string, weak GLib.Object> handles
-        = new HashTable<string, weak GLib.Object>.full(str_hash, str_equal, free, null);
+    private HashTable<string, weak Seahorse.Item> handles
+        = new HashTable<string, weak Seahorse.Item>.full(str_hash, str_equal, free, null);
 
     private GLib.Application app;
     private int n_loading = 0;
@@ -35,26 +35,19 @@ public class Seahorse.SearchProvider : GLib.Object {
     public SearchProvider(GLib.Application app) {
         this.app = app;
 
-        // XXX test
-        this.backends = Backend.get_registered();
         var places = new Gtk.FlattenListModel(this.backends);
         var filter = new Gtk.CustomFilter(filter_objects);
         this.collection = new Gtk.FilterListModel(places, filter);
     }
 
     private static bool filter_objects(GLib.Object obj) {
-        unowned Object? object = obj as Object;
-        if (object == null || !(Flags.PERSONAL in object.object_flags))
+        unowned var item = obj as Seahorse.Item;
+        if (item == null || !(Flags.PERSONAL in item.item_flags))
             return false;
 
-        if (!(obj is Viewable))
+        string? schema_name = ((Secret.Item) obj).get_schema_name ();
+        if (schema_name != "org.gnome.keyring.Note")
             return false;
-
-        if (obj is Secret.Item) {
-            string? schema_name = ((Secret.Item) obj).get_schema_name ();
-            if (schema_name != "org.gnome.keyring.Note")
-                return false;
-        }
 
         return true;
     }
@@ -109,14 +102,14 @@ public class Seahorse.SearchProvider : GLib.Object {
 
         string?[] results = {};
         for (uint i = 0; i < this.collection.get_n_items(); i++) {
-            var obj = this.collection.get_item(i);
+            var item = this.collection.get_item(i) as Seahorse.Item;
 
-            if (object_matches_search(obj, terms)) {
-                string str = "%p".printf(obj);
+            if (item_matches_search(item, terms)) {
+                string str = "%p".printf(item);
 
                 if (!(str in this.handles)) {
-                    this.handles.insert(str, obj);
-                    obj.weak_ref(on_object_gone);
+                    this.handles.insert(str, item);
+                    item.weak_ref(on_object_gone);
                 }
                 results += (owned) str;
             }
@@ -132,11 +125,11 @@ public class Seahorse.SearchProvider : GLib.Object {
 
         string?[] results = {};
         foreach (string previous_result in previous_results) {
-            unowned GLib.Object? object = this.handles.lookup(previous_result);
-            if (object == null)
+            unowned var item = this.handles.lookup(previous_result);
+            if (item == null)
                 continue; // Bogus value
 
-            if (object_matches_search(object, new_terms))
+            if (item_matches_search(item, new_terms))
                 results += previous_result;
         }
 
@@ -150,27 +143,21 @@ public class Seahorse.SearchProvider : GLib.Object {
         var metas = new HashTable<string, Variant>[results.length];
         int good_results = 0;
         foreach (unowned string result in results) {
-            unowned GLib.Object object = this.handles.lookup(result);
-            if (object == null)
+            unowned var item = this.handles.lookup(result);
+            if (item == null)
                 continue; // Bogus value
 
             HashTable<string, Variant> meta = new HashTable<string, Variant>(str_hash, str_equal);
 
             meta["id"] = result;
-
-            string? label = null;
-            object.get("label", out label, null);
-            if (label != null)
-                meta["name"] = label;
-
-            Icon? icon = null;
-            object.get("icon", out icon, null);
+            meta["name"] = item.title;
+            unowned var icon = item.icon;
             if (icon != null)
                 meta["icon"] = icon.serialize();
 
-            string? description = get_description_if_available(object);
-            if (description != null)
-                meta["description"] = description;
+            string? subtitle = item.subtitle;
+            if (subtitle != null)
+                meta["description"] = subtitle;
 
             metas[good_results] = meta;
             good_results++;
@@ -183,15 +170,14 @@ public class Seahorse.SearchProvider : GLib.Object {
     public void ActivateResult(string identifier, string[] terms, uint32 timestamp) throws GLib.Error {
         this.app.hold();
 
-        unowned GLib.Object? object = null;
-        identifier.scanf("%p", &object);
-        object = this.handles.lookup(identifier);
-        if (object == null || !(object is Viewable))
+        unowned Seahorse.Item? item = null;
+        identifier.scanf("%p", &item);
+        item = this.handles.lookup(identifier);
+        if (!(item is Seahorse.Item))
             return; // Bogus value
 
         KeyManager key_manager = new KeyManager(GLib.Application.get_default() as Application);
-        /* key_manager.show(timestamp); */
-        Viewable.view(object, (Gtk.Window) key_manager);
+        item.view((Gtk.Window) key_manager);
 
         this.app.release ();
     }
@@ -200,9 +186,9 @@ public class Seahorse.SearchProvider : GLib.Object {
         // TODO
     }
 
-    private bool object_matches_search (GLib.Object? object, string[] terms) {
+    private bool item_matches_search(Seahorse.Item item, string[] terms) {
         foreach (unowned string term in ((string[]) terms)) {
-            if (!object_contains_filtered_text (object, term))
+            if (!item_contains_filtered_text(item, term))
                 return false;
         }
 
@@ -210,14 +196,12 @@ public class Seahorse.SearchProvider : GLib.Object {
     }
 
     /* Search through row for text */
-    private bool object_contains_filtered_text (GLib.Object object, string? text) {
-        string? name = null;
-        object.get("label", out name, null);
-        if (name != null && (text in name.down()))
+    private bool item_contains_filtered_text(Seahorse.Item item, string? text) {
+        if (text in item.title.down())
             return true;
 
-        string? description = get_description_if_available (object);
-        if (description != null && (text in description.down()))
+        var subtitle = item.subtitle;
+        if (subtitle != null && (text in subtitle.down()))
             return true;
 
         return false;
@@ -225,17 +209,5 @@ public class Seahorse.SearchProvider : GLib.Object {
 
     private void on_object_gone(GLib.Object? where_the_object_was) {
         this.handles.remove("%p".printf(where_the_object_was));
-    }
-
-    private static string? get_description_if_available (GLib.Object? obj) {
-        if (obj == null)
-            return null;
-
-        if (obj.get_class().find_property("description") == null)
-            return null;
-
-        string? description = null;
-        obj.get("description", out description);
-        return description;
     }
 }

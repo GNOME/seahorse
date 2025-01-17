@@ -31,7 +31,7 @@ public class Seahorse.Pkcs11.DeleteOperation : Seahorse.DeleteOperation {
         debug("Deleting %u PKCS#11 objects", this.items.length);
         foreach (unowned var item in this.items) {
             var pair = (CertKeyPair) item;
-            unowned var token = (Token?) pair.place;
+            unowned var token = (Token?) pair.token;
 
             try {
                 if (pair.certificate != null) {

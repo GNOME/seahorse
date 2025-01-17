@@ -139,7 +139,7 @@ on_import_button_clicked (GtkButton *import_button, void *user_data)
     gtk_button_set_child (import_button, g_steal_pointer (&spinner));
 
     /* Now import the key */
-    keys = g_list_store_new (SEAHORSE_TYPE_OBJECT);
+    keys = g_list_store_new (SEAHORSE_PGP_TYPE_KEY);
     g_list_store_append (keys, row->key);
     cancellable = g_cancellable_new ();
     backend = seahorse_pgp_backend_get ();
@@ -165,15 +165,15 @@ static GtkWidget *
 seahorse_found_key_row_new (SeahorsePgpKey *key)
 {
     g_autoptr(SeahorseFoundKeyRow) row = NULL;
-    const char *label = NULL;
+    const char *title = NULL;
     GtkWidget *import_button = NULL;
 
     row = g_object_new (SEAHORSE_TYPE_FOUND_KEY_ROW, NULL);
     row->key = key;
 
-    label = seahorse_object_get_markup (SEAHORSE_OBJECT (key));
+    title = seahorse_item_get_title (SEAHORSE_ITEM (key));
 
-    adw_preferences_row_set_title (ADW_PREFERENCES_ROW (row), label);
+    adw_preferences_row_set_title (ADW_PREFERENCES_ROW (row), title);
     gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), TRUE);
 
     import_button = gtk_button_new_from_icon_name ("document-save-symbolic");
@@ -351,7 +351,7 @@ on_result_row_activated (GtkListBox *key_list, GtkListBoxRow *row, void *user_da
 
     g_return_if_fail (SEAHORSE_IS_VIEWABLE (_row->key));
 
-    seahorse_viewable_view (G_OBJECT (_row->key), GTK_WINDOW (self));
+    seahorse_viewable_view (SEAHORSE_VIEWABLE (_row->key), GTK_WINDOW (self));
 }
 
 static GtkWidget *

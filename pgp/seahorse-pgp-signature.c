@@ -106,7 +106,7 @@ seahorse_pgp_signature_get_sigtype (SeahorsePgpSignature *self)
         = seahorse_pgp_signature_get_instance_private (self);
     SeahorseGpgmeKeyring *keyring;
     SeahorseGpgmeKey *key;
-    SeahorseObject *obj;
+    SeahorseItem *item;
 
     g_return_val_if_fail (SEAHORSE_PGP_IS_SIGNATURE (self), 0);
 
@@ -114,10 +114,10 @@ seahorse_pgp_signature_get_sigtype (SeahorsePgpSignature *self)
     key = seahorse_gpgme_keyring_lookup (keyring, priv->keyid);
 
     if (key != NULL) {
-        obj = SEAHORSE_OBJECT (key);
-        if (seahorse_object_get_usage (obj) == SEAHORSE_USAGE_PRIVATE_KEY)
+        item = SEAHORSE_ITEM (key);
+        if (seahorse_item_get_usage (item) == SEAHORSE_USAGE_PRIVATE_KEY)
             return SKEY_PGPSIG_TRUSTED | SKEY_PGPSIG_PERSONAL;
-        if (seahorse_object_get_flags (obj) & SEAHORSE_FLAG_TRUSTED)
+        if (seahorse_item_get_item_flags (item) & SEAHORSE_FLAG_TRUSTED)
             return SKEY_PGPSIG_TRUSTED;
     }
 

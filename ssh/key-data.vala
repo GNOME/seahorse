@@ -172,7 +172,7 @@ public class Seahorse.Ssh.KeyData : GLib.Object {
         FileUtils.set_contents(filename, results.str);
     }
 
-    public string? get_location() {
+    public unowned string? get_location() {
         return this.privfile != null ? this.privfile : this.pubfile;
     }
 }

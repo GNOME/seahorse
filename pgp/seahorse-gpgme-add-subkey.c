@@ -215,7 +215,7 @@ seahorse_gpgme_add_subkey_constructed (GObject *obj)
     G_OBJECT_CLASS (seahorse_gpgme_add_subkey_parent_class)->constructed (obj);
 
     title = g_strdup_printf (_("Add subkey to %s"),
-                             seahorse_object_get_label (SEAHORSE_OBJECT (self->key)));
+                             seahorse_item_get_title (SEAHORSE_ITEM (self->key)));
     gtk_window_set_title (GTK_WINDOW (self), title);
 }
 

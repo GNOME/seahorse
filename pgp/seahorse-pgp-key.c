@@ -44,23 +44,40 @@ enum {
     PROP_EXPIRES,
     PROP_LENGTH,
     PROP_ALGO,
+    N_PROPS,
+    /* Override properties*/
+    PROP_PLACE,
+    PROP_TITLE,
+    PROP_SUBTITLE,
     PROP_DESCRIPTION,
-    N_PROPS
+    PROP_ICON,
+    PROP_USAGE,
+    PROP_ITEM_FLAGS,
 };
 static GParamSpec *obj_props[N_PROPS] = { NULL, };
 
 static void        seahorse_pgp_key_viewable_iface          (SeahorseViewableIface *iface);
 
+static void        seahorse_pgp_key_item_iface              (SeahorseItemIface *iface);
+
 typedef struct _SeahorsePgpKeyPrivate {
     char *keyid;
+
+    char *title;
+    SeahorsePlace *keyring;
+    SeahorseUsage usage;
+    SeahorseFlags flags;
+    GIcon *icon;
+
     GListModel *uids;            /* All the UID objects */
     GListModel *subkeys;         /* All the Subkey objects */
     GListModel *photos;          /* List of photos */
 } SeahorsePgpKeyPrivate;
 
-G_DEFINE_TYPE_WITH_CODE (SeahorsePgpKey, seahorse_pgp_key, SEAHORSE_TYPE_OBJECT,
+G_DEFINE_TYPE_WITH_CODE (SeahorsePgpKey, seahorse_pgp_key, G_TYPE_OBJECT,
                          G_ADD_PRIVATE (SeahorsePgpKey)
                          G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_VIEWABLE, seahorse_pgp_key_viewable_iface);
+                         G_IMPLEMENT_INTERFACE (SEAHORSE_TYPE_ITEM, seahorse_pgp_key_item_iface);
 );
 
 /*
@@ -105,82 +122,103 @@ seahorse_pgp_keyid_equal (const void *v1,
     return g_ascii_strcasecmp (keyid_1, keyid_2) == 0;
 }
 
-static char*
-calc_name (SeahorsePgpKey *self)
+static SeahorsePlace *
+seahorse_pgp_key_get_place (SeahorseItem *item)
+{
+    SeahorsePgpKey *self = SEAHORSE_PGP_KEY (item);
+    SeahorsePgpKeyPrivate *priv = seahorse_pgp_key_get_instance_private (self);
+
+    return priv->keyring? g_object_ref (priv->keyring) : NULL;
+}
+
+static SeahorseUsage
+seahorse_pgp_key_get_usage (SeahorseItem *item)
+{
+    SeahorsePgpKey *self = SEAHORSE_PGP_KEY (item);
+    SeahorsePgpKeyPrivate *priv = seahorse_pgp_key_get_instance_private (self);
+
+    return priv->usage;
+}
+
+void
+seahorse_pgp_key_set_usage (SeahorsePgpKey *self,
+                            SeahorseUsage   usage)
 {
     SeahorsePgpKeyPrivate *priv = seahorse_pgp_key_get_instance_private (self);
-    g_autoptr(SeahorsePgpUid) uid = g_list_model_get_item (priv->uids, 0);
 
-    if (!uid)
-        return g_strdup ("");
+    if (priv->usage == usage)
+        return;
 
-    return seahorse_pgp_uid_calc_label (seahorse_pgp_uid_get_name (uid),
-                                        seahorse_pgp_uid_get_email (uid),
-                                        seahorse_pgp_uid_get_comment (uid));
+    priv->usage = usage;
+    if (usage == SEAHORSE_USAGE_PRIVATE_KEY) {
+        /* XXX Can we do something here for a private key pair? */
+        priv->icon = g_themed_icon_new ("key-item-symbolic");
+    } else {
+        priv->icon = g_themed_icon_new ("key-item-symbolic");
+    }
+
+    g_object_notify (G_OBJECT (self), "usage");
+    g_object_notify (G_OBJECT (self), "icon");
+    g_object_notify (G_OBJECT (self), "description");
+}
+
+static void
+seahorse_pgp_key_set_place (SeahorseItem  *item,
+                            SeahorsePlace *place)
+{
+    SeahorsePgpKey *self = SEAHORSE_PGP_KEY (item);
+    SeahorsePgpKeyPrivate *priv = seahorse_pgp_key_get_instance_private (self);
+
+    if (priv->keyring == place)
+        return;
+    priv->keyring = place;
+    g_object_notify (G_OBJECT (self), "place");
+}
+
+static GIcon *
+seahorse_pgp_key_get_icon (SeahorseItem *item)
+{
+    SeahorsePgpKey *self = SEAHORSE_PGP_KEY (item);
+    SeahorsePgpKeyPrivate *priv = seahorse_pgp_key_get_instance_private (self);
+
+    return priv->icon;
+}
+
+static const char *
+seahorse_pgp_key_get_title (SeahorseItem *item)
+{
+    SeahorsePgpKey *self = SEAHORSE_PGP_KEY (item);
+    SeahorsePgpKeyPrivate *priv = seahorse_pgp_key_get_instance_private (self);
+
+    return priv->title;
 }
 
 static char *
-calc_markup (SeahorsePgpKey *self)
+seahorse_pgp_key_get_subtitle (SeahorseItem *item)
 {
+    SeahorsePgpKey *self = SEAHORSE_PGP_KEY (item);
     SeahorsePgpKeyPrivate *priv = seahorse_pgp_key_get_instance_private (self);
-    guint flags = seahorse_object_get_flags (SEAHORSE_OBJECT (self));
-    GString *result;
-    g_autoptr(SeahorsePgpUid) uid = NULL;
-    const char *name;
-    g_autofree char *name_escaped = NULL;
-    const char *email;
-    const char *comment;
-    g_autofree char *email_comment = NULL;
-    const char *primary = NULL;
-    guint n_uids;
+    g_autoptr(GString) result = NULL;
+    const char *primary_name;
+    unsigned int n_uids;
 
-    uid = g_list_model_get_item (priv->uids, 0);
+    result = g_string_new (NULL);
+
+    primary_name = seahorse_pgp_key_get_primary_name (self);
+
+    /* First key is displayed as the title, use the other keys for subtitle */
     n_uids = g_list_model_get_n_items (priv->uids);
-
-    result = g_string_new ("<span");
-    if (flags & SEAHORSE_FLAG_EXPIRED || flags & SEAHORSE_FLAG_REVOKED ||
-        flags & SEAHORSE_FLAG_DISABLED)
-        g_string_append (result, " strikethrough='true'");
-    if (!(flags & SEAHORSE_FLAG_TRUSTED))
-        g_string_append (result, "  foreground='#555555'");
-    g_string_append_c (result, '>');
-
-    if (!uid)
-        goto done;
-
-    /* The first name is the key name */
-    name = seahorse_pgp_uid_get_name (uid);
-    name_escaped = g_markup_escape_text (name, -1);
-    g_string_append (result, name_escaped);
-    primary = name;
-
-    g_string_append (result, "<span size='small' rise='0'>");
-
-    email = seahorse_pgp_uid_get_email (uid);
-    if (email && !email[0])
-        email = NULL;
-    comment = seahorse_pgp_uid_get_comment (uid);
-    if (comment && !comment[0])
-        comment = NULL;
-    email_comment = g_markup_printf_escaped ("\n%s%s%s%s%s",
-                                             email ? email : "",
-                                             email ? " " : "",
-                                             comment ? "'" : "",
-                                             comment ? comment : "",
-                                             comment ? "'" : "");
-    g_string_append (result, email_comment);
-
-    /* Now add the other keys */
     for (guint i = 1; i < n_uids; i++) {
         g_autoptr(SeahorsePgpUid) uid = NULL;
-        g_autofree char *text = NULL;
+        const char *name, *email, *comment;
 
         uid = g_list_model_get_item (priv->uids, i);
-        g_string_append_c (result, '\n');
+        if (i > 1)
+            g_string_append_c (result, '\n');
 
-        /* If we have 5 UIDs or more, ellipsze the list.
+        /* If we have 3 UIDs or more, ellipsze the list.
          * Otherwise we get huge rows in the list of GPG keys */
-        if (i == 4) {
+        if (i == 3) {
             int n_others = n_uids - i;
             g_autofree char *others_str = NULL;
 
@@ -196,7 +234,7 @@ calc_markup (SeahorsePgpKey *self)
         name = seahorse_pgp_uid_get_name (uid);
         if (name && !name[0])
             name = NULL;
-        if (g_strcmp0 (name, primary) == 0)
+        if (g_strcmp0 (name, primary_name) == 0)
             name = NULL;
         email = seahorse_pgp_uid_get_email (uid);
         if (email && !email[0])
@@ -204,74 +242,61 @@ calc_markup (SeahorsePgpKey *self)
         comment = seahorse_pgp_uid_get_comment (uid);
         if (comment && !comment[0])
             comment = NULL;
-        text = g_markup_printf_escaped ("%s%s%s%s%s%s%s",
-                                        name ? name : "",
-                                        name ? ": " : "",
-                                        email ? email : "",
-                                        email ? " " : "",
-                                        comment ? "'" : "",
-                                        comment ? comment : "",
-                                        comment ? "'" : "");
-        g_string_append (result, text);
+        g_string_append_printf (result,
+                                "%s%s%s%s%s%s%s",
+                                name ? name : "",
+                                name ? ": " : "",
+                                email ? email : "",
+                                email ? " " : "",
+                                comment ? "'" : "",
+                                comment ? comment : "",
+                                comment ? "'" : "");
     }
 
-    g_string_append (result, "</span>");
-
-done:
-    g_string_append (result, "</span>");
-    return g_string_free (result, FALSE);
+    return g_string_free_and_steal (g_steal_pointer (&result));
 }
 
-/* -----------------------------------------------------------------------------
- * OBJECT
- */
+static const char *
+seahorse_pgp_key_get_description (SeahorseItem *item)
+{
+    if (seahorse_pgp_key_get_usage (item) == SEAHORSE_USAGE_PRIVATE_KEY)
+        return _("Personal PGP key");
+
+    return _("PGP key");
+}
+
+static SeahorseFlags
+seahorse_pgp_key_get_item_flags (SeahorseItem *item)
+{
+    SeahorsePgpKey *self = SEAHORSE_PGP_KEY (item);
+    SeahorsePgpKeyPrivate *priv = seahorse_pgp_key_get_instance_private (self);
+
+    return priv->flags;
+}
 
 void
-seahorse_pgp_key_realize (SeahorsePgpKey *self)
+seahorse_pgp_key_set_item_flags (SeahorsePgpKey *self,
+                                 SeahorseFlags   flags)
 {
     SeahorsePgpKeyPrivate *priv = seahorse_pgp_key_get_instance_private (self);
-    g_autoptr(SeahorsePgpSubkey) subkey = NULL;
-    const char *nickname, *keyid;
-    const char *icon_name;
-    g_autofree char *name = NULL;
-    g_autofree char *markup = NULL;
-    const char *identifier;
-    SeahorseUsage usage;
-    g_autoptr(GIcon) icon = NULL;
 
-    subkey = g_list_model_get_item (priv->subkeys, 0);
-    if (subkey) {
-        keyid = seahorse_pgp_subkey_get_keyid (subkey);
-        identifier = seahorse_pgp_key_calc_identifier (keyid);
-    } else {
-        identifier = "";
-    }
+    if (priv->flags == flags)
+        return;
+    priv->flags = flags;
+    g_object_notify (G_OBJECT (self), "item-flags");
+}
 
-    name = calc_name (self);
-    markup = calc_markup (self);
-    nickname = seahorse_pgp_key_get_primary_name (self);
-
-    g_object_get (self, "usage", &usage, NULL);
-
-    /* The type */
-    // XXX icon for key pair?
-    icon_name = "key-item-symbolic";
-    /* if (usage == SEAHORSE_USAGE_PRIVATE_KEY) { */
-    /*     icon_name = GCR_ICON_KEY_PAIR; */
-    /* } else { */
-    /*     icon_name = GCR_ICON_KEY; */
-    /*     if (usage == SEAHORSE_USAGE_NONE) */
-    /*         g_object_set (self, "usage", SEAHORSE_USAGE_PUBLIC_KEY, NULL); */
-    /* } */
-
-    icon = g_themed_icon_new (icon_name);
-    g_object_set (self,
-              "label", name,
-              "markup", markup,
-              "nickname", nickname,
-              "identifier", identifier,
-              "icon", icon,
-              NULL);
+static void
+seahorse_pgp_key_item_iface (SeahorseItemIface *iface)
+{
+    iface->get_place = seahorse_pgp_key_get_place;
+    iface->set_place = seahorse_pgp_key_set_place;
+    iface->get_icon = seahorse_pgp_key_get_icon;
+    iface->get_title = seahorse_pgp_key_get_title;
+    iface->get_subtitle = seahorse_pgp_key_get_subtitle;
+    iface->get_description = seahorse_pgp_key_get_description;
+    iface->get_usage = seahorse_pgp_key_get_usage;
+    iface->get_item_flags = seahorse_pgp_key_get_item_flags;
 }
 
 static SeahorsePanel *
@@ -587,8 +612,43 @@ seahorse_pgp_key_is_private_key (SeahorsePgpKey *self)
 
     g_return_val_if_fail (SEAHORSE_PGP_IS_KEY (self), FALSE);
 
-    usage = seahorse_object_get_usage (SEAHORSE_OBJECT (self));
+    usage = seahorse_item_get_usage (SEAHORSE_ITEM (self));
     return usage == SEAHORSE_USAGE_PRIVATE_KEY;
+}
+
+static void
+on_uids_changed (GListModel *uids,
+                 unsigned position,
+                 unsigned removed,
+                 unsigned added,
+                 void *data)
+{
+    SeahorsePgpKey *self = SEAHORSE_PGP_KEY (data);
+    SeahorsePgpKeyPrivate *priv = seahorse_pgp_key_get_instance_private (self);
+
+    /* We use the primary UID for the title */
+    if (position == 0) {
+        g_autoptr(SeahorsePgpUid) uid = NULL;
+        const char *name, *email, *comment;
+
+        g_free (priv->title);
+
+        uid = g_list_model_get_item (priv->uids, 0);
+        if (uid == NULL) {
+            priv->title = g_strdup ("");
+        } else {
+            name = seahorse_pgp_uid_get_name (uid);
+            email = seahorse_pgp_uid_get_email (uid);
+            comment = seahorse_pgp_uid_get_comment (uid);
+
+            priv->title = seahorse_pgp_uid_calc_label (name, email, comment);
+        }
+
+        g_object_notify (G_OBJECT (self), "title");
+    }
+    /* We use the next 2 UIDs to construct the subtitle */
+    if (position < 3)
+        g_object_notify (G_OBJECT (self), "subtitle");
 }
 
 static void
@@ -599,14 +659,19 @@ seahorse_pgp_key_init (SeahorsePgpKey *self)
     priv->uids = G_LIST_MODEL (g_list_store_new (SEAHORSE_PGP_TYPE_UID));
     priv->subkeys = G_LIST_MODEL (g_list_store_new (SEAHORSE_PGP_TYPE_SUBKEY));
     priv->photos = G_LIST_MODEL (g_list_store_new (SEAHORSE_PGP_TYPE_PHOTO));
+
+    g_signal_connect_object (priv->uids, "items-changed",
+                             G_CALLBACK (on_uids_changed), self, 0);
 }
 
 static void
-seahorse_pgp_key_get_property (GObject *object, guint prop_id,
-                               GValue *value, GParamSpec *pspec)
+seahorse_pgp_key_get_property (GObject *object,
+                               unsigned int prop_id,
+                               GValue *value,
+                               GParamSpec *pspec)
 {
     SeahorsePgpKey *self = SEAHORSE_PGP_KEY (object);
-    SeahorseUsage usage;
+    SeahorseItem *item = SEAHORSE_ITEM (self);
 
     switch (prop_id) {
     case PROP_PHOTOS:
@@ -620,13 +685,6 @@ seahorse_pgp_key_get_property (GObject *object, guint prop_id,
         break;
     case PROP_FINGERPRINT:
         g_value_set_string (value, seahorse_pgp_key_get_fingerprint (self));
-        break;
-    case PROP_DESCRIPTION:
-        g_object_get (self, "usage", &usage, NULL);
-        if (usage == SEAHORSE_USAGE_PRIVATE_KEY)
-            g_value_set_string (value, _("Personal PGP key"));
-        else
-            g_value_set_string (value, _("PGP key"));
         break;
     case PROP_EXPIRES:
         g_value_set_boxed (value, seahorse_pgp_key_get_expires (self));
@@ -642,6 +700,46 @@ seahorse_pgp_key_get_property (GObject *object, guint prop_id,
         break;
     case PROP_TRUST:
         g_value_set_uint (value, SEAHORSE_VALIDITY_UNKNOWN);
+        break;
+    /* Override properties */
+    case PROP_PLACE:
+        g_value_take_object (value, seahorse_pgp_key_get_place (item));
+        break;
+    case PROP_TITLE:
+        g_value_set_string (value, seahorse_pgp_key_get_title (item));
+        break;
+    case PROP_SUBTITLE:
+        g_value_set_string (value, seahorse_pgp_key_get_subtitle (item));
+        break;
+    case PROP_DESCRIPTION:
+        g_value_set_string (value, seahorse_pgp_key_get_description (item));
+        break;
+    case PROP_ICON:
+        g_value_set_object (value, seahorse_pgp_key_get_icon (item));
+        break;
+    case PROP_USAGE:
+        g_value_set_enum (value, seahorse_pgp_key_get_usage (item));
+        break;
+    case PROP_ITEM_FLAGS:
+        g_value_set_flags (value, seahorse_pgp_key_get_item_flags (item));
+        break;
+    default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+        break;
+    }
+}
+
+static void
+seahorse_pgp_key_set_property (GObject *object,
+                               unsigned int prop_id,
+                               const GValue *value,
+                               GParamSpec *pspec)
+{
+    SeahorsePgpKey *self = SEAHORSE_PGP_KEY (object);
+
+    switch (prop_id) {
+    case PROP_PLACE:
+        seahorse_pgp_key_set_place (SEAHORSE_ITEM (self), g_value_get_object (value));
         break;
     }
 }
@@ -665,6 +763,8 @@ seahorse_pgp_key_object_finalize (GObject *obj)
     SeahorsePgpKey *self = SEAHORSE_PGP_KEY (obj);
     SeahorsePgpKeyPrivate *priv = seahorse_pgp_key_get_instance_private (self);
 
+    g_clear_object (&priv->icon);
+    g_free (priv->title);
     g_free (priv->keyid);
 
     G_OBJECT_CLASS (seahorse_pgp_key_parent_class)->finalize (obj);
@@ -678,58 +778,54 @@ seahorse_pgp_key_class_init (SeahorsePgpKeyClass *klass)
     gobject_class->dispose = seahorse_pgp_key_object_dispose;
     gobject_class->finalize = seahorse_pgp_key_object_finalize;
     gobject_class->get_property = seahorse_pgp_key_get_property;
+    gobject_class->set_property = seahorse_pgp_key_set_property;
 
     obj_props[PROP_PHOTOS] =
-        g_param_spec_object ("photos", "Key Photos", "Photos for the key",
+        g_param_spec_object ("photos", NULL, NULL,
                              G_TYPE_LIST_MODEL,
                              G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
-
     obj_props[PROP_SUBKEYS] =
-        g_param_spec_object ("subkeys", "PGP subkeys", "PGP subkeys",
+        g_param_spec_object ("subkeys", NULL, NULL,
                              G_TYPE_LIST_MODEL,
                              G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
-
     obj_props[PROP_UIDS] =
-        g_param_spec_object ("uids", "PGP User Ids", "PGP User Ids",
+        g_param_spec_object ("uids", NULL, NULL,
                              G_TYPE_LIST_MODEL,
                              G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
-
     obj_props[PROP_FINGERPRINT] =
-        g_param_spec_string ("fingerprint", "Fingerprint", "Unique fingerprint for this key",
+        g_param_spec_string ("fingerprint", NULL, NULL,
                              "",
                              G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
-
-    obj_props[PROP_DESCRIPTION] =
-        g_param_spec_string ("description", "Description", "Description for key",
-                             "",
-                             G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
-
     obj_props[PROP_VALIDITY] =
-        g_param_spec_uint ("validity", "Validity", "Validity of this key",
-                           0, G_MAXUINT, 0,
+        g_param_spec_enum ("validity", NULL, NULL,
+                           SEAHORSE_TYPE_VALIDITY, SEAHORSE_VALIDITY_UNKNOWN,
                            G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
-
     obj_props[PROP_TRUST] =
-        g_param_spec_uint ("trust", "Trust", "Trust in this key",
+        g_param_spec_uint ("trust", NULL, NULL,
                            0, G_MAXUINT, 0,
                            G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
-
     obj_props[PROP_EXPIRES] =
-        g_param_spec_boxed ("expires", "Expires On", "Date this key expires on",
+        g_param_spec_boxed ("expires", NULL, NULL,
                             G_TYPE_DATE_TIME,
                             G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
-
     obj_props[PROP_LENGTH] =
-        g_param_spec_uint ("length", "Length", "The length of this key.",
+        g_param_spec_uint ("length", NULL, NULL,
                            0, G_MAXUINT, 0,
                            G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
-
     obj_props[PROP_ALGO] =
-        g_param_spec_string ("algo", "Algorithm", "The algorithm of this key.",
+        g_param_spec_string ("algo", NULL, NULL,
                              "",
                              G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
     g_object_class_install_properties (gobject_class, N_PROPS, obj_props);
+
+    g_object_class_override_property (gobject_class, PROP_TITLE, "place");
+    g_object_class_override_property (gobject_class, PROP_TITLE, "title");
+    g_object_class_override_property (gobject_class, PROP_SUBTITLE, "subtitle");
+    g_object_class_override_property (gobject_class, PROP_DESCRIPTION, "description");
+    g_object_class_override_property (gobject_class, PROP_ICON, "icon");
+    g_object_class_override_property (gobject_class, PROP_USAGE, "usage");
+    g_object_class_override_property (gobject_class, PROP_ITEM_FLAGS, "item-flags");
 }
 
 SeahorsePgpKey*

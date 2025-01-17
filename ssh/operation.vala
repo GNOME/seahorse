@@ -159,7 +159,7 @@ public class ChangePassphraseOperation : Operation {
             requires(key.key_data.privfile != null) {
 
         this.prompt_title = _("Enter Key Passphrase");
-        this.prompt_argument = key.label;
+        this.prompt_argument = key.title;
 
         var cmd = "%s -p -f '%s'".printf(Config.SSH_KEYGEN_PATH, key.key_data.privfile);
 

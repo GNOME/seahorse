@@ -217,7 +217,7 @@ op_delete (SeahorseGpgmeKey *pkey, gboolean secret)
     gpgme_key_t key;
     gpgme_ctx_t ctx;
 
-    keyring = SEAHORSE_GPGME_KEYRING (seahorse_object_get_place (SEAHORSE_OBJECT (pkey)));
+    keyring = SEAHORSE_GPGME_KEYRING (seahorse_item_get_place (SEAHORSE_ITEM (pkey)));
     g_return_val_if_fail (SEAHORSE_IS_GPGME_KEYRING (keyring), GPG_E (GPG_ERR_INV_KEYRING));
 
     g_object_ref (pkey);
@@ -389,7 +389,7 @@ edit_key (SeahorseGpgmeKey *pkey, SeahorseEditParm *parms)
     gpgme_key_t key;
     gpgme_ctx_t ctx;
 
-    keyring = SEAHORSE_GPGME_KEYRING (seahorse_object_get_place (SEAHORSE_OBJECT (pkey)));
+    keyring = SEAHORSE_GPGME_KEYRING (seahorse_item_get_place (SEAHORSE_ITEM (pkey)));
     g_return_val_if_fail (SEAHORSE_IS_GPGME_KEYRING (keyring), GPG_E (GPG_ERR_INV_KEYRING));
 
     g_object_ref (pkey);
@@ -700,7 +700,7 @@ seahorse_gpgme_key_op_change_pass_async (SeahorseGpgmeKey *pkey,
     gpgme_key_t key;
 
     g_return_if_fail (SEAHORSE_GPGME_IS_KEY (pkey));
-    g_return_if_fail (seahorse_object_get_usage (SEAHORSE_OBJECT (pkey)) == SEAHORSE_USAGE_PRIVATE_KEY);
+    g_return_if_fail (seahorse_item_get_usage (SEAHORSE_ITEM (pkey)) == SEAHORSE_USAGE_PRIVATE_KEY);
 
     gctx = seahorse_gpgme_keyring_new_context (&gerr);
 
@@ -875,7 +875,7 @@ seahorse_gpgme_key_op_set_trust (SeahorseGpgmeKey *pkey, SeahorseValidity trust)
     g_return_val_if_fail (trust >= SEAHORSE_VALIDITY_NEVER, GPG_E (GPG_ERR_INV_VALUE));
     g_return_val_if_fail (seahorse_gpgme_key_get_trust (pkey) != trust, GPG_E (GPG_ERR_INV_VALUE));
 
-    if (seahorse_object_get_usage (SEAHORSE_OBJECT (pkey)) == SEAHORSE_USAGE_PRIVATE_KEY)
+    if (seahorse_item_get_usage (SEAHORSE_ITEM (pkey)) == SEAHORSE_USAGE_PRIVATE_KEY)
         g_return_val_if_fail (trust != SEAHORSE_VALIDITY_UNKNOWN, GPG_E (GPG_ERR_INV_VALUE));
     else
         g_return_val_if_fail (trust != SEAHORSE_VALIDITY_ULTIMATE, GPG_E (GPG_ERR_INV_VALUE));
@@ -1279,8 +1279,8 @@ seahorse_gpgme_key_op_add_revoker (SeahorseGpgmeKey *pkey, SeahorseGpgmeKey *rev
 
     g_return_val_if_fail (SEAHORSE_GPGME_IS_KEY (pkey), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
     g_return_val_if_fail (SEAHORSE_GPGME_IS_KEY (revoker), GPG_E (GPG_ERR_WRONG_KEY_USAGE));
-    g_return_val_if_fail (seahorse_object_get_usage (SEAHORSE_OBJECT (pkey)) == SEAHORSE_USAGE_PRIVATE_KEY, GPG_E (GPG_ERR_WRONG_KEY_USAGE));
-    g_return_val_if_fail (seahorse_object_get_usage (SEAHORSE_OBJECT (revoker)) == SEAHORSE_USAGE_PRIVATE_KEY, GPG_E (GPG_ERR_WRONG_KEY_USAGE));
+    g_return_val_if_fail (seahorse_item_get_usage (SEAHORSE_ITEM (pkey)) == SEAHORSE_USAGE_PRIVATE_KEY, GPG_E (GPG_ERR_WRONG_KEY_USAGE));
+    g_return_val_if_fail (seahorse_item_get_usage (SEAHORSE_ITEM (revoker)) == SEAHORSE_USAGE_PRIVATE_KEY, GPG_E (GPG_ERR_WRONG_KEY_USAGE));
 
     keyid = seahorse_pgp_key_get_keyid (SEAHORSE_PGP_KEY (pkey));
     g_return_val_if_fail (keyid, GPG_E (GPG_ERR_INV_VALUE));
@@ -1326,7 +1326,7 @@ seahorse_gpgme_key_op_add_uid_async (SeahorseGpgmeKey    *pkey,
     g_autofree char* uid = NULL;
 
     g_return_if_fail (SEAHORSE_GPGME_IS_KEY (pkey));
-    g_return_if_fail (seahorse_object_get_usage (SEAHORSE_OBJECT (pkey)) == SEAHORSE_USAGE_PRIVATE_KEY);
+    g_return_if_fail (seahorse_item_get_usage (SEAHORSE_ITEM (pkey)) == SEAHORSE_USAGE_PRIVATE_KEY);
 
     gctx = seahorse_gpgme_keyring_new_context (&gerr);
 
@@ -1383,7 +1383,7 @@ seahorse_gpgme_key_op_add_subkey_async (SeahorseGpgmeKey        *pkey,
     unsigned int flags = 0;
 
     g_return_if_fail (SEAHORSE_GPGME_IS_KEY (pkey));
-    g_return_if_fail (seahorse_object_get_usage (SEAHORSE_OBJECT (pkey)) ==
+    g_return_if_fail (seahorse_item_get_usage (SEAHORSE_ITEM (pkey)) ==
                           SEAHORSE_USAGE_PRIVATE_KEY);
 
     gctx = seahorse_gpgme_keyring_new_context (&gerr);

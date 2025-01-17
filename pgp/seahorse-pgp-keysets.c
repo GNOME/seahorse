@@ -52,9 +52,11 @@ pgp_signers_match (void *item, void *data)
     if (!SEAHORSE_GPGME_IS_KEY (key))
         return FALSE;
 
-    g_object_get (key, "usage", &usage, "object-flags", &flags, NULL);
+    usage = seahorse_item_get_usage (SEAHORSE_ITEM (item));
     if (usage != SEAHORSE_USAGE_PRIVATE_KEY)
         return FALSE;
+
+    flags = seahorse_item_get_item_flags (SEAHORSE_ITEM (item));
     if (!(flags & SEAHORSE_FLAG_CAN_SIGN))
         return FALSE;
     if (flags & (SEAHORSE_FLAG_EXPIRED | SEAHORSE_FLAG_REVOKED | SEAHORSE_FLAG_DISABLED))
