@@ -90,7 +90,7 @@ public class Seahorse.Pkcs11.CertificateWidget : Gtk.Box {
             fill_in_rdn(this.subject_row, rdn, cert.get_subject_part(rdn.id));
 
         // Issuer name
-        this.issuer_row.title = cert.get_subject_part("cn");
+        this.issuer_row.title = cert.get_issuer_part("cn");
         foreach (unowned var rdn in RDNS)
             fill_in_rdn(this.issuer_row, rdn, cert.get_issuer_part(rdn.id));
 
