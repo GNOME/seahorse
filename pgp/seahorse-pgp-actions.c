@@ -31,7 +31,6 @@
 #include "seahorse-pgp-backend.h"
 #include "seahorse-pgp-actions.h"
 #include "seahorse-pgp-dialogs.h"
-#include "seahorse-keyserver-results.h"
 #include "seahorse-keyserver-search.h"
 #include "seahorse-keyserver-sync.h"
 

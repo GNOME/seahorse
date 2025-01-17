@@ -34,7 +34,6 @@
 
 #include "seahorse-common.h"
 
-#include "libseahorse/seahorse-progress.h"
 #include "libseahorse/seahorse-util.h"
 
 #include <ldap.h>
@@ -496,7 +495,6 @@ on_connect_server_info_completed (LDAPMessage *result,
     ldap_memfree (message);
 
     g_task_return_pointer (task, g_steal_pointer (&closure->ldap), destroy_ldap);
-    seahorse_progress_end (cancellable, task);
     return G_SOURCE_REMOVE;
 }
 
@@ -540,7 +538,6 @@ on_connect_bind_completed (LDAPMessage *result,
     sinfo = get_ldap_server_info (self, FALSE);
     if (sinfo != NULL) {
         g_task_return_pointer (task, g_steal_pointer (&closure->ldap), destroy_ldap);
-        seahorse_progress_end (cancellable, task);
         return G_SOURCE_REMOVE;
     }
 
@@ -593,9 +590,6 @@ on_address_resolved (GObject      *src_object,
                                  _("Couldn’t resolve address %s"), uri);
         return;
     }
-
-    /* Now that we've resolved our address, connect via IP */
-    seahorse_progress_update (cancellable, task, _("Connecting to: %s"), uri);
 
     /* Re-create the URL with the resolved IP */
     addr_str = g_socket_connectable_to_string (G_SOCKET_CONNECTABLE (addr));
@@ -654,12 +648,7 @@ seahorse_ldap_source_connect_async (SeahorseLDAPSource *source,
       return;
     }
 
-    seahorse_progress_prep_and_begin (cancellable, task, NULL);
-
     /* Now get a GSocketAddressEnumerator to do the resolving */
-    seahorse_progress_update (cancellable, task,
-                              _("Resolving server address: %s"), uri);
-
     addr_enumer = g_socket_connectable_enumerate (addr);
     g_socket_address_enumerator_next_async (addr_enumer,
                                             cancellable,
@@ -843,7 +832,6 @@ on_search_search_completed (LDAPMessage *result,
         g_task_return_boolean (task, TRUE);
 
     ldap_memfree (message);
-    seahorse_progress_end (cancellable, task);
 
     return G_SOURCE_REMOVE;
 }
@@ -910,8 +898,6 @@ seahorse_ldap_source_search_async (SeahorseServerSource *source,
     text = escape_ldap_value (match);
     closure->filter = g_strdup_printf ("(pgpuserid=*%s*)", text);
     g_task_set_task_data (task, closure, search_closure_free);
-
-    seahorse_progress_prep_and_begin (cancellable, task, NULL);
 
     seahorse_ldap_source_connect_async (self, cancellable,
                                         on_search_connect_completed,
@@ -999,7 +985,6 @@ import_send_key (SeahorseLDAPSource *self, GTask *task)
 
     if (closure->current_index >= 0) {
         keydata = g_ptr_array_index (closure->keydatas, closure->current_index);
-        seahorse_progress_end (cancellable, keydata);
     }
 
     closure->current_index++;
@@ -1011,7 +996,6 @@ import_send_key (SeahorseLDAPSource *self, GTask *task)
     }
 
     keydata = g_ptr_array_index (closure->keydatas, closure->current_index);
-    seahorse_progress_begin (cancellable, keydata);
     values[0] = keydata;
     values[1] = NULL;
 
@@ -1087,7 +1071,6 @@ seahorse_ldap_source_import_async (SeahorseServerSource *source,
             break;
 
         keydata = g_string_free (g_steal_pointer (&buf), FALSE);
-        seahorse_progress_prep (cancellable, keydata, NULL);
         g_ptr_array_add (closure->keydatas, g_steal_pointer (&keydata));
     }
 
@@ -1210,7 +1193,6 @@ export_retrieve_key (SeahorseLDAPSource *self,
     if (closure->current_index > 0) {
         fingerprint = g_ptr_array_index (closure->fingerprints,
                                          closure->current_index);
-        seahorse_progress_end (cancellable, fingerprint);
     }
 
     closure->current_index++;
@@ -1223,7 +1205,6 @@ export_retrieve_key (SeahorseLDAPSource *self,
 
     fingerprint = g_ptr_array_index (closure->fingerprints,
                                      closure->current_index);
-    seahorse_progress_begin (cancellable, fingerprint);
     length = strlen (fingerprint);
     if (length > 16)
         fingerprint += (length - 16);
@@ -1289,7 +1270,6 @@ seahorse_ldap_source_export_async (SeahorseServerSource  *source,
         char *fingerprint = g_strdup (keyids[i]);
 
         g_ptr_array_add (closure->fingerprints, fingerprint);
-        seahorse_progress_prep (cancellable, fingerprint, NULL);
     }
     closure->current_index = -1;
     g_task_set_task_data (task, closure, export_closure_free);

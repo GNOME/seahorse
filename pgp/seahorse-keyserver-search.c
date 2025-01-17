@@ -21,10 +21,173 @@
 #include "config.h"
 
 #include "seahorse-keyserver-search.h"
-#include "seahorse-keyserver-results.h"
 #include "seahorse-pgp-backend.h"
+#include "seahorse-gpgme-keyring.h"
+
+#include <glib/gi18n.h>
 
 #include "seahorse-common.h"
+
+
+/**
+ * SeahorseKeyserverRow:
+ */
+
+#define SEAHORSE_TYPE_KEYSERVER_ROW (seahorse_keyserver_row_get_type ())
+G_DECLARE_FINAL_TYPE (SeahorseKeyserverRow, seahorse_keyserver_row,
+                      SEAHORSE, KEYSERVER_ROW,
+                      AdwActionRow)
+
+struct _SeahorseKeyserverRow {
+    AdwActionRow parent;
+
+    SeahorseServerSource *keyserver;
+    GtkWidget *check_image;
+};
+
+G_DEFINE_TYPE (SeahorseKeyserverRow, seahorse_keyserver_row, ADW_TYPE_ACTION_ROW);
+
+static void
+seahorse_keyserver_row_init (SeahorseKeyserverRow *row)
+{
+}
+
+static void
+seahorse_keyserver_row_class_init (SeahorseKeyserverRowClass *klass)
+{
+}
+
+static GtkWidget *
+seahorse_keyserver_row_new (SeahorseServerSource *ssrc,
+                            GPtrArray *selected_servers)
+{
+    g_autoptr(SeahorseKeyserverRow) row = NULL;
+    g_autofree char *uri = NULL;
+    gboolean is_selected;
+
+    row = g_object_new (SEAHORSE_TYPE_KEYSERVER_ROW, NULL);
+    gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), TRUE);
+
+    uri = seahorse_place_get_uri (SEAHORSE_PLACE (ssrc));
+    adw_preferences_row_set_title (ADW_PREFERENCES_ROW (row), uri);
+
+    row->check_image = gtk_image_new_from_icon_name ("emblem-ok-symbolic");
+    is_selected = g_ptr_array_find (selected_servers, ssrc, NULL);
+    gtk_widget_set_visible (row->check_image, is_selected);
+    adw_action_row_add_suffix (ADW_ACTION_ROW (row), row->check_image);
+
+    return GTK_WIDGET (g_steal_pointer (&row));
+}
+
+
+/**
+ * SeahorseFoundKeyRow:
+ */
+
+#define SEAHORSE_TYPE_FOUND_KEY_ROW (seahorse_found_key_row_get_type ())
+G_DECLARE_FINAL_TYPE (SeahorseFoundKeyRow, seahorse_found_key_row,
+                      SEAHORSE, FOUND_KEY_ROW,
+                      AdwActionRow)
+
+struct _SeahorseFoundKeyRow {
+    AdwActionRow parent;
+
+    SeahorsePgpKey *key;
+    GtkButton *import_button;
+};
+
+G_DEFINE_TYPE (SeahorseFoundKeyRow, seahorse_found_key_row, ADW_TYPE_ACTION_ROW);
+
+static void
+on_import_complete (GObject *source, GAsyncResult *result, void *user_data)
+{
+    SeahorsePgpBackend *backend = SEAHORSE_PGP_BACKEND (source);
+    g_autoptr(SeahorseFoundKeyRow) row =
+        SEAHORSE_FOUND_KEY_ROW (user_data);
+    const char *result_icon_name;
+    g_autofree char *result_tooltip = NULL;
+    g_autoptr(GError) err = NULL;
+
+    if (!seahorse_pgp_backend_transfer_finish (backend, result, &err)) {
+        result_icon_name = "dialog-warning-symbolic";
+        result_tooltip = g_strdup_printf (_("Couldn’t import key: %s"),
+                                          err->message);
+    } else {
+        result_icon_name = "emblem-ok-symbolic";
+        result_tooltip = g_strdup (_("Key import succeeded"));
+    }
+
+    gtk_button_set_icon_name (row->import_button, result_icon_name);
+    gtk_widget_set_tooltip_text (GTK_WIDGET (row->import_button),
+                                 result_tooltip);
+}
+
+static void
+on_import_button_clicked (GtkButton *import_button, void *user_data)
+{
+    SeahorseFoundKeyRow *row = user_data;
+    g_autoptr(GtkWidget) spinner = NULL;
+    g_autoptr(GListStore) keys = NULL;
+    g_autoptr(GCancellable) cancellable = NULL;
+    SeahorsePgpBackend *backend;
+    SeahorseGpgmeKeyring *keyring;
+
+    /* Let the button show a spinner while importing */
+    gtk_widget_set_sensitive (GTK_WIDGET (import_button), FALSE);
+    spinner = gtk_spinner_new ();
+    gtk_spinner_start (GTK_SPINNER (spinner));
+    gtk_button_set_child (import_button, g_steal_pointer (&spinner));
+
+    /* Now import the key */
+    keys = g_list_store_new (SEAHORSE_TYPE_OBJECT);
+    g_list_store_append (keys, row->key);
+    cancellable = g_cancellable_new ();
+    backend = seahorse_pgp_backend_get ();
+    keyring = seahorse_pgp_backend_get_default_keyring (backend);
+    seahorse_pgp_backend_transfer_async (backend,
+                                         G_LIST_MODEL (keys),
+                                         SEAHORSE_PLACE (keyring),
+                                         cancellable, on_import_complete,
+                                         g_object_ref (row));
+}
+
+static void
+seahorse_found_key_row_init (SeahorseFoundKeyRow *row)
+{
+}
+
+static void
+seahorse_found_key_row_class_init (SeahorseFoundKeyRowClass *klass)
+{
+}
+
+static GtkWidget *
+seahorse_found_key_row_new (SeahorsePgpKey *key)
+{
+    g_autoptr(SeahorseFoundKeyRow) row = NULL;
+    const char *label = NULL;
+    GtkWidget *import_button = NULL;
+
+    row = g_object_new (SEAHORSE_TYPE_FOUND_KEY_ROW, NULL);
+    row->key = key;
+
+    label = seahorse_object_get_markup (SEAHORSE_OBJECT (key));
+
+    adw_preferences_row_set_title (ADW_PREFERENCES_ROW (row), label);
+    gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), TRUE);
+
+    import_button = gtk_button_new_from_icon_name ("document-save-symbolic");
+    row->import_button = GTK_BUTTON (import_button);
+    g_signal_connect_object (import_button, "clicked",
+                             G_CALLBACK (on_import_button_clicked), row, 0);
+    gtk_widget_set_valign (import_button, GTK_ALIGN_CENTER);
+    gtk_widget_add_css_class (import_button, "flat");
+    gtk_widget_set_tooltip_text (import_button, _("Import"));
+    adw_action_row_add_suffix (ADW_ACTION_ROW (row), import_button);
+
+    return GTK_WIDGET (g_steal_pointer (&row));
+}
+
 
 /**
  * SeahorseKeyserverSearch:
@@ -37,9 +200,16 @@ struct _SeahorseKeyserverSearch {
 
     GPtrArray *selected_servers; /* (element-type SeahorseServerSource) */
     gboolean selected_servers_changed;
+    GListStore *keys;
+
+    GtkWidget *navigation_view;
 
     GtkWidget *search_row;
     GtkWidget *key_server_list;
+
+    GtkWidget *results_page;
+    GtkWidget *results_view;
+    GtkWidget *key_list;
 };
 
 G_DEFINE_TYPE (SeahorseKeyserverSearch, seahorse_keyserver_search, ADW_TYPE_DIALOG)
@@ -67,6 +237,24 @@ on_keyserver_search_control_changed (GtkWidget *entry, SeahorseKeyserverSearch *
     gtk_widget_action_set_enabled (GTK_WIDGET (self), "search", enabled);
 }
 
+static void
+on_search_completed (GObject *source, GAsyncResult *result, gpointer user_data)
+{
+    SeahorseKeyserverSearch *self = SEAHORSE_KEYSERVER_SEARCH (user_data);
+    SeahorsePgpBackend *backend = seahorse_pgp_backend_get ();
+    g_autoptr(GError) error = NULL;
+
+    seahorse_pgp_backend_search_remote_finish (backend, result, &error);
+    if (error != NULL) {
+        g_dbus_error_strip_remote_error (error);
+        seahorse_util_show_error (GTK_WIDGET (self),
+                                  _("The search for keys failed."),
+                                  error->message);
+    }
+
+    g_object_unref (self);
+}
+
 /* Extracts data, stores it in settings and starts a search using the entered
  * search data. */
 static void
@@ -75,7 +263,7 @@ search_action (GtkWidget *widget, const char *action_name, GVariant *param)
     SeahorseKeyserverSearch *self = SEAHORSE_KEYSERVER_SEARCH (widget);
     SeahorseAppSettings *app_settings;
     const char *search_text = NULL;
-    GtkRoot *root;
+    GCancellable *cancellable;
 
     app_settings = seahorse_app_settings_instance ();
 
@@ -107,67 +295,69 @@ search_action (GtkWidget *widget, const char *action_name, GVariant *param)
 
     search_text = gtk_editable_get_text (GTK_EDITABLE (self->search_row));
     seahorse_app_settings_set_last_search_text (app_settings, search_text);
-    adw_dialog_close (ADW_DIALOG (self));
 
-    root = gtk_widget_get_root (GTK_WIDGET (self));
-    seahorse_keyserver_results_show (search_text,
-                                     GTK_IS_WINDOW (root)? GTK_WINDOW (root) : NULL);
+    /* Clear any keys from the last time */
+    g_list_store_remove_all (self->keys);
+
+    cancellable = g_cancellable_new ();
+    seahorse_pgp_backend_search_remote_async (seahorse_pgp_backend_get (),
+                                              search_text,
+                                              self->keys,
+                                              cancellable, on_search_completed,
+                                              g_object_ref (self));
+
+    adw_navigation_view_push (ADW_NAVIGATION_VIEW (self->navigation_view),
+                              ADW_NAVIGATION_PAGE (self->results_page));
 }
 
 static void
-on_row_activated (GtkListBox    *box,
-                  GtkListBoxRow *row,
-                  gpointer       user_data)
+on_keyserver_row_activated (GtkListBox    *box,
+                            GtkListBoxRow *_row,
+                            void          *user_data)
 {
     SeahorseKeyserverSearch *self = SEAHORSE_KEYSERVER_SEARCH (user_data);
-    SeahorseServerSource *ssrc;
-    GtkWidget *check;
+    SeahorseKeyserverRow *row = SEAHORSE_KEYSERVER_ROW (_row);
     gboolean found;
-    guint pos;
-
-    ssrc = g_object_get_data (G_OBJECT (row), "keyserver-uri");
-
-    g_return_if_fail (SEAHORSE_IS_SERVER_SOURCE (ssrc));
+    unsigned int pos;
 
     self->selected_servers_changed = TRUE;
-    found = g_ptr_array_find (self->selected_servers, ssrc, &pos);
+    found = g_ptr_array_find (self->selected_servers, row->keyserver, &pos);
     if (found) {
         g_ptr_array_remove_index (self->selected_servers, pos);
     } else {
-        g_ptr_array_add (self->selected_servers, ssrc);
+        g_ptr_array_add (self->selected_servers, row->keyserver);
     }
 
-    check = g_object_get_data (G_OBJECT (row), "check");
-    gtk_widget_set_visible (check, !found);
+    gtk_widget_set_visible (row->check_image, !found);
 
     on_keyserver_search_control_changed (NULL, self);
 }
 
 GtkWidget *
-create_row_for_server_source (gpointer item,
-                              gpointer user_data)
+create_row_for_server_source (void *item,
+                              void *user_data)
 {
     SeahorseKeyserverSearch *self = SEAHORSE_KEYSERVER_SEARCH (user_data);
-    SeahorseServerSource *ssrc = SEAHORSE_SERVER_SOURCE (item);
-    g_autofree char *uri = NULL;
-    GtkWidget *row;
-    GtkWidget *check;
-    gboolean is_selected;
 
-    row = adw_action_row_new ();
-    gtk_list_box_row_set_selectable (GTK_LIST_BOX_ROW (row), FALSE);
-    g_object_set_data (G_OBJECT (row), "keyserver-uri", ssrc);
+    return seahorse_keyserver_row_new (SEAHORSE_SERVER_SOURCE (item),
+                                       self->selected_servers);
+}
 
-    uri = seahorse_place_get_uri (SEAHORSE_PLACE (ssrc));
-    adw_preferences_row_set_title (ADW_PREFERENCES_ROW (row), uri);
+static void
+on_result_row_activated (GtkListBox *key_list, GtkListBoxRow *row, void *user_data)
+{
+    SeahorseKeyserverSearch *self = SEAHORSE_KEYSERVER_SEARCH (user_data);
+    SeahorseFoundKeyRow *_row = SEAHORSE_FOUND_KEY_ROW (row);
 
-    check = gtk_image_new_from_icon_name ("emblem-ok-symbolic");
-    is_selected = g_ptr_array_find (self->selected_servers, ssrc, NULL);
-    gtk_widget_set_visible (check, is_selected);
-    adw_action_row_add_suffix (ADW_ACTION_ROW (row), check);
-    g_object_set_data (G_OBJECT (row), "check", check);
+    g_return_if_fail (SEAHORSE_IS_VIEWABLE (_row->key));
 
-    return row;
+    seahorse_viewable_view (G_OBJECT (_row->key), GTK_WINDOW (self));
+}
+
+static GtkWidget *
+create_row_for_key (void *item, void *user_data)
+{
+    return seahorse_found_key_row_new (SEAHORSE_PGP_KEY (item));
 }
 
 static void
@@ -191,7 +381,7 @@ seahorse_keyserver_search_init (SeahorseKeyserverSearch *self)
     self->selected_servers = g_ptr_array_new ();
 
     last_servers = seahorse_app_settings_get_last_search_servers (app_settings);
-    for (guint i = 0; i < g_list_model_get_n_items (remotes); i++) {
+    for (unsigned int i = 0; i < g_list_model_get_n_items (remotes); i++) {
         g_autoptr(SeahorseServerSource) ssrc = g_list_model_get_item (remotes, i);
         g_autofree char *ssrc_name = NULL;
         g_autofree char *ssrc_name_fold = NULL;
@@ -205,7 +395,7 @@ seahorse_keyserver_search_init (SeahorseKeyserverSearch *self)
         ssrc_name = seahorse_place_get_uri (SEAHORSE_PLACE (ssrc));
         ssrc_name_fold = g_utf8_casefold (ssrc_name, -1);
 
-        for (guint j = 0; last_servers[j]; j++) {
+        for (unsigned int j = 0; last_servers[j]; j++) {
             const char *name = last_servers[j];
 
             if (g_utf8_collate (name, ssrc_name_fold) == 0)
@@ -220,10 +410,6 @@ seahorse_keyserver_search_init (SeahorseKeyserverSearch *self)
     }
 
     /* The key servers to list */
-    g_signal_connect (self->key_server_list,
-                      "row-activated",
-                      G_CALLBACK (on_row_activated),
-                      self);
     gtk_list_box_bind_model (GTK_LIST_BOX (self->key_server_list),
                              remotes,
                              create_row_for_server_source,
@@ -231,6 +417,12 @@ seahorse_keyserver_search_init (SeahorseKeyserverSearch *self)
                              NULL);
 
     on_keyserver_search_control_changed (NULL, self);
+
+    /* init key list */
+    self->keys = g_list_store_new (SEAHORSE_PGP_TYPE_KEY);
+    gtk_list_box_bind_model (GTK_LIST_BOX (self->key_list),
+                             G_LIST_MODEL (self->keys),
+                             create_row_for_key, self, NULL);
 }
 
 static void
@@ -239,6 +431,7 @@ seahorse_keyserver_search_finalize (GObject *object)
     SeahorseKeyserverSearch *self = SEAHORSE_KEYSERVER_SEARCH (object);
 
     g_ptr_array_unref (self->selected_servers);
+    g_clear_object (&self->keys);
 
     G_OBJECT_CLASS (seahorse_keyserver_search_parent_class)->finalize (object);
 }
@@ -255,18 +448,20 @@ seahorse_keyserver_search_class_init (SeahorseKeyserverSearchClass *klass)
 
     gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/Seahorse/seahorse-keyserver-search.ui");
 
+    gtk_widget_class_bind_template_child (widget_class, SeahorseKeyserverSearch, navigation_view);
     gtk_widget_class_bind_template_child (widget_class, SeahorseKeyserverSearch, search_row);
     gtk_widget_class_bind_template_child (widget_class, SeahorseKeyserverSearch, key_server_list);
+    gtk_widget_class_bind_template_child (widget_class, SeahorseKeyserverSearch, results_page);
+    gtk_widget_class_bind_template_child (widget_class, SeahorseKeyserverSearch, results_view);
+    gtk_widget_class_bind_template_child (widget_class, SeahorseKeyserverSearch, key_list);
 
     gtk_widget_class_bind_template_callback (widget_class, on_keyserver_search_control_changed);
+    gtk_widget_class_bind_template_callback (widget_class, on_keyserver_row_activated);
+    gtk_widget_class_bind_template_callback (widget_class, on_result_row_activated);
 }
 
 SeahorseKeyserverSearch *
-seahorse_keyserver_search_new ()
+seahorse_keyserver_search_new (void)
 {
-    g_autoptr(SeahorseKeyserverSearch) self = NULL;
-
-    self = g_object_new (SEAHORSE_TYPE_KEYSERVER_SEARCH, NULL);
-
-    return g_steal_pointer (&self);
+    return g_object_new (SEAHORSE_TYPE_KEYSERVER_SEARCH, NULL);
 }

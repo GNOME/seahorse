@@ -1,93 +1,151 @@
 <?xml version="1.0"?>
 <interface>
   <template class="SeahorseKeyserverSearch" parent="AdwDialog">
-    <property name="title" translatable="yes">Find Remote Keys</property>
-    <property name="follows-content-size">True</property>
 
     <child>
-      <object class="AdwToolbarView">
-        <child type="top">
-          <object class="AdwHeaderBar">
-            <property name="show-end-title-buttons">False</property>
-            <property name="show-start-title-buttons">False</property>
+      <object class="AdwNavigationView" id="navigation_view">
+        <child>
+          <object class="AdwNavigationPage" id="search_page">
+            <property name="title" translatable="yes">Find Remote Keys</property>
+            <property name="child">
+              <object class="AdwToolbarView">
+                <child type="top">
+                  <object class="AdwHeaderBar">
+                    <property name="show-end-title-buttons">False</property>
+                    <property name="show-start-title-buttons">False</property>
 
-            <child type="start">
-              <object class="GtkButton">
-                <property name="label" translatable="yes">_Cancel</property>
-                <property name="use-underline">True</property>
-                <property name="action-name">window.close</property>
+                    <child type="start">
+                      <object class="GtkButton">
+                        <property name="label" translatable="yes">_Cancel</property>
+                        <property name="use-underline">True</property>
+                        <property name="action-name">window.close</property>
+                      </object>
+                    </child>
+
+                    <child type="end">
+                      <object class="GtkButton">
+                        <property name="label" translatable="yes">_Search</property>
+                        <property name="use-underline">True</property>
+                        <property name="action-name">search</property>
+                        <style>
+                          <class name="suggested-action"/>
+                        </style>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+
+                <property name="content">
+                  <object class="AdwPreferencesPage">
+                    <property name="margin-top">12</property>
+                    <property name="margin-bottom">12</property>
+                    <property name="margin-start">18</property>
+                    <property name="margin-end">18</property>
+                    <child>
+                      <object class="AdwPreferencesGroup">
+                        <child>
+                          <object class="GtkBox">
+                            <property name="orientation">horizontal</property>
+                            <property name="spacing">12</property>
+                            <child>
+                              <object class="GtkImage">
+                                <property name="icon-name">find-location-symbolic</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="publish-message">
+                                <property name="xalign">0</property>
+                                <property name="label" translatable="yes">This will find keys for others on the Internet. These keys can then be imported into your local key ring.</property>
+                                <property name="max_width_chars">60</property>
+                                <property name="wrap">True</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="AdwPreferencesGroup">
+                        <child>
+                          <object class="AdwEntryRow" id="search_row">
+                            <property name="title" translatable="yes">Search _terms</property>
+                            <property name="use_underline">True</property>
+                            <signal name="changed" handler="on_keyserver_search_control_changed"/>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="AdwPreferencesGroup">
+                        <property name="title" translatable="yes">Where to search</property>
+                        <child>
+                          <object class="GtkListBox" id="key_server_list">
+                            <property name="selection-mode">none</property>
+                            <property name="activate-on-single-click">True</property>
+                            <signal name="row-activated" handler="on_keyserver_row_activated"/>
+                            <style>
+                              <class name="boxed-list"/>
+                            </style>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </property>
               </object>
-            </child>
+            </property>
+          </object>
+        </child>
 
-            <child type="end">
-              <object class="GtkButton">
-                <property name="label" translatable="yes">_Search</property>
-                <property name="use-underline">True</property>
-                <property name="action-name">search</property>
-                <style>
-                  <class name="suggested-action"/>
-                </style>
+        <child>
+          <object class="AdwNavigationPage" id="results_page">
+            <property name="title" translatable="yes">Remote Keys</property>
+            <child>
+              <object class="AdwToolbarView" id="results_view">
+                <child type="top">
+                  <object class="AdwHeaderBar">
+                  </object>
+                </child>
+
+                <property name="content">
+                  <object class="GtkScrolledWindow">
+                    <property name="propagate-natural-height">True</property>
+                    <child>
+                      <object class="AdwPreferencesPage">
+                        <child>
+                          <object class="AdwPreferencesGroup">
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="wrap">True</property>
+                                <property name="max-width-chars">40</property>
+                                <property name="label" translatable="yes">Double click on a key to inspect it, or click the import button to import it into your local keyring.</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="AdwPreferencesGroup">
+                            <child>
+                              <object class="GtkListBox" id="key_list">
+                                <property name="selection-mode">none</property>
+                                <property name="activate-on-single-click">False</property>
+                                <signal name="row-activated" handler="on_result_row_activated"/>
+                                <style>
+                                  <class name="boxed-list"/>
+                                </style>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </property>
               </object>
             </child>
           </object>
         </child>
-
-        <property name="content">
-          <object class="AdwPreferencesPage">
-            <property name="margin-top">12</property>
-            <property name="margin-bottom">12</property>
-            <property name="margin-start">18</property>
-            <property name="margin-end">18</property>
-            <child>
-              <object class="AdwPreferencesGroup">
-                <child>
-                  <object class="GtkBox">
-                    <property name="orientation">horizontal</property>
-                    <property name="spacing">12</property>
-                    <child>
-                      <object class="GtkImage">
-                        <property name="icon-name">find-location-symbolic</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="publish-message">
-                        <property name="xalign">0</property>
-                        <property name="label" translatable="yes">This will find keys for others on the Internet. These keys can then be imported into your local key ring.</property>
-                        <property name="max_width_chars">60</property>
-                        <property name="wrap">True</property>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-              </object>
-            </child>
-            <child>
-              <object class="AdwPreferencesGroup">
-                <child>
-                  <object class="AdwEntryRow" id="search_row">
-                    <property name="title" translatable="yes">Search _terms</property>
-                    <property name="use_underline">True</property>
-                    <signal name="changed" handler="on_keyserver_search_control_changed"/>
-                  </object>
-                </child>
-              </object>
-            </child>
-            <child>
-              <object class="AdwPreferencesGroup">
-                <property name="title" translatable="yes">Where to search</property>
-                <child>
-                  <object class="GtkListBox" id="key_server_list">
-                    <style>
-                      <class name="boxed-list"/>
-                    </style>
-                  </object>
-                </child>
-              </object>
-            </child>
-          </object>
-        </property>
       </object>
     </child>
-
   </template>
 </interface>

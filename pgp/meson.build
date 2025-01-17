@@ -77,7 +77,6 @@ if get_option('keyservers-support')
     'seahorse-server-source.c',
     'seahorse-keyserver-search.c',
     'seahorse-keyserver-sync.c',
-    'seahorse-keyserver-results.c',
   ]
 endif
 
