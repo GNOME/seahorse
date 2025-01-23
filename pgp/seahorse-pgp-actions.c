@@ -107,9 +107,8 @@ on_remote_sync (GSimpleAction *action,
         keys = g_object_ref (G_LIST_MODEL (keyring));
     }
 
-    dialog = seahorse_keyserver_sync_new (G_LIST_MODEL (keys), GTK_WINDOW (catalog));
-    g_signal_connect (dialog, "response", G_CALLBACK (gtk_window_destroy), NULL);
-    gtk_window_present (GTK_WINDOW (dialog));
+    dialog = seahorse_keyserver_sync_new (G_LIST_MODEL (keys));
+    adw_dialog_present (ADW_DIALOG (dialog), GTK_WIDGET (catalog));
 }
 
 #endif /* WITH_KEYSERVER */

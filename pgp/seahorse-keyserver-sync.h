@@ -20,14 +20,11 @@
 
 #pragma once
 
-#include <gtk/gtk.h>
+#include <adwaita.h>
 
 #define SEAHORSE_TYPE_KEYSERVER_SYNC (seahorse_keyserver_sync_get_type ())
 G_DECLARE_FINAL_TYPE (SeahorseKeyserverSync, seahorse_keyserver_sync,
                       SEAHORSE, KEYSERVER_SYNC,
-                      GtkDialog)
+                      AdwDialog)
 
-SeahorseKeyserverSync *    seahorse_keyserver_sync_new          (GListModel *keys,
-                                                                 GtkWindow  *parent);
-
-void                       seahorse_keyserver_sync_do_sync      (GListModel *keys);
+SeahorseKeyserverSync *    seahorse_keyserver_sync_new          (GListModel *keys);

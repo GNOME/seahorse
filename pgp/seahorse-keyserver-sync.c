@@ -33,7 +33,7 @@
 #include <glib/gi18n.h>
 
 struct _SeahorseKeyserverSync {
-    GtkDialog parent_instance;
+    AdwDialog parent_instance;
 
     GListModel *keys;
 
@@ -49,7 +49,7 @@ enum {
     N_PROPS
 };
 
-G_DEFINE_TYPE (SeahorseKeyserverSync, seahorse_keyserver_sync, GTK_TYPE_DIALOG)
+G_DEFINE_TYPE (SeahorseKeyserverSync, seahorse_keyserver_sync, ADW_TYPE_DIALOG)
 
 static void
 on_transfer_upload_complete (GObject      *object,
@@ -115,16 +115,69 @@ on_settings_publish_to_changed (GSettings  *settings,
     update_message (self);
 }
 
+/* Non-interactively synchronizes the given @keys with the chosen keyserver */
 static void
-on_sync_ok_clicked (GtkButton *button, gpointer user_data)
+do_sync_action (GtkWidget *widget, const char *action_name, GVariant *param)
 {
-    SeahorseKeyserverSync *self = SEAHORSE_KEYSERVER_SYNC (user_data);
+    SeahorseKeyserverSync *self = SEAHORSE_KEYSERVER_SYNC (widget);
+    SeahorseServerSource *source;
+    SeahorseGpgmeKeyring *keyring;
+    SeahorseAppSettings *app_settings;
+    SeahorsePgpSettings *pgp_settings;
+    g_autofree char *keyserver = NULL;
+    g_autoptr(GCancellable) cancellable = NULL;
+    g_auto(GStrv) keyservers = NULL;
+    g_autoptr(GPtrArray) keyids = NULL;
 
-    seahorse_keyserver_sync_do_sync (self->keys);
+    g_return_if_fail (G_IS_LIST_MODEL (self->keys));
+
+    keyring = seahorse_pgp_backend_get_default_keyring (NULL);
+    pgp_settings = seahorse_pgp_settings_instance ();
+    cancellable = g_cancellable_new ();
+
+    keyids = g_ptr_array_new ();
+    for (unsigned int i = 0; i < g_list_model_get_n_items (self->keys); i++) {
+        g_autoptr(SeahorsePgpKey) key = g_list_model_get_item (self->keys, i);
+        g_ptr_array_add (keyids, (char *) seahorse_pgp_key_get_keyid (key));
+    }
+    g_ptr_array_add (keyids, NULL);
+
+    /* And now synchronizing keys from the servers */
+    keyservers = seahorse_pgp_settings_get_uris (pgp_settings);
+    for (guint i = 0; keyservers[i] != NULL; i++) {
+        source = seahorse_pgp_backend_lookup_remote (NULL, keyservers[i]);
+
+        /* This can happen if the URI scheme is not supported */
+        if (source == NULL)
+            continue;
+
+        seahorse_transfer_keyids_async (SEAHORSE_SERVER_SOURCE (source),
+                                        SEAHORSE_PLACE (keyring),
+                                        (const char **) keyids->pdata,
+                                        cancellable,
+                                        on_transfer_download_complete,
+                                        g_object_ref (source));
+    }
+
+    /* Publishing keys online */
+    app_settings = seahorse_app_settings_instance ();
+    keyserver = seahorse_app_settings_get_server_publish_to (app_settings);
+    if (keyserver && keyserver[0]) {
+        source = seahorse_pgp_backend_lookup_remote (NULL, keyserver);
+
+        /* This can happen if the URI scheme is not supported */
+        if (source != NULL) {
+            seahorse_pgp_backend_transfer_async (NULL, self->keys, SEAHORSE_PLACE (source),
+                                                 cancellable, on_transfer_upload_complete,
+                                                 g_object_ref (source));
+        }
+    }
+
+    seahorse_progress_show (cancellable, _("Synchronizing keys…"), FALSE);
 }
 
 static void
-on_sync_configure_clicked (GtkButton *button, gpointer user_data)
+configure_sync_action (GtkWidget *widget, const char *action_name, GVariant *param)
 {
     GApplication *app;
 
@@ -225,93 +278,24 @@ seahorse_keyserver_sync_class_init (SeahorseKeyserverSyncClass *klass)
         g_param_spec_object ("keys", NULL, NULL, G_TYPE_LIST_MODEL,
                              G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
+    gtk_widget_class_install_action (widget_class, "do-sync", NULL, do_sync_action);
+    gtk_widget_class_install_action (widget_class, "configure-sync", NULL, configure_sync_action);
+
     gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/Seahorse/seahorse-keyserver-sync.ui");
 
     gtk_widget_class_bind_template_child (widget_class, SeahorseKeyserverSync, detail_message);
     gtk_widget_class_bind_template_child (widget_class, SeahorseKeyserverSync, publish_message);
     gtk_widget_class_bind_template_child (widget_class, SeahorseKeyserverSync, sync_message);
     gtk_widget_class_bind_template_child (widget_class, SeahorseKeyserverSync, sync_button);
-
-    gtk_widget_class_bind_template_callback (widget_class, on_sync_ok_clicked);
-    gtk_widget_class_bind_template_callback (widget_class, on_sync_configure_clicked);
-}
-
-/**
- * seahorse_keyserver_sync_do_sync:
- * @keys: (element-type SeahorsePgpKey): List of keys that need to be synced
- *
- * Non-interactively synchronizes the given @keys with the chosen keyserver.
- */
-void
-seahorse_keyserver_sync_do_sync (GListModel *keys)
-{
-    SeahorseServerSource *source;
-    SeahorseGpgmeKeyring *keyring;
-    SeahorseAppSettings *app_settings;
-    SeahorsePgpSettings *pgp_settings;
-    g_autofree char *keyserver = NULL;
-    g_autoptr(GCancellable) cancellable = NULL;
-    g_auto(GStrv) keyservers = NULL;
-    g_autoptr(GPtrArray) keyids = NULL;
-
-    g_return_if_fail (G_IS_LIST_MODEL (keys));
-
-    keyring = seahorse_pgp_backend_get_default_keyring (NULL);
-    pgp_settings = seahorse_pgp_settings_instance ();
-    cancellable = g_cancellable_new ();
-
-    keyids = g_ptr_array_new ();
-    for (unsigned int i = 0; i < g_list_model_get_n_items (keys); i++) {
-        g_autoptr(SeahorsePgpKey) key = g_list_model_get_item (keys, i);
-        g_ptr_array_add (keyids, (char *) seahorse_pgp_key_get_keyid (key));
-    }
-    g_ptr_array_add (keyids, NULL);
-
-    /* And now synchronizing keys from the servers */
-    keyservers = seahorse_pgp_settings_get_uris (pgp_settings);
-    for (guint i = 0; keyservers[i] != NULL; i++) {
-        source = seahorse_pgp_backend_lookup_remote (NULL, keyservers[i]);
-
-        /* This can happen if the URI scheme is not supported */
-        if (source == NULL)
-            continue;
-
-        seahorse_transfer_keyids_async (SEAHORSE_SERVER_SOURCE (source),
-                                        SEAHORSE_PLACE (keyring),
-                                        (const char **) keyids->pdata,
-                                        cancellable,
-                                        on_transfer_download_complete,
-                                        g_object_ref (source));
-    }
-
-    /* Publishing keys online */
-    app_settings = seahorse_app_settings_instance ();
-    keyserver = seahorse_app_settings_get_server_publish_to (app_settings);
-    if (keyserver && keyserver[0]) {
-        source = seahorse_pgp_backend_lookup_remote (NULL, keyserver);
-
-        /* This can happen if the URI scheme is not supported */
-        if (source != NULL) {
-            seahorse_pgp_backend_transfer_async (NULL, keys, SEAHORSE_PLACE (source),
-                                                 cancellable, on_transfer_upload_complete,
-                                                 g_object_ref (source));
-        }
-    }
-
-    seahorse_progress_show (cancellable, _("Synchronizing keys…"), FALSE);
 }
 
 SeahorseKeyserverSync *
-seahorse_keyserver_sync_new (GListModel *keys,
-                             GtkWindow  *parent)
+seahorse_keyserver_sync_new (GListModel *keys)
 {
     g_return_val_if_fail (G_IS_LIST_MODEL (keys), NULL);
     g_return_val_if_fail (g_list_model_get_n_items (keys) > 0, NULL);
-    g_return_val_if_fail (!parent || GTK_IS_WINDOW (parent), NULL);
 
     return g_object_new (SEAHORSE_TYPE_KEYSERVER_SYNC,
                          "keys", keys,
-                         "transient-for", parent,
-                         "use-header-bar", 1,
                          NULL);
 }
