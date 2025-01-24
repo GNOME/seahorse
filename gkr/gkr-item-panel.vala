@@ -55,6 +55,12 @@ public class Seahorse.Gkr.ItemPanel : Seahorse.Panel {
         // Created/Modified
         var created = new DateTime.from_unix_utc((int64) this.item.get_created());
         this.created_row.subtitle = created.to_local().format("%c");
+        update_use();
+        update_type();
+        update_visibility();
+        update_details();
+        update_server();
+        update_user();
         update_modified();
 
         // Update as appropriate
@@ -243,5 +249,10 @@ public class Seahorse.Gkr.ItemPanel : Seahorse.Panel {
                 Util.show_error(toplevel, _("Couldn’t delete secret"), e.message);
             }
         });
+    }
+
+    [GtkCallback]
+    private bool string_is_not_empty(string val) {
+        return (val != null) && (val != "");
     }
 }

@@ -53,6 +53,11 @@
         <child>
           <object class="AdwActionRow" id="use_row">
             <property name="title" translatable="yes" comments="To translators: This is the noun not the verb.">Use</property>
+            <binding name="visible">
+              <closure function="string_is_not_empty" type="gboolean">
+                <lookup name="subtitle">use_row</lookup>
+              </closure>
+            </binding>
             <style>
               <class name="property"/>
             </style>
@@ -61,6 +66,11 @@
         <child>
           <object class="AdwActionRow" id="type_row">
             <property name="title" translatable="yes">Type</property>
+            <binding name="visible">
+              <closure function="string_is_not_empty" type="gboolean">
+                <lookup name="subtitle">type_row</lookup>
+              </closure>
+            </binding>
             <style>
               <class name="property"/>
             </style>
@@ -69,6 +79,11 @@
         <child>
           <object class="AdwActionRow" id="server_row">
             <property name="title" translatable="yes">Server</property>
+            <binding name="visible">
+              <closure function="string_is_not_empty" type="gboolean">
+                <lookup name="subtitle">server_row</lookup>
+              </closure>
+            </binding>
             <style>
               <class name="property"/>
             </style>
@@ -77,6 +92,11 @@
         <child>
           <object class="AdwActionRow" id="login_row">
             <property name="title" translatable="yes">Login</property>
+            <binding name="visible">
+              <closure function="string_is_not_empty" type="gboolean">
+                <lookup name="subtitle">login_row</lookup>
+              </closure>
+            </binding>
             <style>
               <class name="property"/>
             </style>
