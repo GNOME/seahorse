@@ -24,9 +24,9 @@ libexecbindir = seahorse_prefix / get_option('libexecdir') / meson.project_name(
 
 # Application ID
 if get_option('profile') == 'default'
-  application_id = 'org.gnome.seahorse.Application'
+  application_id = 'org.gnome.Seahorse'
 else
-  application_id = 'org.gnome.seahorse.ApplicationDevel'
+  application_id = 'org.gnome.Seahorse.Devel'
 endif
 
 # Dependencies
