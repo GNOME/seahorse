@@ -20,7 +20,7 @@ fi
 missing="$(for f in $files; do ! grep -q "^$f$" po/POTFILES.in && echo "$f"; done)"
 if [ ${#missing} -ne 0 ]; then
   echo >&2 "The following files are missing from po/POTFILES.in:"
-  for f in ${missing[@]}; do
+  for f in "${missing[@]}"; do
     echo "  $f" >&2
   done
   echo >&2
@@ -29,10 +29,10 @@ fi
 
 # Test 2: find all Vala files that miss a corresponding .c file in POTFILES.skip
 vala_c_files="$(for f in $vala_files; do echo "${f%.vala}.c"; done)"
-vala_c_files_missing="$(for f in ${vala_c_files[@]}; do ! grep -q "^$f$" po/POTFILES.skip && echo "$f"; done)"
+vala_c_files_missing="$(for f in "${vala_c_files[@]}"; do ! grep -q "^$f$" po/POTFILES.skip && echo "$f"; done)"
 if [ ${#vala_c_files_missing} -ne 0 ]; then
   echo >&2 "The following files are missing from po/POTFILES.skip:"
-  for f in ${vala_c_files_missing[@]}; do
+  for f in "${vala_c_files_missing[@]}"; do
     echo "  $f" >&2
   done
   echo >&2
