@@ -38,3 +38,17 @@ if [ ${#vala_c_files_missing} -ne 0 ]; then
   echo >&2
   exit 1
 fi
+
+# Test 3: find all files that are mentioned in POTFILES.in that don't exist
+# Note that we have to manually exclude subprojects/libhandy for Damned Lies
+readarray -t potfiles_in_items < <(grep -v "^#" po/POTFILES.in | grep -v "^subprojects/libhandy$")
+potfiles_in_nonexistent="$(for f in "${potfiles_in_items[@]}"; do [[ -f "$f" ]] || echo "$f"; done)"
+if [ ${#potfiles_in_nonexistent} -ne 0 ]; then
+  echo >&2 "The following files are referenced in po/POTFILES.in, but don't exist:"
+  echo >&2 ""
+  for f in "${potfiles_in_nonexistent[@]}"; do
+    echo "$f" >&2
+  done
+  echo >&2
+  exit 1
+fi
