@@ -16,16 +16,16 @@ resources_src = gnome.compile_resources('seahorse-resources',
   resources_xml,
 )
 
-# The appdata file
-appdata_file = i18n.merge_file(
+# The metainfo file
+metainfo_file = i18n.merge_file(
   input: configure_file(
-    input: 'org.gnome.Seahorse.appdata.xml.in.in',
+    input: 'org.gnome.Seahorse.metainfo.xml.in.in',
     output: '@BASENAME@',
     configuration: {
       'appid': application_id,
     },
   ),
-  output: '@0@.appdata.xml'.format(application_id),
+  output: '@0@.metainfo.xml'.format(application_id),
   type: 'xml',
   po_dir: po_dir,
   install: true,
@@ -34,14 +34,12 @@ appdata_file = i18n.merge_file(
 
 appstreamcli = find_program('appstreamcli', required: false)
 if appstreamcli.found()
-  test('validate-appdata', appstreamcli,
+  test('validate-metainfo', appstreamcli,
     suite: 'data',
     args: [
-      'validate', '--no-net', '--explain', appdata_file
+      'validate', '--no-net', '--explain', metainfo_file
     ],
-    depends: [
-      appdata_file,
-    ],
+    depends: metainfo_file,
   )
 endif
 
