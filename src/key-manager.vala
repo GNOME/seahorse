@@ -76,8 +76,6 @@ public class Seahorse.KeyManager : Catalog {
                                              this.item_list, "model",
                                              GLib.BindingFlags.SYNC_CREATE);
 
-        load_css();
-
         // Add new item list and bind our listbox to it
         this.item_list.items_changed.connect((idx, removed, added) => check_empty_state());
         this.item_listbox.bind_model(this.item_list, (obj) => {
@@ -103,28 +101,6 @@ public class Seahorse.KeyManager : Catalog {
 
     private void init_actions() {
         add_action_entries (action_entries, this);
-    }
-
-    private void load_css() {
-        Gtk.CssProvider provider = new Gtk.CssProvider();
-        Gtk.StyleContext.add_provider_for_display(Gdk.Display.get_default(),
-                                                  provider,
-                                                  Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
-
-        provider.parsing_error.connect((section, error) => {
-            size_t start = section.get_start_location().lines + 1;
-            size_t end = section.get_end_location().lines + 1;
-            if (start == end)
-                debug("Error parsing css on line %zu: %s", start, error.message);
-            else
-                debug("Error parsing css on lines %zu-%zu: %s", start, end, error.message);
-        });
-
-        provider.load_from_resource("/org/gnome/Seahorse/seahorse.css");
-
-        // Makes sure it's visible when people use nightlies
-        if (Config.PROFILE == "development")
-            add_css_class("devel");
     }
 
     [GtkCallback]
