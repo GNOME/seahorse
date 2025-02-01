@@ -162,32 +162,6 @@ seahorse_util_read_data_block (GString      *buf,
     return copied;
 }
 
-/**
- * seahorse_util_parse_version:
- *
- * @version: Version number string in the form xx.yy.zz
- *
- * Converts an (up to) four-part version number into a 64-bit
- * unsigned integer for simple comparison.
- *
- * Returns: SeahorseVersion
- **/
-SeahorseVersion
-seahorse_util_parse_version (const char *version)
-{
-	SeahorseVersion ret = 0, tmp = 0;
-	int offset = 48;
-	gchar **tokens = g_strsplit (version, ".", 5);
-	int i;
-	for (i=0; tokens[i] && offset >= 0; i++) {
-		tmp = atoi(tokens[i]);
-		ret += tmp << offset;
-		offset -= 16;
-	}
-	g_strfreev(tokens);
-	return ret;
-}
-
 guint
 seahorse_ulong_hash (gconstpointer v)
 {

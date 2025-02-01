@@ -29,8 +29,6 @@
 #include <gtk/gtk.h>
 #include <time.h>
 
-typedef guint64 SeahorseVersion;
-
 #define         SEAHORSE_ERROR                          (seahorse_util_error_domain ())
 
 GQuark          seahorse_util_error_domain              (void);
@@ -47,15 +45,10 @@ gboolean        seahorse_util_printf_fd                 (int         fd,
                                                          const char *fmt,
                                                          ...);
 
-SeahorseVersion seahorse_util_parse_version             (const char *version);
-
 guint       seahorse_ulong_hash    (gconstpointer v);
 
 gboolean    seahorse_ulong_equal   (gconstpointer v1,
                                     gconstpointer v2);
-
-#define seahorse_util_version(a,b,c,d) ((SeahorseVersion)a << 48) + ((SeahorseVersion)b << 32) \
-                                     + ((SeahorseVersion)c << 16) +  (SeahorseVersion)d
 
 #define     seahorse_util_wait_until(expr)                \
     while (!(expr)) {                                     \
