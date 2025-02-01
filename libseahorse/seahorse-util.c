@@ -163,23 +163,6 @@ seahorse_util_read_data_block (GString      *buf,
 }
 
 /**
- * seahorse_util_write_file_private:
- * @filename: file to write to
- * @contents: nul-terminated string to write to the file
- * @err: error of the write operation
- *
- * Returns: #TRUE on success, #FALSE if an error occured
- */
-gboolean
-seahorse_util_write_file_private (const gchar* filename, const gchar* contents, GError **err)
-{
-    mode_t mask = umask (0077);
-    gboolean ret = g_file_set_contents (filename, contents, -1, err);
-    umask (mask);
-    return ret;
-}
-
-/**
  * seahorse_util_parse_version:
  *
  * @version: Version number string in the form xx.yy.zz

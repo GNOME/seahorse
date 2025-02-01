@@ -47,10 +47,6 @@ gboolean        seahorse_util_printf_fd                 (int         fd,
                                                          const char *fmt,
                                                          ...);
 
-gboolean        seahorse_util_write_file_private        (const char  *filename,
-                                                         const char  *contents,
-                                                         GError     **err);
-
 SeahorseVersion seahorse_util_parse_version             (const char *version);
 
 guint       seahorse_ulong_hash    (gconstpointer v);
