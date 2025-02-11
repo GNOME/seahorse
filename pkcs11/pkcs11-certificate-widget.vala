@@ -142,10 +142,18 @@ public class Seahorse.Pkcs11.CertificateWidget : Gtk.Box {
             } else if (extension is Gcr.CertificateExtensionExtendedKeyUsage) {
                 add_ext_key_usage(prefs_group,
                                   (Gcr.CertificateExtensionExtendedKeyUsage) extension);
+            } else if (extension is Gcr.CertificateExtensionCertificatePolicies) {
+                add_cert_policies(prefs_group, (Gcr.CertificateExtensionCertificatePolicies) extension);
             } else if (extension is Gcr.CertificateExtensionSubjectKeyIdentifier) {
                 add_ski(prefs_group, (Gcr.CertificateExtensionSubjectKeyIdentifier) extension);
+            } else if (extension is Gcr.CertificateExtensionAuthorityKeyIdentifier) {
+                add_aki(prefs_group, (Gcr.CertificateExtensionAuthorityKeyIdentifier) extension);
+            } else if (extension is Gcr.CertificateExtensionAuthorityInfoAccess) {
+                add_aia(prefs_group, (Gcr.CertificateExtensionAuthorityInfoAccess) extension);
             } else if (extension is Gcr.CertificateExtensionSubjectAltName) {
                 add_san(prefs_group, (Gcr.CertificateExtensionSubjectAltName) extension);
+            } else if (extension is Gcr.CertificateExtensionCrlDistributionPoints) {
+                add_cdp(prefs_group, (Gcr.CertificateExtensionCrlDistributionPoints) extension);
             } else {
                 add_generic_extension(prefs_group, extension);
             }
@@ -181,12 +189,46 @@ public class Seahorse.Pkcs11.CertificateWidget : Gtk.Box {
         group.add(row);
     }
 
+    private void add_cert_policies(Adw.PreferencesGroup group,
+                                   Gcr.CertificateExtensionCertificatePolicies ext) {
+        for (uint i = 0; i < ext.get_n_items(); i++) {
+            unowned var policy = ext.get_policy(i);
+            var row = create_property_row(_("Policy"), policy.get_name());
+            group.add(row);
+
+            for (uint j = 0; j < policy.get_n_items(); j++) {
+                var qualifier = (Gcr.CertificatePolicyQualifier) policy.get_item(j);
+                row = create_property_row(_("Policy Qualifier"), qualifier.get_name());
+                group.add(row);
+            }
+        }
+    }
+
     private void add_ski(Adw.PreferencesGroup group,
                          Gcr.CertificateExtensionSubjectKeyIdentifier ext) {
         var keyid = bytes_to_hex(ext.get_key_id(), ":");
-        var row = create_property_row(_("Subject Key Identifier"), keyid);
+        var row = create_property_row(_("Key Identifier"), keyid);
         row.add_css_class("monospace");
         group.add(row);
+    }
+
+    private void add_aki(Adw.PreferencesGroup group,
+                         Gcr.CertificateExtensionAuthorityKeyIdentifier ext) {
+        var keyid = bytes_to_hex(ext.get_key_id(), ":");
+        var row = create_property_row(_("Key Identifier"), keyid);
+        row.add_css_class("monospace");
+        group.add(row);
+    }
+
+    private void add_aia(Adw.PreferencesGroup group,
+                         Gcr.CertificateExtensionAuthorityInfoAccess ext) {
+        for (uint i = 0; i < ext.get_n_items(); i++) {
+            unowned var descr = ext.get_description(i);
+            var method = _("Method: %s").printf(descr.get_method_name());
+            unowned var location = descr.get_location().get_value();
+            var row = create_property_row(method, location);
+            group.add(row);
+        }
     }
 
     private void add_san(Adw.PreferencesGroup group,
@@ -196,6 +238,22 @@ public class Seahorse.Pkcs11.CertificateWidget : Gtk.Box {
 
             var row = create_property_row(name.get_description(), name.get_value());
             group.add(row);
+        }
+    }
+
+    private void add_cdp(Adw.PreferencesGroup group,
+                         Gcr.CertificateExtensionCrlDistributionPoints ext) {
+        for (uint i = 0; i < ext.get_n_items(); i++) {
+            unowned var endpoint = ext.get_distribution_point(i);
+
+            unowned var full_name = endpoint.get_full_name();
+            if (full_name != null) {
+                string[] name_val = {};
+                for (uint j = 0; j < full_name.get_n_items(); j++)
+                    name_val += full_name.get_name(j).get_value();
+                var row = create_property_row(_("Distribution Point"), string.joinv(";", name_val));
+                group.add(row);
+            }
         }
     }
 
@@ -221,7 +279,7 @@ public class Seahorse.Pkcs11.CertificateWidget : Gtk.Box {
 
     private string bytes_to_hex(Bytes bytes, string? sep2char = null) {
         var result = new StringBuilder();
-        unowned var data = bytes.get_data();
+        unowned uint8[] data = bytes.get_data();
         for (uint i = 0; i < data.length; i++) {
             if (sep2char != null && i > 0)
                 result.append(sep2char);
