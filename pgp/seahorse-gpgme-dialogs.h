@@ -55,6 +55,12 @@ void            seahorse_gpgme_add_revoker_new      (SeahorseGpgmeKey *pkey,
 void            seahorse_gpgme_expires_new          (SeahorseGpgmeSubkey *subkey,
                                                      GtkWindow *parent);
 
-gboolean        seahorse_gpgme_photo_add            (SeahorseGpgmeKey *pkey,
-                                                     GtkWindow        *parent,
-                                                     const char       *path);
+void            seahorse_gpgme_photo_add            (SeahorseGpgmeKey    *key,
+                                                     GtkWindow           *parent,
+                                                     GCancellable        *cancellable,
+                                                     GAsyncReadyCallback  callback,
+                                                     void                *user_data);
+
+gboolean        seahorse_gpgme_photo_add_finish     (SeahorseGpgmeKey *pkey,
+                                                     GAsyncResult     *result,
+                                                     GError          **error);

@@ -20,7 +20,11 @@
 #include "config.h"
 
 #include "seahorse-pgp-photos-widget.h"
-#include "seahorse-pgp-photo.h"
+#include "seahorse-gpgme.h"
+#include "seahorse-gpgme-dialogs.h"
+#include "seahorse-gpgme-key.h"
+#include "seahorse-gpgme-key-op.h"
+#include "seahorse-gpgme-photo.h"
 
 #include "seahorse-common.h"
 
@@ -44,6 +48,91 @@ struct _SeahorsePgpPhotosWidget {
 G_DEFINE_TYPE (SeahorsePgpPhotosWidget,
                seahorse_pgp_photos_widget,
                GTK_TYPE_WIDGET)
+
+static SeahorsePgpPhoto *
+get_current_photo (SeahorsePgpPhotosWidget *self)
+{
+    GListModel *photos;
+    unsigned int pos;
+
+    photos = seahorse_pgp_key_get_photos (self->key);
+    pos = (unsigned int) adw_carousel_get_position (ADW_CAROUSEL (self->carousel));
+
+    /* this will return a strong ref or NULL */
+    return g_list_model_get_item (photos, pos);
+}
+
+static GtkWindow *
+get_toplevel (SeahorsePgpPhotosWidget *self)
+{
+    GtkRoot *root;
+
+    root = gtk_widget_get_root (GTK_WIDGET (self));
+    return GTK_IS_WINDOW (root)? GTK_WINDOW (root) : NULL;
+}
+
+static void
+on_photo_added (GObject      *source_object,
+                GAsyncResult *result,
+                void         *user_data)
+{
+    SeahorsePgpPhotosWidget *self = SEAHORSE_PGP_PHOTOS_WIDGET (user_data);
+    SeahorseGpgmeKey *key = SEAHORSE_GPGME_KEY (self->key);
+    g_autoptr(GError) error = NULL;
+
+    if (!seahorse_gpgme_photo_add_finish (key, result, &error)) {
+        if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+            return;
+        seahorse_util_show_error (GTK_WIDGET (self), _("Couldn't add photo"), NULL);
+    }
+}
+
+static void
+add_photo_action (GtkWidget  *widget,
+                  const char *action_name,
+                  GVariant   *param)
+{
+    SeahorsePgpPhotosWidget *self = SEAHORSE_PGP_PHOTOS_WIDGET (widget);
+
+    g_return_if_fail (SEAHORSE_GPGME_IS_KEY (self->key));
+
+    seahorse_gpgme_photo_add (SEAHORSE_GPGME_KEY (self->key),
+                              get_toplevel (self),
+                              NULL,
+                              on_photo_added,
+                              self);
+}
+
+static void
+remove_photo_action (GtkWidget  *widget,
+                     const char *action_name,
+                     GVariant   *param)
+{
+    SeahorsePgpPhotosWidget *self = SEAHORSE_PGP_PHOTOS_WIDGET (widget);
+    g_autoptr(SeahorsePgpPhoto) photo = NULL;
+
+    photo = get_current_photo (self);
+    g_return_if_fail (SEAHORSE_IS_GPGME_PHOTO (photo));
+
+    seahorse_gpgme_key_op_photo_delete (SEAHORSE_GPGME_PHOTO (photo));
+}
+
+static void
+set_primary_photo_action (GtkWidget  *widget,
+                          const char *action_name,
+                          GVariant   *param)
+{
+    SeahorsePgpPhotosWidget *self = SEAHORSE_PGP_PHOTOS_WIDGET (widget);
+    g_autoptr(SeahorsePgpPhoto) photo = NULL;
+    gpgme_error_t gerr;
+
+    photo = get_current_photo (self);
+    g_return_if_fail (SEAHORSE_IS_GPGME_PHOTO (photo));
+
+    gerr = seahorse_gpgme_key_op_photo_primary (SEAHORSE_GPGME_PHOTO (photo));
+    if (!GPG_IS_OK (gerr))
+        seahorse_gpgme_handle_error (gerr, _("Couldn’t change primary photo"));
+}
 
 static GtkWidget *
 create_widget_for_photo (SeahorsePgpPhoto *photo)
@@ -124,7 +213,6 @@ static void
 seahorse_pgp_photos_widget_constructed (GObject *obj)
 {
     SeahorsePgpPhotosWidget *self = SEAHORSE_PGP_PHOTOS_WIDGET (obj);
-    SeahorseUsage etype;
     GListModel *photos;
     unsigned int n_photos;
 
@@ -135,20 +223,16 @@ seahorse_pgp_photos_widget_constructed (GObject *obj)
 
     gtk_widget_set_visible (self->carousel, n_photos > 0);
 
-    //XXX
-#if 0
-    etype = seahorse_object_get_usage (SEAHORSE_OBJECT (self->key));
-    if (etype == SEAHORSE_USAGE_PRIVATE_KEY) {
-        gboolean is_gpgme;
+    if (seahorse_pgp_key_is_private_key (self->key)) {
+        GtkWidget *w = GTK_WIDGET (self);
+        gboolean is_gpgme = SEAHORSE_GPGME_IS_KEY (self->key);
 
-        is_gpgme = SEAHORSE_GPGME_IS_KEY (self->key);
-        gtk_widget_set_visible (self->owner_photo_add_button, is_gpgme);
-        gtk_widget_set_visible (self->owner_photo_primary_button,
-                                is_gpgme && n_photos> 1);
-        gtk_widget_set_visible (self->owner_photo_delete_button,
-                                is_gpgme && photo);
+        gtk_widget_action_set_enabled (w, "add-photo", is_gpgme);
+        gtk_widget_action_set_enabled (w, "set-primary-photo",
+                                       is_gpgme && n_photos > 1);
+        gtk_widget_action_set_enabled (w, "remove-photo",
+                                       is_gpgme && n_photos > 0);
     }
-#endif
 
     /* Change sensitivity if first/last photo id */
     for (unsigned int i = 0; i < n_photos; i++) {
@@ -184,6 +268,10 @@ seahorse_pgp_photos_widget_class_init (SeahorsePgpPhotosWidgetClass *klass)
                              SEAHORSE_PGP_TYPE_KEY,
                              G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
     g_object_class_install_properties (gobject_class, N_PROPS, properties);
+
+    gtk_widget_class_install_action (widget_class, "add-photo", NULL, add_photo_action);
+    gtk_widget_class_install_action (widget_class, "remove-photo", NULL, remove_photo_action);
+    gtk_widget_class_install_action (widget_class, "set-primary-photo", NULL, set_primary_photo_action);
 
     gtk_widget_class_set_template_from_resource (widget_class,
                                                  "/org/gnome/Seahorse/seahorse-pgp-photos-widget.ui");
