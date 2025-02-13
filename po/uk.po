@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues/\n"
-"POT-Creation-Date: 2025-02-11 00:41+0000\n"
-"PO-Revision-Date: 2025-02-11 13:07+0200\n"
+"POT-Creation-Date: 2025-02-13 05:09+0000\n"
+"PO-Revision-Date: 2025-02-13 23:44+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -67,12 +67,12 @@ msgstr "Якщо вилучити об'єкт, його буде остаточ�
 #: gkr/add-keyring-dialog.ui:27 libseahorse/seahorse-progress.ui:14
 #: pgp/seahorse-gpgme-add-subkey.ui:85 pgp/seahorse-gpgme-add-uid.ui:24
 #: pgp/seahorse-gpgme-expires-dialog.ui:16
-#: pgp/seahorse-gpgme-generate-dialog.ui:16 pgp/seahorse-gpgme-photos.c:75
-#: pgp/seahorse-gpgme-photos.c:263 pgp/seahorse-gpgme-revoke-dialog.ui:23
-#: pgp/seahorse-gpgme-sign-dialog.ui:23 pgp/seahorse-keyserver-search.ui:19
-#: pgp/seahorse-keyserver-sync.ui:17 pkcs11/pkcs11-generate.ui:23
-#: pkcs11/pkcs11-request-certificate-dialog.ui:13 src/import-dialog.ui:17
-#: ssh/generate-key-dialog.ui:27 ssh/upload-remote-dialog.ui:33
+#: pgp/seahorse-gpgme-generate-dialog.ui:16 pgp/seahorse-gpgme-photos.c:216
+#: pgp/seahorse-gpgme-revoke-dialog.ui:23 pgp/seahorse-gpgme-sign-dialog.ui:23
+#: pgp/seahorse-keyserver-search.ui:19 pgp/seahorse-keyserver-sync.ui:17
+#: pkcs11/pkcs11-generate.ui:23 pkcs11/pkcs11-request-certificate-dialog.ui:13
+#: src/import-dialog.ui:17 ssh/generate-key-dialog.ui:27
+#: ssh/upload-remote-dialog.ui:33
 msgid "_Cancel"
 msgstr "_Скасувати"
 
@@ -579,7 +579,7 @@ msgstr "Властивості запису"
 msgid "Description"
 msgstr "Опис"
 
-#: gkr/gkr-item-panel.ui:37 gkr/gkr-item-panel.vala:143
+#: gkr/gkr-item-panel.ui:37 gkr/gkr-item-panel.vala:144
 #: src/seahorse-key-manager.ui:185
 msgid "Password"
 msgstr "Пароль"
@@ -617,43 +617,43 @@ msgstr "Змінено"
 msgid "Details"
 msgstr "Подробиці"
 
-#: gkr/gkr-item-panel.vala:114
+#: gkr/gkr-item-panel.vala:115
 msgid "Access a network share or resource"
 msgstr "Надає доступ до мережного сховища чи ресурсу"
 
-#: gkr/gkr-item-panel.vala:117
+#: gkr/gkr-item-panel.vala:118
 msgid "Access a website"
 msgstr "Надає доступ до веб-сайту"
 
-#: gkr/gkr-item-panel.vala:120
+#: gkr/gkr-item-panel.vala:121
 msgid "Unlocks a PGP key"
 msgstr "Розблокувати ключ PGP"
 
-#: gkr/gkr-item-panel.vala:123
+#: gkr/gkr-item-panel.vala:124
 msgid "Unlocks a Secure Shell key"
 msgstr "Розблокувати ключ віддаленого командного рядка"
 
-#: gkr/gkr-item-panel.vala:126
+#: gkr/gkr-item-panel.vala:127
 msgid "Saved password or login"
 msgstr "Збережений пароль чи обліковий запис"
 
-#: gkr/gkr-item-panel.vala:138
+#: gkr/gkr-item-panel.vala:139
 msgid "Network Credentials"
 msgstr "Мережні рекомендації"
 
-#: gkr/gkr-item-panel.vala:201
+#: gkr/gkr-item-panel.vala:207
 msgid "Couldn’t change password."
 msgstr "Не вдалося змінити пароль."
 
-#: gkr/gkr-item-panel.vala:220
+#: gkr/gkr-item-panel.vala:226
 msgid "Couldn’t set description."
 msgstr "Не вдалося встановити опис."
 
-#: gkr/gkr-item-panel.vala:236
+#: gkr/gkr-item-panel.vala:242
 msgid "Copied secret to clipboard"
 msgstr "Ключ скопійовано до буфера обміну даними"
 
-#: gkr/gkr-item-panel.vala:249
+#: gkr/gkr-item-panel.vala:255
 msgid "Couldn’t delete secret"
 msgstr "Не вдалося вилучити ключ"
 
@@ -1038,25 +1038,37 @@ msgstr "Ключі GnuPG"
 msgid "GnuPG: default keyring directory"
 msgstr "GnuPG: типовий каталог в’язки ключів"
 
-#: pgp/seahorse-gpgme-photos.c:71
-#, c-format
-msgid ""
-"<big><b>The photo is too large</b></big>\n"
-"The recommended size for a photo on your key is %d × %d pixels."
-msgstr ""
-"<big><b>Фотографія надто велика</b></big>\n"
-"Рекомендований розмір фотографії -  %d ⨯ %d точок."
+#: pgp/seahorse-gpgme-photos.c:97
+#| msgid "Couldn’t add photo"
+msgid "Couldn’t add photo: invalid format"
+msgstr "Не вдалося додати фотографію, некоректний формат"
 
-#: pgp/seahorse-gpgme-photos.c:76
+#: pgp/seahorse-gpgme-photos.c:100
+#| msgid "Couldn’t add photo"
+msgid "Couldn’t add photo: unknown reason"
+msgstr "Не вдалося додати фотографію, невідома причина"
+
+#: pgp/seahorse-gpgme-photos.c:209
+msgid "The photo is too large"
+msgstr "Фотографія є надто великою"
+
+#: pgp/seahorse-gpgme-photos.c:212
+#, c-format
+#| msgid ""
+#| "<big><b>The photo is too large</b></big>\n"
+#| "The recommended size for a photo on your key is %d × %d pixels."
+msgid "The recommended size for a photo on your key is %d × %d pixels"
+msgstr "Рекомендований розмір фотографії на вашому ключі —  %d ⨯ %d точок"
+
+#: pgp/seahorse-gpgme-photos.c:217
 msgid "_Don’t Resize"
 msgstr "_Не змінювати розмір"
 
-#: pgp/seahorse-gpgme-photos.c:77
+#: pgp/seahorse-gpgme-photos.c:218
 msgid "_Resize"
 msgstr "_Змінювати розмір"
 
-#: pgp/seahorse-gpgme-photos.c:126
-#, c-format
+#: pgp/seahorse-gpgme-photos.c:268
 msgid ""
 "This is not a image file, or an unrecognized kind of image file. Try to use "
 "a JPEG image."
@@ -1064,38 +1076,21 @@ msgstr ""
 "Це не файл зображення чи він не розпізнаний коректно. Спробуйте використати "
 "зображення у форматі JPEG."
 
-#: pgp/seahorse-gpgme-photos.c:221
-msgid "All image files"
-msgstr "Всі файли зображення"
-
-#: pgp/seahorse-gpgme-photos.c:234
-msgid "All JPEG files"
-msgstr "Всі файли формату JPEG"
-
-#: pgp/seahorse-gpgme-photos.c:239 src/key-manager.vala:261
-msgid "All files"
-msgstr "Усі файли"
-
-#: pgp/seahorse-gpgme-photos.c:261
+#: pgp/seahorse-gpgme-photos.c:324
 msgid "Choose Photo to Add to Key"
 msgstr "Виберіть фотографію для додавання до ключа"
 
-#: pgp/seahorse-gpgme-photos.c:264
-msgid "_Open"
-msgstr "Від_крити"
+#: pgp/seahorse-gpgme-photos.c:330
+msgid "All image files"
+msgstr "Всі файли зображення"
 
-#: pgp/seahorse-gpgme-photos.c:283
-msgid "Couldn’t prepare photo"
-msgstr "Не вдалося підготувати фотографію"
+#: pgp/seahorse-gpgme-photos.c:342
+msgid "All JPEG files"
+msgstr "Всі файли формату JPEG"
 
-#: pgp/seahorse-gpgme-photos.c:293 pgp/seahorse-gpgme-photos.c:296
-msgid "Couldn’t add photo"
-msgstr "Не вдалося додати фотографію"
-
-#: pgp/seahorse-gpgme-photos.c:294
-msgid "The file could not be loaded. It may be in an invalid format."
-msgstr ""
-"Не вдалося завантажити файл. Може бути, його записано у некоректному форматі."
+#: pgp/seahorse-gpgme-photos.c:347 src/key-manager.vala:261
+msgid "All files"
+msgstr "Усі файли"
 
 #: pgp/seahorse-gpgme-revoke-dialog.c:80
 msgid "Couldn’t revoke subkey"
@@ -1555,6 +1550,19 @@ msgstr "Особистий ключ PGP"
 msgid "PGP key"
 msgstr "Ключ PGP"
 
+#: pgp/seahorse-pgp-photos-widget.c:86
+#| msgid "Couldn’t add photo"
+msgid "Couldn't add photo"
+msgstr "Не вдалося додати фотографію"
+
+#: pgp/seahorse-pgp-photos-widget.c:134
+msgid "Couldn’t change primary photo"
+msgstr "Не вдалося змінити головну фотографію"
+
+#: pgp/seahorse-pgp-photos-widget.ui:38
+msgid "Add Picture"
+msgstr "Додати зображення"
+
 #: pgp/seahorse-pgp-subkey-list-box-row.ui:6
 msgid "Change expiration date"
 msgstr "Змінити строк дії"
@@ -1917,13 +1925,11 @@ msgstr "Кваліфікатор правил"
 
 #: pkcs11/pkcs11-certificate-widget.vala:210
 #: pkcs11/pkcs11-certificate-widget.vala:218
-#| msgid "Subject Key Identifier"
 msgid "Key Identifier"
 msgstr "Ідентифікатор ключа"
 
 #: pkcs11/pkcs11-certificate-widget.vala:227
 #, c-format
-#| msgid "Revoke: %s"
 msgid "Method: %s"
 msgstr "Метод: %s"
 
@@ -2568,6 +2574,17 @@ msgstr "Налаштовування"
 msgid "Configuring Secure Shell Keys…"
 msgstr "Налаштовування ключів SSH…"
 
+#~ msgid "_Open"
+#~ msgstr "Від_крити"
+
+#~ msgid "Couldn’t prepare photo"
+#~ msgstr "Не вдалося підготувати фотографію"
+
+#~ msgid "The file could not be loaded. It may be in an invalid format."
+#~ msgstr ""
+#~ "Не вдалося завантажити файл. Може бути, його записано у некоректному "
+#~ "форматі."
+
 #~ msgid "Cancel"
 #~ msgstr "Скасувати"
 
@@ -2670,9 +2687,6 @@ msgstr "Налаштовування ключів SSH…"
 #, c-format
 #~ msgid "Resolving server address: %s"
 #~ msgstr "Визначення адреси сервера: %s"
-
-#~ msgid "Couldn’t change primary photo"
-#~ msgstr "Не вдалося змінити головну фотографію"
 
 #, c-format
 #~ msgid "I no longer trust that “%s” owns this key"
