@@ -30,6 +30,7 @@ public class Seahorse.Gkr.ItemPanel : Seahorse.Panel {
     [GtkChild] private unowned Adw.ActionRow modified_row;
 
     [GtkChild] private unowned Adw.PreferencesGroup details_group;
+    private GenericArray<unowned Gtk.Widget> details_rows = new GenericArray<unowned Gtk.Widget>();
     [GtkChild] private unowned Adw.ActionRow server_row;
     [GtkChild] private unowned Adw.ActionRow login_row;
     [GtkChild] private unowned Adw.PasswordEntryRow password_row;
@@ -172,6 +173,10 @@ public class Seahorse.Gkr.ItemPanel : Seahorse.Panel {
         var attrs = this.item.attributes;
         var iter = GLib.HashTableIter<string, string>(attrs);
 
+        foreach (unowned var row in this.details_rows)
+            this.details_group.remove(row);
+        this.details_rows.remove_range(0, this.details_rows.length);
+
         bool any_details = false;
         string key, value;
         while (iter.next(out key, out value)) {
@@ -186,6 +191,7 @@ public class Seahorse.Gkr.ItemPanel : Seahorse.Panel {
             row.subtitle_selectable = true;
             row.add_css_class("property");
 
+            this.details_rows.add(row);
             this.details_group.add(row);
         }
 
