@@ -24,6 +24,7 @@
 #include <time.h>
 
 #include "pgp/seahorse-gpgme-key.h"
+#include "pgp/seahorse-gpgme-key-parms.h"
 #include "pgp/seahorse-gpgme-keyring.h"
 #include "pgp/seahorse-gpgme-subkey.h"
 #include "pgp/seahorse-gpgme-uid.h"
@@ -60,17 +61,11 @@ typedef enum {
     SEAHORSE_PGP_REVOKE_REASON_NOT_USED = 3,
 } SeahorsePgpRevokeReason;
 
-void                  seahorse_gpgme_key_op_generate_async   (SeahorseGpgmeKeyring    *keyring,
-                                                              const char              *name,
-                                                              const char              *email,
-                                                              const char              *comment,
-                                                              const char              *passphrase,
-                                                              SeahorsePgpKeyAlgorithm  algo,
-                                                              unsigned int             length,
-                                                              GDateTime               *expires,
-                                                              GCancellable            *cancellable,
-                                                              GAsyncReadyCallback      callback,
-                                                              void                    *user_data);
+void                  seahorse_gpgme_key_op_generate_async   (SeahorseGpgmeKeyring  *keyring,
+                                                              SeahorseGpgmeKeyParms *parms,
+                                                              GCancellable          *cancellable,
+                                                              GAsyncReadyCallback    callback,
+                                                              void                  *user_data);
 
 gboolean              seahorse_gpgme_key_op_generate_finish  (SeahorseGpgmeKeyring *keyring,
                                                               GAsyncResult *Result,

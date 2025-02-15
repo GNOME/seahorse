@@ -83,98 +83,26 @@ on_key_op_generate_complete (gpgme_error_t gerr,
     return G_SOURCE_REMOVE;
 }
 
-
 /**
- * seahorse_gpgme_key_op_generate:
- * @sksrc: #SeahorseSource
- * @name: User ID name, must be at least 5 characters long
- * @email: Optional user ID email
- * @comment: Optional user ID comment
- * @passphrase: Passphrase for key
- * @type: Key type. Supported types are #DSA_ELGAMAL, #DSA, #RSA_SIGN, and #RSA_RSA
- * @length: Length of key, must be within the range of @type specified by #SeahorseKeyLength
- * @expires: Expiration date of key (or %NULL if none)
- *
- * Tries to generate a new key based on given parameters.
+ * Tries to generate a new key based on the given parameters.
  */
 void
-seahorse_gpgme_key_op_generate_async (SeahorseGpgmeKeyring     *keyring,
-                                      const char               *name,
-                                      const char               *email,
-                                      const char               *comment,
-                                      const char               *passphrase,
-                                      SeahorsePgpKeyAlgorithm  type,
-                                      unsigned int             length,
-                                      GDateTime               *expires,
-                                      GCancellable            *cancellable,
-                                      GAsyncReadyCallback      callback,
-                                      void                    *user_data)
+seahorse_gpgme_key_op_generate_async (SeahorseGpgmeKeyring  *keyring,
+                                      SeahorseGpgmeKeyParms *parms,
+                                      GCancellable          *cancellable,
+                                      GAsyncReadyCallback    callback,
+                                      void                  *user_data)
 {
-    const char* key_type;
-    g_autofree char *common = NULL, *start = NULL, *expires_date = NULL;
     gpgme_ctx_t gctx;
     g_autoptr(GTask) task = NULL;
     g_autoptr(GError) error = NULL;
-    const char *parms;
+    g_autofree char *parms_str = NULL;
     gpgme_error_t gerr = 0;
     g_autoptr(GSource) gsource = NULL;
 
     g_return_if_fail (SEAHORSE_IS_GPGME_KEYRING (keyring));
-    g_return_if_fail (name);
-    g_return_if_fail (strlen (name) > 4);
 
-    /* Check lengths for each type */
-    switch (type) {
-    case SEAHORSE_PGP_KEY_ALGO_DSA_ELGAMAL:
-        g_return_if_fail (length >= ELGAMAL_MIN || length <= LENGTH_MAX);
-        break;
-    case SEAHORSE_PGP_KEY_ALGO_DSA:
-        g_return_if_fail (length >= DSA_MIN || length <= DSA_MAX);
-        break;
-    case SEAHORSE_PGP_KEY_ALGO_RSA_RSA:
-    case SEAHORSE_PGP_KEY_ALGO_RSA_SIGN:
-        g_return_if_fail (length >= RSA_MIN || length <= LENGTH_MAX);
-        break;
-    default:
-        g_return_if_reached ();
-        break;
-    }
-
-    if (expires)
-        expires_date = g_date_time_format (expires, "%Y-%m-%d");
-    else
-        expires_date = g_strdup ("0");
-
-    /* Common xml */
-    common = g_strdup_printf ("Name-Real: %s\nExpire-Date: %s\n"
-            "</GnupgKeyParms>", name, expires_date);
-
-    if (passphrase != NULL && strlen (passphrase) > 0)
-        common = g_strdup_printf ("Passphrase: %s\n%s", passphrase, common);
-    else
-        common = g_strdup_printf ("%%no-protection\n%s", common);
-
-    if (email != NULL && strlen (email) > 0)
-        common = g_strdup_printf ("Name-Email: %s\n%s", email, common);
-    if (comment != NULL && strlen (comment) > 0)
-        common = g_strdup_printf ("Name-Comment: %s\n%s", comment, common);
-
-    if (type == SEAHORSE_PGP_KEY_ALGO_DSA || type == SEAHORSE_PGP_KEY_ALGO_DSA_ELGAMAL)
-        key_type = "Key-Type: DSA\nKey-Usage: sign";
-    else
-        key_type = "Key-Type: RSA\nKey-Usage: sign";
-
-    start = g_strdup_printf ("<GnupgKeyParms format=\"internal\">\n%s\nKey-Length: ", key_type);
-
-    /* Subkey xml */
-    if (type == SEAHORSE_PGP_KEY_ALGO_DSA_ELGAMAL)
-        parms = g_strdup_printf ("%s%d\nSubkey-Type: ELG-E\nSubkey-Length: %d\nSubkey-Usage: encrypt\n%s",
-                                 start, (length < DSA_MAX) ? length : DSA_MAX, length, common);
-    else if (type == SEAHORSE_PGP_KEY_ALGO_RSA_RSA)
-        parms = g_strdup_printf ("%s%d\nSubkey-Type: RSA\nSubkey-Length: %d\nSubkey-Usage: encrypt\n%s",
-                                 start, length, length, common);
-    else
-        parms = g_strdup_printf ("%s%d\n%s", start, length, common);
+    parms_str = seahorse_gpgme_key_parms_to_string (parms);
 
     gctx = seahorse_gpgme_keyring_new_context (&gerr);
 
@@ -188,7 +116,7 @@ seahorse_gpgme_key_op_generate_async (SeahorseGpgmeKeyring     *keyring,
                            g_object_ref (task), g_object_unref);
 
     if (gerr == 0)
-        gerr = gpgme_op_genkey_start (gctx, parms, NULL, NULL);
+        gerr = gpgme_op_genkey_start (gctx, parms_str, NULL, NULL);
 
     if (seahorse_gpgme_propagate_error (gerr, &error)) {
         g_task_return_error (task, g_steal_pointer (&error));

@@ -26,6 +26,7 @@
 #include "seahorse-gpgme.h"
 #include "seahorse-gpgme-key.h"
 #include "seahorse-gpgme-key-op.h"
+#include "seahorse-gpgme-key-parms.h"
 #include "seahorse-gpgme-keyring.h"
 
 #include "seahorse-common.h"
@@ -86,6 +87,15 @@ static AlgorithmDesc available_algorithms[] = {
     { N_("RSA (sign only)"), SEAHORSE_PGP_KEY_ALGO_RSA_SIGN,    RSA_MIN,     LENGTH_MAX, LENGTH_DEFAULT  }
 };
 
+static GtkWindow *
+get_toplevel (SeahorseGpgmeGenerateDialog *self)
+{
+    GtkRoot *root;
+
+    root = gtk_widget_get_root (GTK_WIDGET (self));
+    return GTK_IS_WINDOW (root)? GTK_WINDOW (root) : NULL;
+}
+
 static void
 on_generate_key_complete (GObject *source,
                           GAsyncResult *result,
@@ -108,12 +118,7 @@ on_generate_key_complete (GObject *source,
 
 typedef struct _GenerateClosure {
     SeahorseGpgmeKeyring *keyring;
-    char *name;
-    char *email;
-    char *comment;
-    unsigned int type;
-    unsigned int bits;
-    GDateTime *expires;
+    SeahorseGpgmeKeyParms *parms;
     GtkWindow *parent;
 } GenerateClosure;
 
@@ -122,12 +127,11 @@ generate_closure_free (void *data)
 {
     GenerateClosure *closure = data;
     g_clear_object (&closure->keyring);
-    g_clear_pointer (&closure->name, g_free);
-    g_clear_pointer (&closure->email, g_free);
-    g_clear_pointer (&closure->comment, g_free);
-    g_clear_object (&closure->expires);
+    g_clear_object (&closure->parms);
     g_clear_object (&closure->parent);
 }
+
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GenerateClosure, generate_closure_free);
 
 static void
 on_pass_prompted (GObject *source,
@@ -135,7 +139,7 @@ on_pass_prompted (GObject *source,
                   gpointer user_data)
 {
     SeahorsePassphrasePrompt *pdialog = SEAHORSE_PASSPHRASE_PROMPT (source);
-    GenerateClosure *closure = user_data;
+    g_autoptr(GenerateClosure) closure = user_data;
     g_autofree char *pass = NULL;
     g_autoptr(GCancellable) cancellable = NULL;
     const char *notice;
@@ -143,15 +147,11 @@ on_pass_prompted (GObject *source,
     pass = seahorse_passphrase_prompt_prompt_finish (pdialog, result);
     if (pass != NULL) {
         cancellable = g_cancellable_new ();
+        seahorse_gpgme_key_parms_set_passphrase (closure->parms, pass);
         seahorse_gpgme_key_op_generate_async (closure->keyring,
-                                              closure->name,
-                                              closure->email,
-                                              closure->comment,
-                                              pass,
-                                              closure->type,
-                                              closure->bits,
-                                              closure->expires,
-                                              cancellable, on_generate_key_complete,
+                                              closure->parms,
+                                              cancellable,
+                                              on_generate_key_complete,
                                               closure->parent);
 
         /* Has line breaks because GtkLabel is completely broken WRT wrapping */
@@ -164,7 +164,6 @@ on_pass_prompted (GObject *source,
     }
 
     adw_dialog_close (ADW_DIALOG (pdialog));
-    generate_closure_free (closure);
 }
 
 /**
@@ -200,12 +199,7 @@ seahorse_gpgme_generate_key (SeahorseGpgmeKeyring *keyring,
 
     closure = g_new0 (GenerateClosure, 1);
     closure->keyring = g_object_ref (keyring);
-    closure->name = g_strdup (name);
-    closure->email = g_strdup (email);
-    closure->comment = g_strdup (comment);
-    closure->type = type;
-    closure->bits = bits;
-    closure->expires = expires? g_object_ref (expires) : NULL;
+    closure->parms = seahorse_gpgme_key_parms_new (name, email, comment, type, bits, expires);
     closure->parent = parent? g_object_ref (parent) : NULL;
 
     seahorse_passphrase_prompt_prompt (dialog, GTK_WIDGET (parent), NULL, on_pass_prompted, closure);
@@ -290,7 +284,7 @@ create_key_action (GtkWidget *widget, const char *action_name, GVariant *param)
 
     seahorse_gpgme_generate_key (self->keyring,
                                  name, email, comment, type, bits, expires,
-                                 gtk_window_get_transient_for (GTK_WINDOW (self)));
+                                 get_toplevel (self));
 
     adw_dialog_close (ADW_DIALOG (self));
 }
