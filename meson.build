@@ -70,6 +70,13 @@ if get_option('pgp-support')
   if get_option('check-compatible-gpg') and gpg_version_check.returncode() != 0
     error('Incompatible version of GnuPG. Accepted versions are: @0@'.format(accepted_gpg_versions))
   endif
+
+  gpg_check_pubkey_algos = run_command(
+    [ gpg_check, 'pubkey-algos', gpg_bin.full_path() ],
+    check: true,
+  ).stdout().strip()
+  message(f'GnuPG supported pubkey algos: @gpg_check_pubkey_algos@')
+  gpg_pubkey_algos = gpg_check_pubkey_algos.split(',')
 endif
 
 if get_option('ldap-support')
@@ -146,6 +153,9 @@ if get_option('pgp-support')
   conf.set('GPG_MAJOR', gpg_version_split[0])
   conf.set('GPG_MINOR', gpg_version_split[1])
   conf.set('GPG_MICRO', gpg_version_split[2])
+  foreach _algo : gpg_pubkey_algos
+    conf.set(f'GPG_HAS_PUBKEY_ALGO_@_algo@', true)
+  endforeach
 endif
 
 config_file = vcs_tag(

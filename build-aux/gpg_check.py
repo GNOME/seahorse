@@ -48,6 +48,18 @@ def version_command(args):
 
     sys.exit(1)
 
+
+def pubkey_algos_command(args):
+    output = run_gpg_version(args.gpg_path)
+    formats_match = re.search(r'Pubkey: (.+)', output)
+    if formats_match == None:
+        print("Couldn't parse pubkey algorithms from the output of `gpg --version`")
+        sys.exit(1)
+    formats = formats_match.group(1)
+    # Get rid of the spaces here alreayd
+    print(','.join(formats.split(', ')))
+
+
 def parse_args():
     parser = argparse.ArgumentParser()
     subparsers = parser.add_subparsers(dest='command')
@@ -56,11 +68,16 @@ def parse_args():
     version_parser.add_argument('gpg_path')
     version_parser.add_argument('accepted_versions', nargs='*')
 
+    pubkey_algos_parser = subparsers.add_parser('pubkey-algos')
+    pubkey_algos_parser.add_argument('gpg_path')
+
     return parser.parse_args()
 
 args = parse_args()
 if args.command == 'version':
     version_command(args)
+elif args.command == 'pubkey-algos':
+    pubkey_algos_command(args)
 else:
     print(f'Unknown command {args.command}')
     sys.exit(1)
