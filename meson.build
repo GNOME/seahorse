@@ -33,7 +33,7 @@ endif
 min_glib_version = '2.82'
 min_gcr_version = '4.3.90'
 accepted_gpg_versions = [ '2.4.0', '2.5.0' ]
-gpg_check_version = find_program('build-aux' / 'gpg_check_version.py')
+gpg_check = find_program('build-aux' / 'gpg_check.py')
 
 glib_deps = [
   dependency('glib-2.0',    version: '>=' + min_glib_version),
@@ -59,8 +59,8 @@ gpgme_dep = dependency('gpgme', version: '>= 1.14.0', required: get_option('pgp-
 
 if get_option('pgp-support')
   gpg_version_check = run_command(
-    [gpg_check_version, gpg_bin.full_path(), accepted_gpg_versions ],
-    check: true,
+    [ gpg_check, 'version', gpg_bin.full_path(), accepted_gpg_versions ],
+    check: false,
   )
   # GnuPG now outputs e.g. 2.3.4-unknown so we need to drop this extra cruft
   gpg_version_raw = gpg_version_check.stdout()
