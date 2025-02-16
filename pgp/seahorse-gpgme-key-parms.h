@@ -29,12 +29,30 @@ G_DECLARE_FINAL_TYPE (SeahorseGpgmeKeyParms, seahorse_gpgme_key_parms,
                       SEAHORSE_GPGME, KEY_PARMS,
                       GObject)
 
-SeahorseGpgmeKeyParms *  seahorse_gpgme_key_parms_new                  (const char              *name,
-                                                                        const char              *email,
-                                                                        const char              *comment,
-                                                                        SeahorsePgpKeyAlgorithm  type,
-                                                                        unsigned int             length,
-                                                                        GDateTime               *expires);
+SeahorseGpgmeKeyParms *  seahorse_gpgme_key_parms_new                  (void);
+
+const char *             seahorse_gpgme_key_parms_get_name             (SeahorseGpgmeKeyParms *self);
+void                     seahorse_gpgme_key_parms_set_name             (SeahorseGpgmeKeyParms *self,
+                                                                        const char            *name);
+
+const char *             seahorse_gpgme_key_parms_get_email            (SeahorseGpgmeKeyParms *self);
+void                     seahorse_gpgme_key_parms_set_email            (SeahorseGpgmeKeyParms *self,
+                                                                        const char            *email);
+
+const char *             seahorse_gpgme_key_parms_get_comment          (SeahorseGpgmeKeyParms *self);
+void                     seahorse_gpgme_key_parms_set_comment          (SeahorseGpgmeKeyParms *self,
+                                                                        const char            *comment);
+
+SeahorsePgpKeyAlgorithm  seahorse_gpgme_key_parms_get_key_type         (SeahorseGpgmeKeyParms *self);
+void                     seahorse_gpgme_key_parms_set_key_type         (SeahorseGpgmeKeyParms  *self,
+                                                                        SeahorsePgpKeyAlgorithm algo);
+
+GtkAdjustment *          seahorse_gpgme_key_parms_get_key_length       (SeahorseGpgmeKeyParms *self);
+unsigned int             seahorse_gpgme_key_parms_get_key_length_value (SeahorseGpgmeKeyParms *self);
+
+GDateTime *              seahorse_gpgme_key_parms_get_expires          (SeahorseGpgmeKeyParms *self);
+void                     seahorse_gpgme_key_parms_set_expires          (SeahorseGpgmeKeyParms *self,
+                                                                        GDateTime             *expires);
 
 void                     seahorse_gpgme_key_parms_set_passphrase       (SeahorseGpgmeKeyParms *self,
                                                                         const char            *passphrase);
@@ -43,6 +61,6 @@ gboolean                 seahorse_gpgme_key_parms_has_subkey           (Seahorse
 
 gboolean                 seahorse_gpgme_key_parms_has_valid_name       (SeahorseGpgmeKeyParms *self);
 
-gboolean                 seahorse_gpgme_key_parms_has_valid_key_length (SeahorseGpgmeKeyParms *self);
+gboolean                 seahorse_gpgme_key_parms_is_valid             (SeahorseGpgmeKeyParms *self);
 
 char *                   seahorse_gpgme_key_parms_to_string            (SeahorseGpgmeKeyParms *self);

@@ -67,7 +67,6 @@
                             <property name="title" translatable="yes" comments="Full name of the key, usually the name of the user.">Full _Name</property>
                             <property name="use-underline">True</property>
                             <property name="input-purpose">name</property>
-                            <signal name="changed" handler="on_gpgme_generate_entry_changed"/>
                             <child type="suffix">
                               <object class="GtkImage" id="name_row_warning">
                                 <property name="icon-name">dialog-warning-symbolic</property>
@@ -81,7 +80,6 @@
                             <property name="title" translatable="yes">_Email Address</property>
                             <property name="use-underline">True</property>
                             <property name="input-purpose">email</property>
-                            <signal name="changed" handler="on_gpgme_generate_entry_changed"/>
                           </object>
                         </child>
                       </object>
@@ -93,7 +91,6 @@
                           <object class="AdwEntryRow" id="comment_row">
                             <property name="title" translatable="yes">_Comment</property>
                             <property name="use-underline">True</property>
-                            <signal name="changed" handler="on_gpgme_generate_entry_changed"/>
                           </object>
                         </child>
                         <child>
@@ -110,7 +107,6 @@
                             <child type="suffix">
                               <object class="GtkSpinButton" id="bits_spin">
                                 <property name="valign">center</property>
-                                <property name="adjustment">bits_spin_adjustment</property>
                                 <property name="climb-rate">1</property>
                                 <property name="numeric">True</property>
                               </object>
@@ -125,6 +121,7 @@
                               <object class="GtkSwitch" id="expires_switch">
                                 <property name="valign">center</property>
                                 <property name="active">True</property>
+                                <signal name="notify::active" handler="on_expires_switch_notify_active"/>
                               </object>
                             </child>
                           </object>
@@ -152,12 +149,4 @@
       </object>
     </child>
   </template>
-
-  <object class="GtkAdjustment" id="bits_spin_adjustment">
-    <property name="lower">512</property>
-    <property name="upper">8192</property>
-    <property name="value">2048</property>
-    <property name="step_increment">512</property>
-    <property name="page_increment">1</property>
-  </object>
 </interface>

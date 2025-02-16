@@ -50,6 +50,8 @@ struct _SeahorseGpgmeGenerateDialog {
 
     SeahorseGpgmeKeyring *keyring;
 
+    SeahorseGpgmeKeyParms *parms;
+
     GtkWidget *name_row;
     GtkWidget *name_row_warning;
     GtkWidget *email_row;
@@ -61,6 +63,7 @@ struct _SeahorseGpgmeGenerateDialog {
     GtkWidget *expires_switch;
     GtkWidget *expires_date_row;
     GtkWidget *expires_datepicker;
+    GBinding *expires_binding;
 };
 
 enum {
@@ -71,21 +74,6 @@ enum {
 static GParamSpec *obj_props[N_PROPS] = { NULL, };
 
 G_DEFINE_TYPE (SeahorseGpgmeGenerateDialog, seahorse_gpgme_generate_dialog, ADW_TYPE_DIALOG)
-
-typedef struct _AlgorithmDesc {
-    const char* desc;
-    unsigned int type;
-    unsigned int min;
-    unsigned int max;
-    unsigned int def;
-} AlgorithmDesc;
-
-static AlgorithmDesc available_algorithms[] = {
-    { N_("RSA"),             SEAHORSE_PGP_KEY_ALGO_RSA_RSA,     RSA_MIN,     LENGTH_MAX, LENGTH_DEFAULT  },
-    { N_("DSA ElGamal"),     SEAHORSE_PGP_KEY_ALGO_DSA_ELGAMAL, ELGAMAL_MIN, LENGTH_MAX, LENGTH_DEFAULT  },
-    { N_("DSA (sign only)"), SEAHORSE_PGP_KEY_ALGO_DSA,         DSA_MIN,     DSA_MAX,    LENGTH_DEFAULT  },
-    { N_("RSA (sign only)"), SEAHORSE_PGP_KEY_ALGO_RSA_SIGN,    RSA_MIN,     LENGTH_MAX, LENGTH_DEFAULT  }
-};
 
 static GtkWindow *
 get_toplevel (SeahorseGpgmeGenerateDialog *self)
@@ -128,7 +116,6 @@ generate_closure_free (void *data)
     GenerateClosure *closure = data;
     g_clear_object (&closure->keyring);
     g_clear_object (&closure->parms);
-    g_clear_object (&closure->parent);
 }
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (GenerateClosure, generate_closure_free);
@@ -190,37 +177,6 @@ seahorse_gpgme_generate_key (SeahorseGpgmeKeyring *keyring,
                              GDateTime           *expires,
                              GtkWindow           *parent)
 {
-    SeahorsePassphrasePrompt *dialog;
-    GenerateClosure *closure;
-
-    dialog = seahorse_passphrase_prompt_new (_("Passphrase for New PGP Key"),
-                                             _("Enter the passphrase for your new key twice."),
-                                             NULL, NULL, TRUE);
-
-    closure = g_new0 (GenerateClosure, 1);
-    closure->keyring = g_object_ref (keyring);
-    closure->parms = seahorse_gpgme_key_parms_new (name, email, comment, type, bits, expires);
-    closure->parent = parent? g_object_ref (parent) : NULL;
-
-    seahorse_passphrase_prompt_prompt (dialog, GTK_WIDGET (parent), NULL, on_pass_prompted, closure);
-}
-
-/* If the name has more than 5 characters, this sets the ok button sensitive */
-static void
-on_gpgme_generate_entry_changed (GtkEditable *editable,
-                                 gpointer user_data)
-{
-    SeahorseGpgmeGenerateDialog *self = SEAHORSE_GPGME_GENERATE_DIALOG (user_data);
-    g_autofree char *name = NULL;
-    gboolean name_long_enough;
-
-    /* A 5 character name is required */
-    name = g_strdup (gtk_editable_get_text (GTK_EDITABLE (self->name_row)));
-    name_long_enough = name && strlen (g_strstrip (name)) >= 5;
-
-    /* If not, show the user and disable the create button */
-    gtk_widget_set_visible (self->name_row_warning, !name_long_enough);
-    gtk_widget_action_set_enabled (GTK_WIDGET (self), "create-key", name_long_enough);
 }
 
 /* Changes the bit range depending on the algorithm set */
@@ -233,58 +189,45 @@ on_algo_row_notify_selected (GObject    *object,
     unsigned int sel;
 
     sel = adw_combo_row_get_selected (ADW_COMBO_ROW (self->algorithm_row));
-    g_assert (sel < G_N_ELEMENTS (available_algorithms));
+    seahorse_gpgme_key_parms_set_key_type (self->parms, sel);
+}
 
-    gtk_spin_button_set_range (GTK_SPIN_BUTTON (self->bits_spin),
-                               available_algorithms[sel].min,
-                               available_algorithms[sel].max);
+static void
+on_expires_switch_notify_active (GObject    *object,
+                                 GParamSpec *pspec,
+                                 void       *user_data)
+{
+    SeahorseGpgmeGenerateDialog *self = SEAHORSE_GPGME_GENERATE_DIALOG (user_data);
 
-    /* Set sane default key length */
-    if (available_algorithms[sel].def > available_algorithms[sel].max)
-        gtk_spin_button_set_value (GTK_SPIN_BUTTON (self->bits_spin), available_algorithms[sel].max);
-    else
-        gtk_spin_button_set_value (GTK_SPIN_BUTTON (self->bits_spin), available_algorithms[sel].def);
+    if (gtk_switch_get_active (GTK_SWITCH (self->expires_switch))) {
+        self->expires_binding =
+            g_object_bind_property (self->expires_datepicker, "datetime",
+                                    self->parms, "expires",
+                                    G_BINDING_BIDIRECTIONAL |
+                                    G_BINDING_SYNC_CREATE);
+    } else {
+        g_clear_object (&self->expires_binding);
+        seahorse_gpgme_key_parms_set_expires (self->parms, NULL);
+    }
 }
 
 static void
 create_key_action (GtkWidget *widget, const char *action_name, GVariant *param)
 {
     SeahorseGpgmeGenerateDialog *self = SEAHORSE_GPGME_GENERATE_DIALOG (widget);
-    g_autofree char *name = NULL;
-    const char *email, *comment;
-    unsigned int sel;
-    unsigned int type;
-    g_autoptr(GDateTime) expires = NULL;
-    unsigned int bits;
+    SeahorsePassphrasePrompt *dialog;
+    GenerateClosure *closure;
 
-    /* Make sure the name is the right length. Should've been checked earlier */
-    name = g_strdup (gtk_editable_get_text (GTK_EDITABLE (self->name_row)));
-    g_return_if_fail (name);
-    name = g_strstrip (name);
-    g_return_if_fail (strlen(name) >= 5);
+    dialog = seahorse_passphrase_prompt_new (_("Passphrase for New PGP Key"),
+                                             _("Enter the passphrase for your new key twice."),
+                                             NULL, NULL, TRUE);
 
-    email = gtk_editable_get_text (GTK_EDITABLE (self->email_row));
-    comment = gtk_editable_get_text (GTK_EDITABLE (self->comment_row));
+    closure = g_new0 (GenerateClosure, 1);
+    closure->keyring = g_object_ref (self->keyring);
+    closure->parms = g_object_ref (self->parms);
+    closure->parent = get_toplevel (self);
 
-    /* The algorithm */
-    sel = adw_combo_row_get_selected (ADW_COMBO_ROW (self->algorithm_row));
-    g_assert (sel <= (int) G_N_ELEMENTS(available_algorithms));
-    type = available_algorithms[sel].type;
-
-    /* The number of bits */
-    bits = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (self->bits_spin));
-    if (bits < available_algorithms[sel].min || bits > available_algorithms[sel].max) {
-        bits = available_algorithms[sel].def;
-        g_message ("invalid key size: %s defaulting to %u", available_algorithms[sel].desc, bits);
-    }
-
-    /* The expiry */
-    if (!gtk_switch_get_active (GTK_SWITCH (self->expires_switch)))
-        expires = seahorse_date_picker_get_datetime (SEAHORSE_DATE_PICKER (self->expires_datepicker));
-
-    seahorse_gpgme_generate_key (self->keyring,
-                                 name, email, comment, type, bits, expires,
-                                 get_toplevel (self));
+    seahorse_passphrase_prompt_prompt (dialog, GTK_WIDGET (closure->parent), NULL, on_pass_prompted, closure);
 
     adw_dialog_close (ADW_DIALOG (self));
 }
@@ -326,14 +269,50 @@ seahorse_gpgme_generate_dialog_set_property (GObject *object,
 }
 
 static void
+seahorse_gpgme_generate_dialog_dispose (GObject *obj)
+{
+    SeahorseGpgmeGenerateDialog *self = SEAHORSE_GPGME_GENERATE_DIALOG (obj);
+
+    gtk_widget_dispose_template (GTK_WIDGET (self), SEAHORSE_GPGME_TYPE_GENERATE_DIALOG);
+
+    G_OBJECT_CLASS (seahorse_gpgme_generate_dialog_parent_class)->dispose (obj);
+}
+
+static void
 seahorse_gpgme_generate_dialog_finalize (GObject *obj)
 {
     SeahorseGpgmeGenerateDialog *self = SEAHORSE_GPGME_GENERATE_DIALOG (obj);
 
+    g_clear_object (&self->expires_binding);
+    g_clear_object (&self->parms);
     g_clear_object (&self->keyring);
 
     G_OBJECT_CLASS (seahorse_gpgme_generate_dialog_parent_class)->finalize (obj);
 }
+
+static void
+on_parms_is_valid_changed (GObject    *object,
+                           GParamSpec *pspec,
+                           void       *user_data)
+{
+    SeahorseGpgmeGenerateDialog *self = SEAHORSE_GPGME_GENERATE_DIALOG (user_data);
+    SeahorseGpgmeKeyParms *parms = SEAHORSE_GPGME_KEY_PARMS (object);
+
+    gtk_widget_action_set_enabled (GTK_WIDGET (self),
+                                   "create-key",
+                                   seahorse_gpgme_key_parms_is_valid (parms));
+
+    gtk_widget_set_visible (self->name_row_warning,
+                            !seahorse_gpgme_key_parms_has_valid_name (parms));
+}
+
+// Keep this in sync manually for now with the list in seahorse-gpgme-key-parms.c
+static const char *ALGO_STRINGS[] = {
+    N_("RSA"),
+    N_("DSA ElGamal"),
+    N_("DSA (sign only)"),
+    N_("RSA (sign only)"),
+};
 
 static void
 seahorse_gpgme_generate_dialog_init (SeahorseGpgmeGenerateDialog *self)
@@ -344,10 +323,26 @@ seahorse_gpgme_generate_dialog_init (SeahorseGpgmeGenerateDialog *self)
 
     gtk_widget_init_template (GTK_WIDGET (self));
 
+    self->parms = seahorse_gpgme_key_parms_new ();
+    g_object_bind_property (self->parms, "name",
+                            self->name_row, "text",
+                            G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
+    g_object_bind_property (self->parms, "email",
+                            self->email_row, "text",
+                            G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
+    g_object_bind_property (self->parms, "comment",
+                            self->comment_row, "text",
+                            G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
+    gtk_spin_button_set_adjustment (GTK_SPIN_BUTTON (self->bits_spin),
+                                    seahorse_gpgme_key_parms_get_key_length (self->parms));
+    g_signal_connect_object (self->parms, "notify::is-valid",
+                             G_CALLBACK (on_parms_is_valid_changed),
+                             self,
+                             G_CONNECT_DEFAULT);
+    on_parms_is_valid_changed (G_OBJECT (self->parms), NULL, self);
+
     /* The algorithms */
-    algos = gtk_string_list_new (NULL);
-    for (guint i = 0; i < G_N_ELEMENTS (available_algorithms); i++)
-        gtk_string_list_append (algos, _(available_algorithms[i].desc));
+    algos = gtk_string_list_new (ALGO_STRINGS);
     adw_combo_row_set_model (ADW_COMBO_ROW (self->algorithm_row),
                              G_LIST_MODEL (algos));
     on_algo_row_notify_selected (G_OBJECT (self->algorithm_row), NULL, self);
@@ -357,8 +352,6 @@ seahorse_gpgme_generate_dialog_init (SeahorseGpgmeGenerateDialog *self)
     next_year = g_date_time_add_years (now, 1);
     seahorse_date_picker_set_datetime (SEAHORSE_DATE_PICKER (self->expires_datepicker),
                                        next_year);
-
-    on_gpgme_generate_entry_changed (NULL, self);
 }
 
 static void
@@ -369,6 +362,7 @@ seahorse_gpgme_generate_dialog_class_init (SeahorseGpgmeGenerateDialogClass *kla
 
     gobject_class->get_property = seahorse_gpgme_generate_dialog_get_property;
     gobject_class->set_property = seahorse_gpgme_generate_dialog_set_property;
+    gobject_class->dispose = seahorse_gpgme_generate_dialog_dispose;
     gobject_class->finalize = seahorse_gpgme_generate_dialog_finalize;
 
     obj_props[PROP_KEYRING] =
@@ -392,8 +386,8 @@ seahorse_gpgme_generate_dialog_class_init (SeahorseGpgmeGenerateDialogClass *kla
     gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeGenerateDialog, expires_date_row);
     gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeGenerateDialog, expires_datepicker);
     gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeGenerateDialog, expires_switch);
-    gtk_widget_class_bind_template_callback (widget_class, on_gpgme_generate_entry_changed);
     gtk_widget_class_bind_template_callback (widget_class, on_algo_row_notify_selected);
+    gtk_widget_class_bind_template_callback (widget_class, on_expires_switch_notify_active);
 }
 
 SeahorseGpgmeGenerateDialog *
