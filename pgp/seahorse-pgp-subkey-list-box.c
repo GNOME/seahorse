@@ -65,7 +65,7 @@ on_add_subkey_response (GtkDialog *dialog, int response, void *user_data)
 {
     SeahorsePgpSubkeyListBox *self = SEAHORSE_PGP_SUBKEY_LIST_BOX (user_data);
     SeahorseGpgmeAddSubkey *add_dialog = SEAHORSE_GPGME_ADD_SUBKEY (dialog);
-    SeahorsePgpKeyAlgorithm algo;
+    SeahorseGpgmeKeyGenType algo;
     unsigned int length;
     GDateTime *expires;
 

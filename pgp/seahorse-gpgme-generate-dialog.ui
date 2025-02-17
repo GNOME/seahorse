@@ -98,6 +98,23 @@
                             <property name="title" translatable="yes">Encryption _Type</property>
                             <property name="use-underline">True</property>
                             <signal name="notify::selected" handler="on_algo_row_notify_selected"/>
+                            <property name="model">
+                              <object class="GtkFilterListModel">
+                                <property name="model">
+                                  <object class="AdwEnumListModel">
+                                    <property name="enum-type">SeahorseGpgmeKeyGenType</property>
+                                  </object>
+                                </property>
+                                <property name="filter">
+                                  <object class="GtkCustomFilter" id="algo_filter"/>
+                                </property>
+                              </object>
+                            </property>
+                            <property name="expression">
+                              <closure type="gchararray" function="algo_to_string">
+                                <lookup name="value" type="AdwEnumListItem"/>
+                              </closure>
+                            </property>
                           </object>
                         </child>
                         <child>

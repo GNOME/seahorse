@@ -24,6 +24,7 @@
 #include <time.h>
 
 #include "pgp/seahorse-gpgme-key.h"
+#include "pgp/seahorse-gpgme-key-gen-type.h"
 #include "pgp/seahorse-gpgme-key-parms.h"
 #include "pgp/seahorse-gpgme-keyring.h"
 #include "pgp/seahorse-gpgme-subkey.h"
@@ -130,7 +131,7 @@ gboolean          seahorse_gpgme_key_op_make_primary_finish (SeahorseGpgmeUid *u
 gpgme_error_t         seahorse_gpgme_key_op_del_uid          (SeahorseGpgmeUid *uid);
 
 void              seahorse_gpgme_key_op_add_subkey_async    (SeahorseGpgmeKey        *pkey,
-                                                             SeahorsePgpKeyAlgorithm  encoding,
+                                                             SeahorseGpgmeKeyGenType  encoding,
                                                              unsigned int             length,
                                                              GDateTime               *expires,
                                                              GCancellable            *cancellable,

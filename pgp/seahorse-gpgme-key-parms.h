@@ -23,6 +23,7 @@
 
 #include "seahorse-common.h"
 #include "seahorse-gpgme.h"
+#include "seahorse-gpgme-key-gen-type.h"
 
 #define SEAHORSE_GPGME_TYPE_KEY_PARMS (seahorse_gpgme_key_parms_get_type ())
 G_DECLARE_FINAL_TYPE (SeahorseGpgmeKeyParms, seahorse_gpgme_key_parms,
@@ -43,9 +44,9 @@ const char *             seahorse_gpgme_key_parms_get_comment          (Seahorse
 void                     seahorse_gpgme_key_parms_set_comment          (SeahorseGpgmeKeyParms *self,
                                                                         const char            *comment);
 
-SeahorsePgpKeyAlgorithm  seahorse_gpgme_key_parms_get_key_type         (SeahorseGpgmeKeyParms *self);
+SeahorseGpgmeKeyGenType  seahorse_gpgme_key_parms_get_key_type         (SeahorseGpgmeKeyParms *self);
 void                     seahorse_gpgme_key_parms_set_key_type         (SeahorseGpgmeKeyParms  *self,
-                                                                        SeahorsePgpKeyAlgorithm algo);
+                                                                        SeahorseGpgmeKeyGenType algo);
 
 GtkAdjustment *          seahorse_gpgme_key_parms_get_key_length       (SeahorseGpgmeKeyParms *self);
 unsigned int             seahorse_gpgme_key_parms_get_key_length_value (SeahorseGpgmeKeyParms *self);

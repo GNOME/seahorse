@@ -1292,7 +1292,7 @@ seahorse_gpgme_key_op_add_uid_finish (SeahorseGpgmeKey *pkey,
 
 void
 seahorse_gpgme_key_op_add_subkey_async (SeahorseGpgmeKey        *pkey,
-                                        SeahorsePgpKeyAlgorithm  type,
+                                        SeahorseGpgmeKeyGenType  type,
                                         unsigned int             length,
                                         GDateTime               *expires,
                                         GCancellable            *cancellable,
@@ -1329,7 +1329,7 @@ seahorse_gpgme_key_op_add_subkey_async (SeahorseGpgmeKey        *pkey,
     key = seahorse_gpgme_key_get_private (pkey);
 
     /* Get the algo string as GPG(ME) expects it */
-    algo = seahorse_gpgme_get_algo_string (type);
+    algo = seahorse_gpgme_key_enc_type_to_gpgme_string (type);
     g_return_if_fail (algo);
     algo_full = g_strdup_printf ("%s%u", algo, length);
 
@@ -1343,10 +1343,10 @@ seahorse_gpgme_key_op_add_subkey_async (SeahorseGpgmeKey        *pkey,
 
     /* Add usage flags */
     switch (type) {
-        case SEAHORSE_PGP_KEY_ALGO_RSA_SIGN:
+        case SEAHORSE_GPGME_KEY_GEN_TYPE_RSA_SIGN:
             flags |= GPGME_CREATE_SIGN;
             break;
-        case SEAHORSE_PGP_KEY_ALGO_RSA_ENCRYPT:
+        case SEAHORSE_GPGME_KEY_GEN_TYPE_RSA_ENCRYPT:
             flags |= GPGME_CREATE_ENCR;
             break;
         default:

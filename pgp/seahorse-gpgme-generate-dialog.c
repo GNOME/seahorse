@@ -58,6 +58,7 @@ struct _SeahorseGpgmeGenerateDialog {
     GtkWidget *comment_row;
 
     GtkWidget *algorithm_row;
+    GtkCustomFilter *algo_filter;
     GtkWidget *bits_spin;
 
     GtkWidget *expires_switch;
@@ -186,9 +187,11 @@ on_algo_row_notify_selected (GObject    *object,
                              void       *user_data)
 {
     SeahorseGpgmeGenerateDialog *self = SEAHORSE_GPGME_GENERATE_DIALOG (user_data);
-    unsigned int sel;
+    GObject *selected_item;
+    SeahorseGpgmeKeyGenType sel;
 
-    sel = adw_combo_row_get_selected (ADW_COMBO_ROW (self->algorithm_row));
+    selected_item = adw_combo_row_get_selected_item (ADW_COMBO_ROW (self->algorithm_row));
+    sel = adw_enum_list_item_get_value (ADW_ENUM_LIST_ITEM (selected_item));
     seahorse_gpgme_key_parms_set_key_type (self->parms, sel);
 }
 
@@ -306,13 +309,32 @@ on_parms_is_valid_changed (GObject    *object,
                             !seahorse_gpgme_key_parms_has_valid_name (parms));
 }
 
-// Keep this in sync manually for now with the list in seahorse-gpgme-key-parms.c
-static const char *ALGO_STRINGS[] = {
-    N_("RSA"),
-    N_("DSA ElGamal"),
-    N_("DSA (sign only)"),
-    N_("RSA (sign only)"),
-};
+static gboolean
+filter_enums (void *item, void *user_data)
+{
+    AdwEnumListItem *enum_item = ADW_ENUM_LIST_ITEM (item);
+
+    switch (adw_enum_list_item_get_value (enum_item)) {
+        case SEAHORSE_GPGME_KEY_GEN_TYPE_RSA_RSA:
+        case SEAHORSE_GPGME_KEY_GEN_TYPE_DSA_ELGAMAL:
+        case SEAHORSE_GPGME_KEY_GEN_TYPE_DSA:
+        case SEAHORSE_GPGME_KEY_GEN_TYPE_RSA_SIGN:
+            return TRUE;
+    }
+
+    return FALSE;
+}
+
+static char *
+algo_to_string (void                    *user_data,
+                SeahorseGpgmeKeyGenType  algo)
+{
+    const char *str;
+
+    str = seahorse_gpgme_key_enc_type_to_string (algo);
+    g_return_val_if_fail (str != NULL, NULL);
+    return g_strdup (str);
+}
 
 static void
 seahorse_gpgme_generate_dialog_init (SeahorseGpgmeGenerateDialog *self)
@@ -322,6 +344,8 @@ seahorse_gpgme_generate_dialog_init (SeahorseGpgmeGenerateDialog *self)
     g_autoptr(GtkStringList) algos = NULL;
 
     gtk_widget_init_template (GTK_WIDGET (self));
+
+    gtk_custom_filter_set_filter_func (self->algo_filter, filter_enums, self, NULL);
 
     self->parms = seahorse_gpgme_key_parms_new ();
     g_object_bind_property (self->parms, "name",
@@ -341,10 +365,6 @@ seahorse_gpgme_generate_dialog_init (SeahorseGpgmeGenerateDialog *self)
                              G_CONNECT_DEFAULT);
     on_parms_is_valid_changed (G_OBJECT (self->parms), NULL, self);
 
-    /* The algorithms */
-    algos = gtk_string_list_new (ALGO_STRINGS);
-    adw_combo_row_set_model (ADW_COMBO_ROW (self->algorithm_row),
-                             G_LIST_MODEL (algos));
     on_algo_row_notify_selected (G_OBJECT (self->algorithm_row), NULL, self);
 
     /* Default expiry date */
@@ -382,10 +402,12 @@ seahorse_gpgme_generate_dialog_class_init (SeahorseGpgmeGenerateDialogClass *kla
     gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeGenerateDialog, email_row);
     gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeGenerateDialog, comment_row);
     gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeGenerateDialog, algorithm_row);
+    gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeGenerateDialog, algo_filter);
     gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeGenerateDialog, bits_spin);
     gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeGenerateDialog, expires_date_row);
     gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeGenerateDialog, expires_datepicker);
     gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeGenerateDialog, expires_switch);
+    gtk_widget_class_bind_template_callback (widget_class, algo_to_string);
     gtk_widget_class_bind_template_callback (widget_class, on_algo_row_notify_selected);
     gtk_widget_class_bind_template_callback (widget_class, on_expires_switch_notify_active);
 }

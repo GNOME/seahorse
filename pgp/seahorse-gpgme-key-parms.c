@@ -37,7 +37,7 @@ struct _SeahorseGpgmeKeyParms {
     char *email;
     char *comment;
     char *passphrase;
-    SeahorsePgpKeyAlgorithm type;
+    SeahorseGpgmeKeyGenType type;
     GtkAdjustment *key_length;
     GDateTime *expires;
 };
@@ -58,17 +58,16 @@ static GParamSpec *obj_props[N_PROPS] = { NULL, };
 
 
 typedef struct _AlgorithmDesc {
-    const char* desc;
     unsigned int min;
     unsigned int max;
     unsigned int def;
 } AlgorithmDesc;
 
 static AlgorithmDesc available_algorithms[] = {
-    [SEAHORSE_PGP_KEY_ALGO_RSA_RSA] =     { N_("RSA"),             RSA_MIN,     LENGTH_MAX, LENGTH_DEFAULT  },
-    [SEAHORSE_PGP_KEY_ALGO_DSA_ELGAMAL] = { N_("DSA ElGamal"),     ELGAMAL_MIN, LENGTH_MAX, LENGTH_DEFAULT  },
-    [SEAHORSE_PGP_KEY_ALGO_DSA] =         { N_("DSA (sign only)"), DSA_MIN,     DSA_MAX,    LENGTH_DEFAULT  },
-    [SEAHORSE_PGP_KEY_ALGO_RSA_SIGN] =    { N_("RSA (sign only)"), RSA_MIN,     LENGTH_MAX, LENGTH_DEFAULT  }
+    [SEAHORSE_GPGME_KEY_GEN_TYPE_RSA_RSA] =     { RSA_MIN,     LENGTH_MAX, LENGTH_DEFAULT  },
+    [SEAHORSE_GPGME_KEY_GEN_TYPE_DSA_ELGAMAL] = { ELGAMAL_MIN, LENGTH_MAX, LENGTH_DEFAULT  },
+    [SEAHORSE_GPGME_KEY_GEN_TYPE_DSA] =         { DSA_MIN,     DSA_MAX,    LENGTH_DEFAULT  },
+    [SEAHORSE_GPGME_KEY_GEN_TYPE_RSA_SIGN] =    { RSA_MIN,     LENGTH_MAX, LENGTH_DEFAULT  }
 };
 
 const char *
@@ -141,7 +140,7 @@ seahorse_gpgme_key_parms_set_comment (SeahorseGpgmeKeyParms *self,
     g_object_notify_by_pspec (G_OBJECT (self), obj_props[PROP_COMMENT]);
 }
 
-SeahorsePgpKeyAlgorithm
+SeahorseGpgmeKeyGenType
 seahorse_gpgme_key_parms_get_key_type (SeahorseGpgmeKeyParms *self)
 {
     g_return_val_if_fail (SEAHORSE_GPGME_IS_KEY_PARMS (self), 0);
@@ -150,7 +149,7 @@ seahorse_gpgme_key_parms_get_key_type (SeahorseGpgmeKeyParms *self)
 
 void
 seahorse_gpgme_key_parms_set_key_type (SeahorseGpgmeKeyParms   *self,
-                                       SeahorsePgpKeyAlgorithm  key_type)
+                                       SeahorseGpgmeKeyGenType  key_type)
 {
     g_return_if_fail (SEAHORSE_GPGME_IS_KEY_PARMS (self));
 
@@ -217,8 +216,8 @@ seahorse_gpgme_key_parms_has_subkey (SeahorseGpgmeKeyParms *self)
 {
     g_return_val_if_fail (SEAHORSE_GPGME_IS_KEY_PARMS (self), FALSE);
 
-    return self->type == SEAHORSE_PGP_KEY_ALGO_DSA_ELGAMAL ||
-        self->type == SEAHORSE_PGP_KEY_ALGO_RSA_RSA;
+    return self->type == SEAHORSE_GPGME_KEY_GEN_TYPE_DSA_ELGAMAL ||
+        self->type == SEAHORSE_GPGME_KEY_GEN_TYPE_RSA_RSA;
 }
 
 gboolean
@@ -250,7 +249,7 @@ seahorse_gpgme_key_parms_to_string (SeahorseGpgmeKeyParms *self)
     str = g_string_new ("<GnupgKeyParms format=\"internal\">");
 
     /* Key */
-    if (self->type == SEAHORSE_PGP_KEY_ALGO_DSA || self->type == SEAHORSE_PGP_KEY_ALGO_DSA_ELGAMAL)
+    if (self->type == SEAHORSE_GPGME_KEY_GEN_TYPE_DSA || self->type == SEAHORSE_GPGME_KEY_GEN_TYPE_DSA_ELGAMAL)
         g_string_append (str, "\nKey-Type: DSA");
     else
         g_string_append (str, "\nKey-Type: RSA");
@@ -260,9 +259,9 @@ seahorse_gpgme_key_parms_to_string (SeahorseGpgmeKeyParms *self)
 
     /* Subkey */
     if (seahorse_gpgme_key_parms_has_subkey (self)) {
-        if (self->type == SEAHORSE_PGP_KEY_ALGO_DSA_ELGAMAL)
+        if (self->type == SEAHORSE_GPGME_KEY_GEN_TYPE_DSA_ELGAMAL)
             g_string_append (str, "\nSubkey-Type: ELG-E");
-        else if (self->type == SEAHORSE_PGP_KEY_ALGO_RSA_RSA)
+        else if (self->type == SEAHORSE_GPGME_KEY_GEN_TYPE_RSA_RSA)
             g_string_append (str, "\nSubkey-Type: RSA");
         else
             g_return_val_if_reached (NULL);
@@ -369,7 +368,7 @@ seahorse_gpgme_key_parms_init (SeahorseGpgmeKeyParms *self)
     self->name = g_strdup ("");
     self->email = g_strdup ("");
     self->comment = g_strdup ("");
-    self->type = SEAHORSE_PGP_KEY_ALGO_RSA_RSA;
+    self->type = SEAHORSE_GPGME_KEY_GEN_TYPE_RSA_RSA;
     self->key_length = gtk_adjustment_new (2048, 512, 8192, 512, 1, 1);
     g_object_ref_sink (self->key_length);
 }

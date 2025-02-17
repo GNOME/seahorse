@@ -58,37 +58,3 @@ SeahorseValidity   seahorse_gpgme_convert_validity  (gpgme_validity_t validity);
 
 GSource *          seahorse_gpgme_gsource_new       (gpgme_ctx_t gctx,
                                                      GCancellable *cancellable);
-
-typedef enum {
-    SEAHORSE_PGP_KEY_ALGO_RSA_RSA,
-    SEAHORSE_PGP_KEY_ALGO_DSA_ELGAMAL,
-    SEAHORSE_PGP_KEY_ALGO_DSA,
-    SEAHORSE_PGP_KEY_ALGO_RSA_SIGN,
-    SEAHORSE_PGP_KEY_ALGO_ELGAMAL,
-    SEAHORSE_PGP_KEY_ALGO_RSA_ENCRYPT,
-} SeahorsePgpKeyAlgorithm;
-
-/* Length ranges for key types */
-typedef enum {
-    /* Minimum length for #DSA. */
-    DSA_MIN = 768,
-    /* Maximum length for #DSA. */
-#if ( GPG_MAJOR == 2 &&   GPG_MINOR == 0 && GPG_MICRO < 12 ) || \
-    ( GPG_MAJOR == 1 && ( GPG_MINOR <  4 || GPG_MICRO < 10 ) )
-    DSA_MAX = 1024,
-#else
-    DSA_MAX = 3072,
-#endif
-    /* Minimum length for #ELGAMAL. Maximum length is #LENGTH_MAX. */
-    ELGAMAL_MIN = 768,
-    /* Minimum length of #RSA_SIGN and #RSA_ENCRYPT. Maximum length is
-     * #LENGTH_MAX.
-     */
-    RSA_MIN = 1024,
-    /* Maximum length for #ELGAMAL, #RSA_SIGN, and #RSA_ENCRYPT. */
-    LENGTH_MAX = 4096,
-    /* Default length for #ELGAMAL, #RSA_SIGN, #RSA_ENCRYPT, and #DSA. */
-    LENGTH_DEFAULT = 2048
-} SeahorseKeyLength;
-
-const char *    seahorse_gpgme_get_algo_string (SeahorsePgpKeyAlgorithm encoding);

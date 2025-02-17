@@ -60,7 +60,7 @@ static void
 on_algo_row_notify_selected (GObject *object, GParamSpec *pspec, void *user_data)
 {
     SeahorseGpgmeAddSubkey *self = SEAHORSE_GPGME_ADD_SUBKEY (user_data);
-    SeahorsePgpKeyAlgorithm algo;
+    SeahorseGpgmeKeyGenType algo;
     AdwSpinRow *length_row;
     GtkAdjustment *adjustment;
 
@@ -70,20 +70,20 @@ on_algo_row_notify_selected (GObject *object, GParamSpec *pspec, void *user_data
     adjustment = self->length_row_adjustment;
 
     switch (algo) {
-        case SEAHORSE_PGP_KEY_ALGO_DSA:
+        case SEAHORSE_GPGME_KEY_GEN_TYPE_DSA:
             gtk_adjustment_set_lower (adjustment, DSA_MIN);
             gtk_adjustment_set_upper (adjustment, DSA_MAX);
             adw_spin_row_set_value (length_row, MIN (LENGTH_DEFAULT, DSA_MAX));
             break;
         /* ElGamal */
-        case SEAHORSE_PGP_KEY_ALGO_ELGAMAL:
+        case SEAHORSE_GPGME_KEY_GEN_TYPE_ELGAMAL:
             gtk_adjustment_set_lower (adjustment, ELGAMAL_MIN);
             gtk_adjustment_set_upper (adjustment, LENGTH_MAX);
             adw_spin_row_set_value (length_row, LENGTH_DEFAULT);
             break;
         /* RSA */
-        case SEAHORSE_PGP_KEY_ALGO_RSA_SIGN:
-        case SEAHORSE_PGP_KEY_ALGO_RSA_ENCRYPT:
+        case SEAHORSE_GPGME_KEY_GEN_TYPE_RSA_SIGN:
+        case SEAHORSE_GPGME_KEY_GEN_TYPE_RSA_ENCRYPT:
             gtk_adjustment_set_lower (adjustment, RSA_MIN);
             gtk_adjustment_set_upper (adjustment, LENGTH_MAX);
             adw_spin_row_set_value (length_row, LENGTH_DEFAULT);
@@ -93,7 +93,7 @@ on_algo_row_notify_selected (GObject *object, GParamSpec *pspec, void *user_data
     }
 }
 
-SeahorsePgpKeyAlgorithm
+SeahorseGpgmeKeyGenType
 seahorse_gpgme_add_subkey_get_selected_algo (SeahorseGpgmeAddSubkey *self)
 {
     AdwComboRow *algo_row;
@@ -178,10 +178,10 @@ filter_enums (void *item, void *user_data)
     AdwEnumListItem *enum_item = ADW_ENUM_LIST_ITEM (item);
 
     switch (adw_enum_list_item_get_value (enum_item)) {
-        case SEAHORSE_PGP_KEY_ALGO_DSA:
-        case SEAHORSE_PGP_KEY_ALGO_ELGAMAL:
-        case SEAHORSE_PGP_KEY_ALGO_RSA_SIGN:
-        case SEAHORSE_PGP_KEY_ALGO_RSA_ENCRYPT:
+        case SEAHORSE_GPGME_KEY_GEN_TYPE_DSA:
+        case SEAHORSE_GPGME_KEY_GEN_TYPE_ELGAMAL:
+        case SEAHORSE_GPGME_KEY_GEN_TYPE_RSA_SIGN:
+        case SEAHORSE_GPGME_KEY_GEN_TYPE_RSA_ENCRYPT:
             return TRUE;
     }
 
@@ -189,21 +189,14 @@ filter_enums (void *item, void *user_data)
 }
 
 static char *
-algo_to_string (void *user_data,
-                SeahorsePgpKeyAlgorithm algo)
+algo_to_string (void                    *user_data,
+                SeahorseGpgmeKeyGenType  algo)
 {
-    switch (algo) {
-        case SEAHORSE_PGP_KEY_ALGO_DSA:
-            return g_strdup (_("DSA (sign only)"));
-        case SEAHORSE_PGP_KEY_ALGO_ELGAMAL:
-            return g_strdup (_("ElGamal (encrypt only)"));
-        case SEAHORSE_PGP_KEY_ALGO_RSA_SIGN:
-            return g_strdup (_("RSA (sign only)"));
-        case SEAHORSE_PGP_KEY_ALGO_RSA_ENCRYPT:
-            return g_strdup (_("RSA (encrypt only)"));
-        default:
-            return g_strdup ("");
-    }
+    const char *str;
+
+    str = seahorse_gpgme_key_enc_type_to_string (algo);
+    g_return_val_if_fail (str != NULL, NULL);
+    return g_strdup (str);
 }
 
 static void
@@ -225,7 +218,7 @@ seahorse_gpgme_add_subkey_init (SeahorseGpgmeAddSubkey *self)
     g_autoptr (GDateTime) now = NULL;
     g_autoptr (GDateTime) next_year = NULL;
 
-    g_type_ensure (SEAHORSE_TYPE_PGP_KEY_ALGORITHM);
+    g_type_ensure (SEAHORSE_TYPE_GPGME_KEY_GEN_TYPE);
 
     gtk_widget_init_template (GTK_WIDGET (self));
 

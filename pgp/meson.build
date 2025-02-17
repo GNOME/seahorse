@@ -1,6 +1,6 @@
 pgp_enums = gnome.mkenums_simple('seahorse-pgp-enums',
   sources: [
-    'seahorse-gpgme.h',
+    'seahorse-gpgme-key-gen-type.h',
     'seahorse-gpgme-key-op.h',
   ],
 )
@@ -16,6 +16,7 @@ pgp_sources = files(
   'seahorse-gpgme-key.c',
   'seahorse-gpgme-key-delete-operation.c',
   'seahorse-gpgme-key-export-operation.c',
+  'seahorse-gpgme-key-gen-type.c',
   'seahorse-gpgme-key-op.c',
   'seahorse-gpgme-key-parms.c',
   'seahorse-gpgme-keyring.c',
