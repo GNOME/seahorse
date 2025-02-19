@@ -59,7 +59,7 @@ struct _SeahorseGpgmeGenerateDialog {
 
     GtkWidget *algorithm_row;
     GtkCustomFilter *algo_filter;
-    GtkWidget *bits_spin;
+    GtkAdjustment *bits_spin_adjustment;
 
     GtkWidget *expires_switch;
     GtkWidget *expires_date_row;
@@ -189,10 +189,23 @@ on_algo_row_notify_selected (GObject    *object,
     SeahorseGpgmeGenerateDialog *self = SEAHORSE_GPGME_GENERATE_DIALOG (user_data);
     GObject *selected_item;
     SeahorseGpgmeKeyGenType sel;
+    SeahorsePgpKeyAlgorithm algo;
+    unsigned int default_val, lower, upper;
 
     selected_item = adw_combo_row_get_selected_item (ADW_COMBO_ROW (self->algorithm_row));
     sel = adw_enum_list_item_get_value (ADW_ENUM_LIST_ITEM (selected_item));
     seahorse_gpgme_key_parms_set_key_type (self->parms, sel);
+
+    algo = seahorse_gpgme_key_gen_type_get_key_algo (sel);
+    if (seahorse_pgp_key_algorithm_get_length_values (algo, &default_val, &lower, &upper)) {
+        gtk_adjustment_configure (self->bits_spin_adjustment,
+                                  default_val,
+                                  lower,
+                                  upper,
+                                  512,
+                                  0,
+                                  0);
+    }
 }
 
 static void
@@ -331,7 +344,7 @@ algo_to_string (void                    *user_data,
 {
     const char *str;
 
-    str = seahorse_gpgme_key_enc_type_to_string (algo);
+    str = seahorse_gpgme_key_gen_type_to_string (algo);
     g_return_val_if_fail (str != NULL, NULL);
     return g_strdup (str);
 }
@@ -357,8 +370,6 @@ seahorse_gpgme_generate_dialog_init (SeahorseGpgmeGenerateDialog *self)
     g_object_bind_property (self->parms, "comment",
                             self->comment_row, "text",
                             G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
-    gtk_spin_button_set_adjustment (GTK_SPIN_BUTTON (self->bits_spin),
-                                    seahorse_gpgme_key_parms_get_key_length (self->parms));
     g_signal_connect_object (self->parms, "notify::is-valid",
                              G_CALLBACK (on_parms_is_valid_changed),
                              self,
@@ -403,7 +414,7 @@ seahorse_gpgme_generate_dialog_class_init (SeahorseGpgmeGenerateDialogClass *kla
     gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeGenerateDialog, comment_row);
     gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeGenerateDialog, algorithm_row);
     gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeGenerateDialog, algo_filter);
-    gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeGenerateDialog, bits_spin);
+    gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeGenerateDialog, bits_spin_adjustment);
     gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeGenerateDialog, expires_date_row);
     gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeGenerateDialog, expires_datepicker);
     gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeGenerateDialog, expires_switch);

@@ -22,7 +22,7 @@
 #pragma once
 
 #include "seahorse-gpgme.h"
-#include "seahorse-common.h"
+#include "seahorse-pgp-key-algorithm.h"
 
 typedef enum {
     SEAHORSE_GPGME_KEY_GEN_TYPE_RSA_RSA,
@@ -33,24 +33,9 @@ typedef enum {
     SEAHORSE_GPGME_KEY_GEN_TYPE_ELGAMAL,
 } SeahorseGpgmeKeyGenType;
 
-/* Length ranges for key types */
-typedef enum {
-    /* Minimum length for #DSA. */
-    DSA_MIN = 768,
-    /* Maximum length for #DSA. */
-    DSA_MAX = 3072,
-    /* Minimum length for #ELGAMAL. Maximum length is #LENGTH_MAX. */
-    ELGAMAL_MIN = 768,
-    /* Minimum length of #RSA_SIGN and #RSA_ENCRYPT. Maximum length is
-     * #LENGTH_MAX.
-     */
-    RSA_MIN = 1024,
-    /* Maximum length for #ELGAMAL, #RSA_SIGN, and #RSA_ENCRYPT. */
-    LENGTH_MAX = 4096,
-    /* Default length for #ELGAMAL, #RSA_SIGN, #RSA_ENCRYPT, and #DSA. */
-    LENGTH_DEFAULT = 2048,
-} SeahorseKeyLength;
+const char *             seahorse_gpgme_key_gen_type_to_string        (SeahorseGpgmeKeyGenType type);
 
-const char *    seahorse_gpgme_key_enc_type_to_string        (SeahorseGpgmeKeyGenType encoding);
+SeahorsePgpKeyAlgorithm  seahorse_gpgme_key_gen_type_get_key_algo     (SeahorseGpgmeKeyGenType type);
 
-const char *    seahorse_gpgme_key_enc_type_to_gpgme_string  (SeahorseGpgmeKeyGenType encoding);
+gboolean                 seahorse_gpgme_key_gen_type_get_subkey_algo  (SeahorseGpgmeKeyGenType  type,
+                                                                       SeahorsePgpKeyAlgorithm *subkey_algo);

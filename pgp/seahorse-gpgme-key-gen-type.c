@@ -29,7 +29,7 @@
 #include <glib/gi18n.h>
 
 const char *
-seahorse_gpgme_key_enc_type_to_string (SeahorseGpgmeKeyGenType type)
+seahorse_gpgme_key_gen_type_to_string (SeahorseGpgmeKeyGenType type)
 {
     switch (type) {
         case SEAHORSE_GPGME_KEY_GEN_TYPE_RSA_RSA:
@@ -49,28 +49,41 @@ seahorse_gpgme_key_enc_type_to_string (SeahorseGpgmeKeyGenType type)
     g_return_val_if_reached (NULL);
 }
 
-/**
- * seahorse_gpgme_key_enc_type_to_gpgme_string:
- * @type: The algo type
- *
- * Returns: (transfer none): A string version of the algorithm, which can be
- * used for GPGME functions like gpgme_op_create(sub)key.
- */
-const char *
-seahorse_gpgme_key_enc_type_to_gpgme_string (SeahorseGpgmeKeyGenType algo)
+SeahorsePgpKeyAlgorithm
+seahorse_gpgme_key_gen_type_get_key_algo (SeahorseGpgmeKeyGenType type)
 {
-    switch (algo) {
-        case SEAHORSE_GPGME_KEY_GEN_TYPE_DSA:
-            return "dsa";
+    switch (type) {
         case SEAHORSE_GPGME_KEY_GEN_TYPE_RSA_RSA:
         case SEAHORSE_GPGME_KEY_GEN_TYPE_RSA_SIGN:
         case SEAHORSE_GPGME_KEY_GEN_TYPE_RSA_ENCRYPT:
-            return "rsa";
+            return SEAHORSE_PGP_KEY_ALGORITHM_RSA;
+        case SEAHORSE_GPGME_KEY_GEN_TYPE_DSA:
+        case SEAHORSE_GPGME_KEY_GEN_TYPE_DSA_ELGAMAL:
+            return SEAHORSE_PGP_KEY_ALGORITHM_DSA;
         case SEAHORSE_GPGME_KEY_GEN_TYPE_ELGAMAL:
-            return "elg";
-        default:
-            return NULL;
+            return SEAHORSE_PGP_KEY_ALGORITHM_ELGAMAL;
     }
 
-    g_return_val_if_reached (NULL);
+    g_return_val_if_reached (0);
+}
+
+gboolean
+seahorse_gpgme_key_gen_type_get_subkey_algo (SeahorseGpgmeKeyGenType  type,
+                                             SeahorsePgpKeyAlgorithm *subkey_algo)
+{
+    switch (type) {
+        case SEAHORSE_GPGME_KEY_GEN_TYPE_RSA_SIGN:
+        case SEAHORSE_GPGME_KEY_GEN_TYPE_RSA_ENCRYPT:
+        case SEAHORSE_GPGME_KEY_GEN_TYPE_DSA:
+        case SEAHORSE_GPGME_KEY_GEN_TYPE_ELGAMAL:
+            return FALSE;
+        case SEAHORSE_GPGME_KEY_GEN_TYPE_RSA_RSA:
+            *subkey_algo = SEAHORSE_PGP_KEY_ALGORITHM_RSA;
+            return TRUE;
+        case SEAHORSE_GPGME_KEY_GEN_TYPE_DSA_ELGAMAL:
+            *subkey_algo = SEAHORSE_GPGME_KEY_GEN_TYPE_ELGAMAL;
+            return TRUE;
+    }
+
+    g_return_val_if_reached (FALSE);
 }

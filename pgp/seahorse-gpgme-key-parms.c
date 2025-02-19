@@ -20,6 +20,7 @@
 #include "config.h"
 
 #include "seahorse-gpgme-key-parms.h"
+#include "seahorse-pgp-enums.h"
 
 #include <glib/gi18n.h>
 
@@ -38,7 +39,7 @@ struct _SeahorseGpgmeKeyParms {
     char *comment;
     char *passphrase;
     SeahorseGpgmeKeyGenType type;
-    GtkAdjustment *key_length;
+    unsigned int key_length;
     GDateTime *expires;
 };
 
@@ -55,20 +56,6 @@ enum {
     N_PROPS
 };
 static GParamSpec *obj_props[N_PROPS] = { NULL, };
-
-
-typedef struct _AlgorithmDesc {
-    unsigned int min;
-    unsigned int max;
-    unsigned int def;
-} AlgorithmDesc;
-
-static AlgorithmDesc available_algorithms[] = {
-    [SEAHORSE_GPGME_KEY_GEN_TYPE_RSA_RSA] =     { RSA_MIN,     LENGTH_MAX, LENGTH_DEFAULT  },
-    [SEAHORSE_GPGME_KEY_GEN_TYPE_DSA_ELGAMAL] = { ELGAMAL_MIN, LENGTH_MAX, LENGTH_DEFAULT  },
-    [SEAHORSE_GPGME_KEY_GEN_TYPE_DSA] =         { DSA_MIN,     DSA_MAX,    LENGTH_DEFAULT  },
-    [SEAHORSE_GPGME_KEY_GEN_TYPE_RSA_SIGN] =    { RSA_MIN,     LENGTH_MAX, LENGTH_DEFAULT  }
-};
 
 const char *
 seahorse_gpgme_key_parms_get_name (SeahorseGpgmeKeyParms *self)
@@ -151,34 +138,49 @@ void
 seahorse_gpgme_key_parms_set_key_type (SeahorseGpgmeKeyParms   *self,
                                        SeahorseGpgmeKeyGenType  key_type)
 {
+    SeahorsePgpKeyAlgorithm algo;
+    unsigned int default_val;
+
     g_return_if_fail (SEAHORSE_GPGME_IS_KEY_PARMS (self));
 
     if (self->type == key_type)
         return;
+
     self->type = key_type;
-
     g_object_notify_by_pspec (G_OBJECT (self), obj_props[PROP_KEY_TYPE]);
-    gtk_adjustment_configure (self->key_length,
-                              available_algorithms[key_type].def,
-                              available_algorithms[key_type].min,
-                              available_algorithms[key_type].max,
-                              512,
-                              1,
-                              1);
-}
 
-GtkAdjustment *
-seahorse_gpgme_key_parms_get_key_length (SeahorseGpgmeKeyParms *self)
-{
-    g_return_val_if_fail (SEAHORSE_GPGME_IS_KEY_PARMS (self), NULL);
-    return self->key_length;
+    algo = seahorse_gpgme_key_gen_type_get_key_algo (key_type);
+    if (seahorse_pgp_key_algorithm_get_length_values (algo, &default_val, NULL, NULL))
+        seahorse_gpgme_key_parms_set_key_length (self, default_val);
 }
 
 unsigned int
-seahorse_gpgme_key_parms_get_key_length_value (SeahorseGpgmeKeyParms *self)
+seahorse_gpgme_key_parms_get_key_length (SeahorseGpgmeKeyParms *self)
 {
     g_return_val_if_fail (SEAHORSE_GPGME_IS_KEY_PARMS (self), 0);
-    return (unsigned int) gtk_adjustment_get_value (self->key_length);
+    return self->key_length;
+}
+
+void
+seahorse_gpgme_key_parms_set_key_length (SeahorseGpgmeKeyParms   *self,
+                                         unsigned int             key_length)
+{
+    SeahorsePgpKeyAlgorithm algo;
+    unsigned int default_val, lower, upper;
+
+    g_return_if_fail (SEAHORSE_GPGME_IS_KEY_PARMS (self));
+
+    algo = seahorse_gpgme_key_gen_type_get_key_algo (self->type);
+    if (seahorse_pgp_key_algorithm_get_length_values (algo, &default_val, &lower, &upper)) {
+        g_return_if_fail (key_length >= lower);
+        g_return_if_fail (key_length <= upper);
+    }
+
+    if (self->key_length == key_length)
+        return;
+
+    self->key_length = key_length;
+    g_object_notify_by_pspec (G_OBJECT (self), obj_props[PROP_KEY_LENGTH]);
 }
 
 GDateTime *
@@ -236,9 +238,25 @@ seahorse_gpgme_key_parms_is_valid (SeahorseGpgmeKeyParms *self)
     return seahorse_gpgme_key_parms_has_valid_name (self);
 }
 
+const char *
+key_algo_str (SeahorsePgpKeyAlgorithm algo)
+{
+    switch (algo) {
+        case SEAHORSE_PGP_KEY_ALGORITHM_RSA:
+            return "RSA";
+        case SEAHORSE_PGP_KEY_ALGORITHM_DSA:
+            return "DSA";
+        case SEAHORSE_PGP_KEY_ALGORITHM_ELGAMAL:
+            return "ELG-E";
+        default: /* Others are not supported */
+            return NULL;
+    }
+}
+
 char *
 seahorse_gpgme_key_parms_to_string (SeahorseGpgmeKeyParms *self)
 {
+    SeahorsePgpKeyAlgorithm algo;
     g_autoptr(GString) str = NULL;
     g_autofree char *expires_date = NULL;
 
@@ -249,25 +267,16 @@ seahorse_gpgme_key_parms_to_string (SeahorseGpgmeKeyParms *self)
     str = g_string_new ("<GnupgKeyParms format=\"internal\">");
 
     /* Key */
-    if (self->type == SEAHORSE_GPGME_KEY_GEN_TYPE_DSA || self->type == SEAHORSE_GPGME_KEY_GEN_TYPE_DSA_ELGAMAL)
-        g_string_append (str, "\nKey-Type: DSA");
-    else
-        g_string_append (str, "\nKey-Type: RSA");
+    algo = seahorse_gpgme_key_gen_type_get_key_algo (self->type);
+    g_string_append_printf (str, "\nKey-Type: %s", key_algo_str (algo));
     g_string_append (str, "\nKey-Usage: sign");
-    g_string_append_printf (str, "\nKey-Length: %u",
-                            seahorse_gpgme_key_parms_get_key_length_value (self));
+    g_string_append_printf (str, "\nKey-Length: %u", self->key_length);
 
     /* Subkey */
-    if (seahorse_gpgme_key_parms_has_subkey (self)) {
-        if (self->type == SEAHORSE_GPGME_KEY_GEN_TYPE_DSA_ELGAMAL)
-            g_string_append (str, "\nSubkey-Type: ELG-E");
-        else if (self->type == SEAHORSE_GPGME_KEY_GEN_TYPE_RSA_RSA)
-            g_string_append (str, "\nSubkey-Type: RSA");
-        else
-            g_return_val_if_reached (NULL);
+    if (seahorse_gpgme_key_gen_type_get_subkey_algo (self->type, &algo)) {
+        g_string_append_printf (str, "\nSubkey-Type: %s", key_algo_str (algo));
         g_string_append (str, "\nSubkey-Usage: encrypt");
-        g_string_append_printf (str, "\nSubkey-Length: %d",
-                                seahorse_gpgme_key_parms_get_key_length_value (self));
+        g_string_append_printf (str, "\nSubkey-Length: %d", self->key_length);
     }
 
     /* Name */
@@ -315,10 +324,10 @@ seahorse_gpgme_key_parms_get_property (GObject      *object,
         g_value_set_string (value, seahorse_gpgme_key_parms_get_comment (self));
         break;
     case PROP_KEY_TYPE:
-        g_value_set_uint (value, seahorse_gpgme_key_parms_get_key_type (self));
+        g_value_set_enum (value, seahorse_gpgme_key_parms_get_key_type (self));
         break;
     case PROP_KEY_LENGTH:
-        g_value_set_object (value, seahorse_gpgme_key_parms_get_key_length (self));
+        g_value_set_uint (value, seahorse_gpgme_key_parms_get_key_length (self));
         break;
     case PROP_EXPIRES:
         g_value_set_boxed (value, seahorse_gpgme_key_parms_get_expires (self));
@@ -351,7 +360,10 @@ seahorse_gpgme_key_parms_set_property (GObject      *object,
         seahorse_gpgme_key_parms_set_comment (self, g_value_get_string (value));
         break;
     case PROP_KEY_TYPE:
-        seahorse_gpgme_key_parms_set_key_type (self, g_value_get_uint (value));
+        seahorse_gpgme_key_parms_set_key_type (self, g_value_get_enum (value));
+        break;
+    case PROP_KEY_LENGTH:
+        seahorse_gpgme_key_parms_set_key_length (self, g_value_get_uint (value));
         break;
     case PROP_EXPIRES:
         seahorse_gpgme_key_parms_set_expires (self, g_value_get_boxed (value));
@@ -369,8 +381,7 @@ seahorse_gpgme_key_parms_init (SeahorseGpgmeKeyParms *self)
     self->email = g_strdup ("");
     self->comment = g_strdup ("");
     self->type = SEAHORSE_GPGME_KEY_GEN_TYPE_RSA_RSA;
-    self->key_length = gtk_adjustment_new (2048, 512, 8192, 512, 1, 1);
-    g_object_ref_sink (self->key_length);
+    self->key_length = 4096;
 }
 
 static void
@@ -382,7 +393,6 @@ seahorse_gpgme_key_parms_finalize (GObject *obj)
     g_clear_pointer (&self->email, g_free);
     g_clear_pointer (&self->comment, g_free);
     g_clear_pointer (&self->passphrase, gcr_secure_memory_free);
-    g_clear_object (&self->key_length);
     g_clear_object (&self->expires);
 
     G_OBJECT_CLASS (seahorse_gpgme_key_parms_parent_class)->finalize (obj);
@@ -410,13 +420,14 @@ seahorse_gpgme_key_parms_class_init (SeahorseGpgmeKeyParmsClass *klass)
                              NULL,
                              G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
     obj_props[PROP_KEY_TYPE] =
-        g_param_spec_uint ("key-type", NULL, NULL,
-                           0, G_MAXUINT, 0,
+        g_param_spec_enum ("key-type", NULL, NULL,
+                           SEAHORSE_TYPE_GPGME_KEY_GEN_TYPE,
+                           SEAHORSE_GPGME_KEY_GEN_TYPE_RSA_RSA,
                            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
     obj_props[PROP_KEY_LENGTH] =
-        g_param_spec_object ("key-length", NULL, NULL,
-                             GTK_TYPE_ADJUSTMENT,
-                             G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+        g_param_spec_uint ("key-length", NULL, NULL,
+                           0, G_MAXUINT, 0,
+                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
     obj_props[PROP_EXPIRES] =
         g_param_spec_boxed ("expires", NULL, NULL,
                             G_TYPE_DATE_TIME,

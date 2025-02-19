@@ -21,7 +21,7 @@
                       <object class="GtkFilterListModel">
                         <property name="model">
                           <object class="AdwEnumListModel">
-                            <property name="enum-type">SeahorseGpgmeKeyGenType</property>
+                            <property name="enum-type">SeahorsePgpKeyAlgorithm</property>
                           </object>
                         </property>
                         <property name="filter">
@@ -37,6 +37,29 @@
                   </object>
                 </child>
                 <child>
+                  <object class="AdwComboRow" id="usage_row">
+                    <property name="title" translatable="yes">Key _Usage</property>
+                    <property name="use-underline">True</property>
+                    <property name="model">
+                      <object class="GtkFilterListModel">
+                        <property name="model">
+                          <object class="AdwEnumListModel">
+                            <property name="enum-type">SeahorsePgpSubkeyUsage</property>
+                          </object>
+                        </property>
+                        <property name="filter">
+                          <object class="GtkCustomFilter" id="usage_filter"/>
+                        </property>
+                      </object>
+                    </property>
+                    <property name="expression">
+                      <closure type="gchararray" function="usage_to_string">
+                        <lookup name="value" type="AdwEnumListItem"/>
+                      </closure>
+                    </property>
+                  </object>
+                </child>
+                <child>
                   <object class="AdwSpinRow" id="length_row">
                     <property name="title" translatable="yes">Key _Length</property>
                     <property name="use-underline">True</property>
@@ -45,8 +68,7 @@
                         <property name="value">1024</property>
                         <property name="lower">768</property>
                         <property name="upper">1024</property>
-                        <property name="step_increment">1</property>
-                        <property name="page_increment">128</property>
+                        <property name="step_increment">512</property>
                       </object>
                     </property>
                     <property name="numeric">True</property>

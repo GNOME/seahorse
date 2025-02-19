@@ -48,8 +48,9 @@ SeahorseGpgmeKeyGenType  seahorse_gpgme_key_parms_get_key_type         (Seahorse
 void                     seahorse_gpgme_key_parms_set_key_type         (SeahorseGpgmeKeyParms  *self,
                                                                         SeahorseGpgmeKeyGenType algo);
 
-GtkAdjustment *          seahorse_gpgme_key_parms_get_key_length       (SeahorseGpgmeKeyParms *self);
-unsigned int             seahorse_gpgme_key_parms_get_key_length_value (SeahorseGpgmeKeyParms *self);
+unsigned int             seahorse_gpgme_key_parms_get_key_length       (SeahorseGpgmeKeyParms *self);
+void                     seahorse_gpgme_key_parms_set_key_length       (SeahorseGpgmeKeyParms *self,
+                                                                        unsigned int           key_length);
 
 GDateTime *              seahorse_gpgme_key_parms_get_expires          (SeahorseGpgmeKeyParms *self);
 void                     seahorse_gpgme_key_parms_set_expires          (SeahorseGpgmeKeyParms *self,

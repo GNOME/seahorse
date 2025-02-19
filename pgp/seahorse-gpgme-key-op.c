@@ -1292,7 +1292,8 @@ seahorse_gpgme_key_op_add_uid_finish (SeahorseGpgmeKey *pkey,
 
 void
 seahorse_gpgme_key_op_add_subkey_async (SeahorseGpgmeKey        *pkey,
-                                        SeahorseGpgmeKeyGenType  type,
+                                        SeahorsePgpKeyAlgorithm  algo,
+                                        SeahorsePgpSubkeyUsage   usage,
                                         unsigned int             length,
                                         GDateTime               *expires,
                                         GCancellable            *cancellable,
@@ -1304,15 +1305,14 @@ seahorse_gpgme_key_op_add_subkey_async (SeahorseGpgmeKey        *pkey,
     gpgme_error_t gerr;
     g_autoptr(GError) error = NULL;
     gpgme_key_t key;
-    const char *algo;
+    const char *algo_str;
     g_autofree char *algo_full = NULL;
     int64_t expires_ts;
     g_autoptr(GSource) gsource = NULL;
     unsigned int flags = 0;
 
     g_return_if_fail (SEAHORSE_GPGME_IS_KEY (pkey));
-    g_return_if_fail (seahorse_item_get_usage (SEAHORSE_ITEM (pkey)) ==
-                          SEAHORSE_USAGE_PRIVATE_KEY);
+    g_return_if_fail (seahorse_pgp_key_is_private_key (SEAHORSE_PGP_KEY (pkey)));
 
     gctx = seahorse_gpgme_keyring_new_context (&gerr);
 
@@ -1329,9 +1329,9 @@ seahorse_gpgme_key_op_add_subkey_async (SeahorseGpgmeKey        *pkey,
     key = seahorse_gpgme_key_get_private (pkey);
 
     /* Get the algo string as GPG(ME) expects it */
-    algo = seahorse_gpgme_key_enc_type_to_gpgme_string (type);
-    g_return_if_fail (algo);
-    algo_full = g_strdup_printf ("%s%u", algo, length);
+    algo_str = seahorse_pgp_key_algorithm_to_gpgme_string (algo);
+    g_return_if_fail (algo_str != NULL);
+    algo_full = g_strdup_printf ("%s%u", algo_str, length);
 
     /* 0 means "no expire" for us (GPGME picks a default otherwise) */
     if (expires) {
@@ -1342,11 +1342,11 @@ seahorse_gpgme_key_op_add_subkey_async (SeahorseGpgmeKey        *pkey,
     }
 
     /* Add usage flags */
-    switch (type) {
-        case SEAHORSE_GPGME_KEY_GEN_TYPE_RSA_SIGN:
+    switch (usage) {
+        case SEAHORSE_PGP_SUBKEY_USAGE_SIGN_ONLY:
             flags |= GPGME_CREATE_SIGN;
             break;
-        case SEAHORSE_GPGME_KEY_GEN_TYPE_RSA_ENCRYPT:
+        case SEAHORSE_PGP_SUBKEY_USAGE_ENCRYPT_ONLY:
             flags |= GPGME_CREATE_ENCR;
             break;
         default:

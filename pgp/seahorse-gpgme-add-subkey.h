@@ -25,6 +25,7 @@
 #include "pgp/seahorse-gpgme-key.h"
 #include "pgp/seahorse-gpgme-key-gen-type.h"
 #include "pgp/seahorse-gpgme-subkey.h"
+#include "pgp/seahorse-pgp-subkey-usage.h"
 
 #define SEAHORSE_GPGME_TYPE_ADD_SUBKEY (seahorse_gpgme_add_subkey_get_type ())
 G_DECLARE_FINAL_TYPE (SeahorseGpgmeAddSubkey, seahorse_gpgme_add_subkey,
@@ -34,7 +35,9 @@ G_DECLARE_FINAL_TYPE (SeahorseGpgmeAddSubkey, seahorse_gpgme_add_subkey,
 SeahorseGpgmeAddSubkey*  seahorse_gpgme_add_subkey_new               (SeahorseGpgmeKey *pkey,
                                                                       GtkWindow *parent);
 
-SeahorseGpgmeKeyGenType  seahorse_gpgme_add_subkey_get_selected_algo (SeahorseGpgmeAddSubkey *self);
+SeahorsePgpKeyAlgorithm  seahorse_gpgme_add_subkey_get_selected_algo (SeahorseGpgmeAddSubkey *self);
+
+SeahorsePgpSubkeyUsage   seahorse_gpgme_add_subkey_get_selected_usage (SeahorseGpgmeAddSubkey *self);
 
 guint                    seahorse_gpgme_add_subkey_get_keysize       (SeahorseGpgmeAddSubkey *self);
 

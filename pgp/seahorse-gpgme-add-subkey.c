@@ -41,6 +41,9 @@ struct _SeahorseGpgmeAddSubkey {
     GtkWidget *algo_row;
     GtkCustomFilter *algo_filter;
 
+    GtkWidget *usage_row;
+    GtkCustomFilter *usage_filter;
+
     GtkWidget *length_row;
     GtkAdjustment *length_row_adjustment;
 
@@ -60,40 +63,26 @@ static void
 on_algo_row_notify_selected (GObject *object, GParamSpec *pspec, void *user_data)
 {
     SeahorseGpgmeAddSubkey *self = SEAHORSE_GPGME_ADD_SUBKEY (user_data);
-    SeahorseGpgmeKeyGenType algo;
+    SeahorsePgpKeyAlgorithm algo;
     AdwSpinRow *length_row;
     GtkAdjustment *adjustment;
+    unsigned int default_val, lower, upper;
 
     /* Change the key length row based on the selected algo */
     algo = seahorse_gpgme_add_subkey_get_selected_algo (self);
     length_row = ADW_SPIN_ROW (self->length_row);
     adjustment = self->length_row_adjustment;
 
-    switch (algo) {
-        case SEAHORSE_GPGME_KEY_GEN_TYPE_DSA:
-            gtk_adjustment_set_lower (adjustment, DSA_MIN);
-            gtk_adjustment_set_upper (adjustment, DSA_MAX);
-            adw_spin_row_set_value (length_row, MIN (LENGTH_DEFAULT, DSA_MAX));
-            break;
-        /* ElGamal */
-        case SEAHORSE_GPGME_KEY_GEN_TYPE_ELGAMAL:
-            gtk_adjustment_set_lower (adjustment, ELGAMAL_MIN);
-            gtk_adjustment_set_upper (adjustment, LENGTH_MAX);
-            adw_spin_row_set_value (length_row, LENGTH_DEFAULT);
-            break;
-        /* RSA */
-        case SEAHORSE_GPGME_KEY_GEN_TYPE_RSA_SIGN:
-        case SEAHORSE_GPGME_KEY_GEN_TYPE_RSA_ENCRYPT:
-            gtk_adjustment_set_lower (adjustment, RSA_MIN);
-            gtk_adjustment_set_upper (adjustment, LENGTH_MAX);
-            adw_spin_row_set_value (length_row, LENGTH_DEFAULT);
-            break;
-        default:
-            g_return_if_reached ();
+    if (seahorse_pgp_key_algorithm_get_length_values (algo, &default_val, &lower, &upper)) {
+        gtk_adjustment_set_lower (adjustment, lower);
+        gtk_adjustment_set_upper (adjustment, upper);
+        adw_spin_row_set_value (length_row, default_val);
     }
+
+    gtk_filter_changed (GTK_FILTER (self->usage_filter), GTK_FILTER_CHANGE_DIFFERENT);
 }
 
-SeahorseGpgmeKeyGenType
+SeahorsePgpKeyAlgorithm
 seahorse_gpgme_add_subkey_get_selected_algo (SeahorseGpgmeAddSubkey *self)
 {
     AdwComboRow *algo_row;
@@ -103,6 +92,19 @@ seahorse_gpgme_add_subkey_get_selected_algo (SeahorseGpgmeAddSubkey *self)
 
     algo_row = ADW_COMBO_ROW (self->algo_row);
     selected_item = adw_combo_row_get_selected_item (algo_row);
+    return adw_enum_list_item_get_value (ADW_ENUM_LIST_ITEM (selected_item));
+}
+
+SeahorsePgpSubkeyUsage
+seahorse_gpgme_add_subkey_get_selected_usage (SeahorseGpgmeAddSubkey *self)
+{
+    AdwComboRow *usage_row;
+    GObject *selected_item;
+
+    g_return_val_if_fail (SEAHORSE_GPGME_IS_ADD_SUBKEY (self), 0);
+
+    usage_row = ADW_COMBO_ROW (self->usage_row);
+    selected_item = adw_combo_row_get_selected_item (usage_row);
     return adw_enum_list_item_get_value (ADW_ENUM_LIST_ITEM (selected_item));
 }
 
@@ -173,15 +175,14 @@ seahorse_gpgme_add_subkey_finalize (GObject *obj)
 }
 
 static gboolean
-filter_enums (void *item, void *user_data)
+filter_algos (void *item, void *user_data)
 {
     AdwEnumListItem *enum_item = ADW_ENUM_LIST_ITEM (item);
 
     switch (adw_enum_list_item_get_value (enum_item)) {
-        case SEAHORSE_GPGME_KEY_GEN_TYPE_DSA:
-        case SEAHORSE_GPGME_KEY_GEN_TYPE_ELGAMAL:
-        case SEAHORSE_GPGME_KEY_GEN_TYPE_RSA_SIGN:
-        case SEAHORSE_GPGME_KEY_GEN_TYPE_RSA_ENCRYPT:
+        case SEAHORSE_PGP_KEY_ALGORITHM_RSA:
+        case SEAHORSE_PGP_KEY_ALGORITHM_DSA:
+        case SEAHORSE_PGP_KEY_ALGORITHM_ELGAMAL:
             return TRUE;
     }
 
@@ -190,11 +191,45 @@ filter_enums (void *item, void *user_data)
 
 static char *
 algo_to_string (void                    *user_data,
-                SeahorseGpgmeKeyGenType  algo)
+                SeahorsePgpKeyAlgorithm  algo)
 {
     const char *str;
 
-    str = seahorse_gpgme_key_enc_type_to_string (algo);
+    str = seahorse_pgp_key_algorithm_to_string (algo);
+    g_return_val_if_fail (str != NULL, NULL);
+    return g_strdup (str);
+}
+
+static gboolean
+filter_usages (void *item, void *user_data)
+{
+    SeahorseGpgmeAddSubkey *self = SEAHORSE_GPGME_ADD_SUBKEY (user_data);
+    AdwEnumListItem *enum_item = ADW_ENUM_LIST_ITEM (item);
+    SeahorsePgpKeyAlgorithm algo;
+    SeahorsePgpSubkeyUsage usage;
+
+    algo = seahorse_gpgme_add_subkey_get_selected_algo (self);
+    usage = adw_enum_list_item_get_value (enum_item);
+    switch (algo) {
+        case SEAHORSE_PGP_KEY_ALGORITHM_RSA:
+            return usage == SEAHORSE_PGP_SUBKEY_USAGE_SIGN_ONLY
+                || usage == SEAHORSE_PGP_SUBKEY_USAGE_ENCRYPT_ONLY;
+        case SEAHORSE_PGP_KEY_ALGORITHM_DSA:
+            return usage == SEAHORSE_PGP_SUBKEY_USAGE_SIGN_ONLY;
+        case SEAHORSE_PGP_KEY_ALGORITHM_ELGAMAL:
+            return usage == SEAHORSE_PGP_SUBKEY_USAGE_SIGN_ONLY;
+        default:
+            return FALSE;
+    }
+}
+
+static char *
+usage_to_string (void                   *user_data,
+                 SeahorsePgpSubkeyUsage  usage)
+{
+    const char *str;
+
+    str = seahorse_pgp_subkey_usage_to_string (usage);
     g_return_val_if_fail (str != NULL, NULL);
     return g_strdup (str);
 }
@@ -218,11 +253,15 @@ seahorse_gpgme_add_subkey_init (SeahorseGpgmeAddSubkey *self)
     g_autoptr (GDateTime) now = NULL;
     g_autoptr (GDateTime) next_year = NULL;
 
-    g_type_ensure (SEAHORSE_TYPE_GPGME_KEY_GEN_TYPE);
+    g_type_ensure (SEAHORSE_TYPE_PGP_KEY_ALGORITHM);
+    g_type_ensure (SEAHORSE_TYPE_PGP_SUBKEY_USAGE);
 
     gtk_widget_init_template (GTK_WIDGET (self));
 
-    gtk_custom_filter_set_filter_func (self->algo_filter, filter_enums, self, NULL);
+    gtk_custom_filter_set_filter_func (self->algo_filter, filter_algos, self, NULL);
+    gtk_custom_filter_set_filter_func (self->usage_filter, filter_usages, self, NULL);
+
+    on_algo_row_notify_selected (G_OBJECT (self->algo_row), NULL, self);
 
     now = g_date_time_new_now_utc ();
     next_year = g_date_time_add_years (now, 1);
@@ -250,11 +289,14 @@ seahorse_gpgme_add_subkey_class_init (SeahorseGpgmeAddSubkeyClass *klass)
     gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/Seahorse/seahorse-gpgme-add-subkey.ui");
     gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeAddSubkey, algo_row);
     gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeAddSubkey, algo_filter);
+    gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeAddSubkey, usage_row);
+    gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeAddSubkey, usage_filter);
     gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeAddSubkey, length_row);
     gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeAddSubkey, length_row_adjustment);
     gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeAddSubkey, expires_datepicker);
     gtk_widget_class_bind_template_child (widget_class, SeahorseGpgmeAddSubkey, never_expires_check);
     gtk_widget_class_bind_template_callback (widget_class, algo_to_string);
+    gtk_widget_class_bind_template_callback (widget_class, usage_to_string);
     gtk_widget_class_bind_template_callback (widget_class, on_algo_row_notify_selected);
 }
 
