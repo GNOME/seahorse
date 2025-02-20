@@ -10,18 +10,18 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues/\n"
-"POT-Creation-Date: 2025-02-13 05:09+0000\n"
-"PO-Revision-Date: 2025-02-13 23:40+0100\n"
+"POT-Creation-Date: 2025-02-19 02:02+0000\n"
+"PO-Revision-Date: 2025-02-20 23:19+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
-"%100==4 ? 3 : 0);\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || "
+"n%100==4 ? 3 : 0);\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 3.4.2\n"
 
 #: common/add-keyserver-dialog.vala:48
 msgid "Custom"
@@ -65,7 +65,7 @@ msgstr "Če izbrišete element, bo trajno izgubljen"
 #: common/delete-operation.vala:62 common/passphrase-prompt.ui:7
 #: common/seahorse-add-keyserver.ui:22 gkr/add-item-dialog.ui:27
 #: gkr/add-keyring-dialog.ui:27 libseahorse/seahorse-progress.ui:14
-#: pgp/seahorse-gpgme-add-subkey.ui:85 pgp/seahorse-gpgme-add-uid.ui:24
+#: pgp/seahorse-gpgme-add-subkey.ui:107 pgp/seahorse-gpgme-add-uid.ui:24
 #: pgp/seahorse-gpgme-expires-dialog.ui:16
 #: pgp/seahorse-gpgme-generate-dialog.ui:16 pgp/seahorse-gpgme-photos.c:216
 #: pgp/seahorse-gpgme-revoke-dialog.ui:23 pgp/seahorse-gpgme-sign-dialog.ui:23
@@ -738,23 +738,7 @@ msgstr "_Nastavi kot privzeto"
 msgid "Change _Password"
 msgstr "_Spremeni geslo"
 
-#: pgp/seahorse-gpgme-add-subkey.c:197 pgp/seahorse-gpgme-generate-dialog.c:85
-msgid "DSA (sign only)"
-msgstr "DSA (le podpis)"
-
-#: pgp/seahorse-gpgme-add-subkey.c:199
-msgid "ElGamal (encrypt only)"
-msgstr "ElGamal (le šifriranje)"
-
-#: pgp/seahorse-gpgme-add-subkey.c:201 pgp/seahorse-gpgme-generate-dialog.c:86
-msgid "RSA (sign only)"
-msgstr "RSA (le podpis)"
-
-#: pgp/seahorse-gpgme-add-subkey.c:203
-msgid "RSA (encrypt only)"
-msgstr "RSA (le šifriranje)"
-
-#: pgp/seahorse-gpgme-add-subkey.c:217
+#: pgp/seahorse-gpgme-add-subkey.c:245
 #, c-format
 msgid "Add subkey to %s"
 msgstr "Dodaj podključ v %s"
@@ -764,26 +748,30 @@ msgid "Key _Type"
 msgstr "Vrsta _ključa"
 
 #: pgp/seahorse-gpgme-add-subkey.ui:41
+msgid "Key _Usage"
+msgstr "_Raba ključa"
+
+#: pgp/seahorse-gpgme-add-subkey.ui:64
 msgid "Key _Length"
 msgstr "_Dolžina ključa"
 
-#: pgp/seahorse-gpgme-add-subkey.ui:59
+#: pgp/seahorse-gpgme-add-subkey.ui:81
 msgid "Expiration Date"
 msgstr "Datum preteka"
 
-#: pgp/seahorse-gpgme-add-subkey.ui:67
+#: pgp/seahorse-gpgme-add-subkey.ui:89
 msgid "Never E_xpires"
 msgstr "Nikoli _ne preteče"
 
-#: pgp/seahorse-gpgme-add-subkey.ui:68
+#: pgp/seahorse-gpgme-add-subkey.ui:90
 msgid "If key never expires"
 msgstr "V kolikor ključ nikoli ne poteče"
 
-#: pgp/seahorse-gpgme-add-subkey.ui:90 ssh/generate-key-dialog.ui:35
+#: pgp/seahorse-gpgme-add-subkey.ui:112 ssh/generate-key-dialog.ui:35
 msgid "_Generate"
 msgstr "_Ustvari"
 
-#: pgp/seahorse-gpgme-add-subkey.ui:92
+#: pgp/seahorse-gpgme-add-subkey.ui:114
 msgid "Generate a new subkey"
 msgstr "Ustvari novi podključ"
 
@@ -813,7 +801,7 @@ msgstr "Polno _ime"
 msgid "Must be at least 5 characters long"
 msgstr "Najmanjša dolžina je 5 znakov."
 
-#: pgp/seahorse-gpgme-add-uid.ui:64 pgp/seahorse-gpgme-generate-dialog.ui:81
+#: pgp/seahorse-gpgme-add-uid.ui:64 pgp/seahorse-gpgme-generate-dialog.ui:80
 msgid "_Email Address"
 msgstr "_Elektronski naslov"
 
@@ -858,21 +846,12 @@ msgstr "S_premeni"
 msgid "_Never expires"
 msgstr "_Nikoli ne preteče"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:83 pkcs11/pkcs11-generate.vala:44
-#: pkcs11/pkcs11-private-key.vala:75
-msgid "RSA"
-msgstr "RSA"
-
-#: pgp/seahorse-gpgme-generate-dialog.c:84
-msgid "DSA ElGamal"
-msgstr "DSA ElGamal"
-
-#: pgp/seahorse-gpgme-generate-dialog.c:99
+#: pgp/seahorse-gpgme-generate-dialog.c:98
 msgid "Couldn’t generate PGP key"
 msgstr "Ni mogoče ustvariti ključa PGP"
 
 #. Has line breaks because GtkLabel is completely broken WRT wrapping
-#: pgp/seahorse-gpgme-generate-dialog.c:158
+#: pgp/seahorse-gpgme-generate-dialog.c:146
 msgid ""
 "When creating a key we need to generate a lot of\n"
 "random data and we need you to help. It’s a good\n"
@@ -886,15 +865,15 @@ msgstr ""
 "tipkanje, premikanje miške, zaganjanje in zapiranje\n"
 "programov in podobno. Na ta način se ustvarja naključnost."
 
-#: pgp/seahorse-gpgme-generate-dialog.c:163 pkcs11/pkcs11-generate.vala:169
+#: pgp/seahorse-gpgme-generate-dialog.c:151 pkcs11/pkcs11-generate.vala:169
 msgid "Generating key"
 msgstr "Ustvari ključ"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:197
+#: pgp/seahorse-gpgme-generate-dialog.c:237
 msgid "Passphrase for New PGP Key"
 msgstr "Šifrirno geslo za nov ključ PGP"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:198
+#: pgp/seahorse-gpgme-generate-dialog.c:238
 msgid "Enter the passphrase for your new key twice."
 msgstr "Dvakrat vnesite šifrirno geslo za vaš novi ključ."
 
@@ -915,31 +894,31 @@ msgstr "Ustvari nov ključ"
 msgid "A PGP key allows you to encrypt email or files to other people."
 msgstr "Ključ PGP omogoča šifriranje elektronske pošte za druge uporabnike."
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:74
+#: pgp/seahorse-gpgme-generate-dialog.ui:73
 msgid "Name must be at least 5 characters long."
 msgstr "Najmanjša sprejemljiva dolžina imena je 5 znakov."
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:91 pkcs11/pkcs11-generate.ui:85
+#: pgp/seahorse-gpgme-generate-dialog.ui:89 pkcs11/pkcs11-generate.ui:85
 msgid "Advanced key options"
 msgstr "Napredne možnosti ključa"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:94
+#: pgp/seahorse-gpgme-generate-dialog.ui:92
 msgid "_Comment"
 msgstr "_Opomba"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:101 ssh/generate-key-dialog.ui:78
+#: pgp/seahorse-gpgme-generate-dialog.ui:98 ssh/generate-key-dialog.ui:78
 msgid "Encryption _Type"
 msgstr "Vrsta _šifriranja"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:108 ssh/generate-key-dialog.ui:102
+#: pgp/seahorse-gpgme-generate-dialog.ui:122 ssh/generate-key-dialog.ui:102
 msgid "Key _Strength (bits)"
 msgstr "_Moč ključa (v bitih):"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:122
+#: pgp/seahorse-gpgme-generate-dialog.ui:143
 msgid "Ne_ver Expires"
 msgstr "_Nikoli ne preteče"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:134
+#: pgp/seahorse-gpgme-generate-dialog.ui:156
 msgid "E_xpiration Date"
 msgstr "Datum _preteka"
 
@@ -964,13 +943,38 @@ msgstr "Zaščiteni ključi PGP"
 msgid "PGP keys"
 msgstr "Ključi PGP"
 
-#: pgp/seahorse-gpgme-key-op.c:362
+#: pgp/seahorse-gpgme-key-op.c:290
 msgid "Wrong password"
 msgstr "Napačno geslo"
 
-#: pgp/seahorse-gpgme-key-op.c:362
+#: pgp/seahorse-gpgme-key-op.c:290
 msgid "This was the third time you entered a wrong password. Please try again."
 msgstr "To je bil tretji poskus prijave z napačnim geslom. Poskusite znova."
+
+#: pgp/seahorse-gpgme-key-gen-type.c:36 pgp/seahorse-pgp-key-algorithm.c:32
+#: pkcs11/pkcs11-generate.vala:44 pkcs11/pkcs11-private-key.vala:75
+msgid "RSA"
+msgstr "RSA"
+
+#: pgp/seahorse-gpgme-key-gen-type.c:38
+msgid "RSA (sign only)"
+msgstr "RSA (le podpis)"
+
+#: pgp/seahorse-gpgme-key-gen-type.c:40
+msgid "RSA (encrypt only)"
+msgstr "RSA (le šifriranje)"
+
+#: pgp/seahorse-gpgme-key-gen-type.c:42
+msgid "DSA (sign only)"
+msgstr "DSA (le podpis)"
+
+#: pgp/seahorse-gpgme-key-gen-type.c:44
+msgid "DSA ElGamal"
+msgstr "DSA ElGamal"
+
+#: pgp/seahorse-gpgme-key-gen-type.c:46
+msgid "ElGamal (encrypt only)"
+msgstr "ElGamal (le šifriranje)"
 
 #: pgp/seahorse-gpgme-keyring-panel.ui:4
 msgid "GPG Keyring"
@@ -1267,7 +1271,7 @@ msgctxt "Algorithm"
 msgid "Unknown"
 msgstr "Neznano"
 
-#: pgp/seahorse-gpgme-subkey.c:93
+#: pgp/seahorse-gpgme-subkey.c:93 pgp/seahorse-pgp-key-algorithm.c:36
 msgid "ElGamal"
 msgstr "ElGamal"
 
@@ -1409,6 +1413,26 @@ msgstr "Ključi PGP"
 msgid "PGP keys are for encrypting email or files"
 msgstr ""
 "Ključi PGP se uporabljajo za šifriranje elektronskih sporočil in datotek"
+
+#: pgp/seahorse-pgp-key-algorithm.c:34 pkcs11/pkcs11-private-key.vala:77
+msgid "DSA"
+msgstr "DSA"
+
+#: pgp/seahorse-pgp-key-algorithm.c:38
+msgid "ECC"
+msgstr "ECC"
+
+#: pgp/seahorse-pgp-key-algorithm.c:40 pkcs11/pkcs11-private-key.vala:81
+msgid "ECDSA"
+msgstr "ECDSA"
+
+#: pgp/seahorse-pgp-key-algorithm.c:42
+msgid "ECDH"
+msgstr "ECDH"
+
+#: pgp/seahorse-pgp-key-algorithm.c:44
+msgid "EdDSA"
+msgstr "EdDSA"
 
 #: pgp/seahorse-pgp-key-panel.c:117
 msgid "Error changing password"
@@ -1570,43 +1594,43 @@ msgstr "Izbriši"
 msgid "Usages"
 msgstr "Uporaba"
 
-#: pgp/seahorse-pgp-subkey-list-box.c:192
+#: pgp/seahorse-pgp-subkey-list-box.c:194
 msgid "Add subkey"
 msgstr "Dodaj podključ"
 
-#: pgp/seahorse-pgp-subkey-list-box.c:208
+#: pgp/seahorse-pgp-subkey-list-box.c:210
 msgid "Subkeys"
 msgstr "Podključi"
 
-#: pgp/seahorse-pgp-subkey-list-box.c:313
+#: pgp/seahorse-pgp-subkey-list-box.c:315
 msgid "Couldn't Delete Subkey"
 msgstr "Ni mogoče izbrisati podključa"
 
-#: pgp/seahorse-pgp-subkey-list-box.c:386
+#: pgp/seahorse-pgp-subkey-list-box.c:388
 msgid "Subkey was revoked"
 msgstr "Podključ je bil preklican"
 
-#: pgp/seahorse-pgp-subkey-list-box.c:393
+#: pgp/seahorse-pgp-subkey-list-box.c:395
 msgid "Subkey has expired"
 msgstr "Podključ je pretekel"
 
-#: pgp/seahorse-pgp-subkey-list-box.c:396
+#: pgp/seahorse-pgp-subkey-list-box.c:398
 msgid "Subkey is disabled"
 msgstr "Podključ je onemogočen"
 
-#: pgp/seahorse-pgp-subkey-list-box.c:406
+#: pgp/seahorse-pgp-subkey-list-box.c:408
 #: pkcs11/pkcs11-certificate-widget.vala:85
 msgid "Never expires"
 msgstr "Nikoli ne preteče"
 
 #. Translators: first part is the algorithm, second part is the length,
 #. * e.g. "RSA" (2048 bit)
-#: pgp/seahorse-pgp-subkey-list-box.c:429
+#: pgp/seahorse-pgp-subkey-list-box.c:431
 #, c-format
 msgid "%s (%d bit)"
 msgstr "%s (%d bit)"
 
-#: pgp/seahorse-pgp-subkey-list-box.c:436
+#: pgp/seahorse-pgp-subkey-list-box.c:438
 #: pkcs11/pkcs11-certificate-widget.vala:80
 #: pkcs11/pkcs11-certificate-widget.vala:293
 #: pkcs11/pkcs11-certificate-widget.vala:307
@@ -1614,6 +1638,18 @@ msgstr "%s (%d bit)"
 #: pkcs11/pkcs11-private-key-widget.vala:54 pkcs11/pkcs11-token-panel.vala:67
 msgid "Unknown"
 msgstr "Neznano"
+
+#: pgp/seahorse-pgp-subkey-usage.c:32
+msgid "All Usages"
+msgstr "Vse rabe"
+
+#: pgp/seahorse-pgp-subkey-usage.c:34
+msgid "Sign Only"
+msgstr "Samo podpiši"
+
+#: pgp/seahorse-pgp-subkey-usage.c:36
+msgid "Encrypt Only"
+msgstr "Samo šifriraj"
 
 #: pgp/seahorse-pgp-subkey.c:212
 msgid "Encrypt"
@@ -1985,17 +2021,9 @@ msgstr "Osebni ključ"
 msgid "Unnamed key"
 msgstr "Neimenovani ključ"
 
-#: pkcs11/pkcs11-private-key.vala:77
-msgid "DSA"
-msgstr "DSA"
-
 #: pkcs11/pkcs11-private-key.vala:79
 msgid "DH"
 msgstr "DH"
-
-#: pkcs11/pkcs11-private-key.vala:81
-msgid "ECDSA"
-msgstr "ECDSA"
 
 #: pkcs11/pkcs11-request-certificate-dialog.ui:50
 msgid "Create a certificate request file"
