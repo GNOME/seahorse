@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues/\n"
-"POT-Creation-Date: 2025-02-13 05:09+0000\n"
-"PO-Revision-Date: 2025-02-13 23:44+0200\n"
+"POT-Creation-Date: 2025-02-19 02:02+0000\n"
+"PO-Revision-Date: 2025-02-21 20:59+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -65,7 +65,7 @@ msgstr "Якщо вилучити об'єкт, його буде остаточ�
 #: common/delete-operation.vala:62 common/passphrase-prompt.ui:7
 #: common/seahorse-add-keyserver.ui:22 gkr/add-item-dialog.ui:27
 #: gkr/add-keyring-dialog.ui:27 libseahorse/seahorse-progress.ui:14
-#: pgp/seahorse-gpgme-add-subkey.ui:85 pgp/seahorse-gpgme-add-uid.ui:24
+#: pgp/seahorse-gpgme-add-subkey.ui:107 pgp/seahorse-gpgme-add-uid.ui:24
 #: pgp/seahorse-gpgme-expires-dialog.ui:16
 #: pgp/seahorse-gpgme-generate-dialog.ui:16 pgp/seahorse-gpgme-photos.c:216
 #: pgp/seahorse-gpgme-revoke-dialog.ui:23 pgp/seahorse-gpgme-sign-dialog.ui:23
@@ -738,23 +738,7 @@ msgstr "_Встановити типовим"
 msgid "Change _Password"
 msgstr "Змінити _пароль"
 
-#: pgp/seahorse-gpgme-add-subkey.c:197 pgp/seahorse-gpgme-generate-dialog.c:85
-msgid "DSA (sign only)"
-msgstr "DSA (лише підпис)"
-
-#: pgp/seahorse-gpgme-add-subkey.c:199
-msgid "ElGamal (encrypt only)"
-msgstr "ElGamal (лише шифрування)"
-
-#: pgp/seahorse-gpgme-add-subkey.c:201 pgp/seahorse-gpgme-generate-dialog.c:86
-msgid "RSA (sign only)"
-msgstr "RSA (лише підпис)"
-
-#: pgp/seahorse-gpgme-add-subkey.c:203
-msgid "RSA (encrypt only)"
-msgstr "RSA (лише шифрування)"
-
-#: pgp/seahorse-gpgme-add-subkey.c:217
+#: pgp/seahorse-gpgme-add-subkey.c:245
 #, c-format
 msgid "Add subkey to %s"
 msgstr "Додати підключ до %s"
@@ -764,26 +748,31 @@ msgid "Key _Type"
 msgstr "Т_ип ключа"
 
 #: pgp/seahorse-gpgme-add-subkey.ui:41
+#| msgid "Key _size"
+msgid "Key _Usage"
+msgstr "_Використання ключа"
+
+#: pgp/seahorse-gpgme-add-subkey.ui:64
 msgid "Key _Length"
 msgstr "Дов_жина ключа"
 
-#: pgp/seahorse-gpgme-add-subkey.ui:59
+#: pgp/seahorse-gpgme-add-subkey.ui:81
 msgid "Expiration Date"
 msgstr "Закінчується дія"
 
-#: pgp/seahorse-gpgme-add-subkey.ui:67
+#: pgp/seahorse-gpgme-add-subkey.ui:89
 msgid "Never E_xpires"
 msgstr "Ніколи _не закінчується термін дії"
 
-#: pgp/seahorse-gpgme-add-subkey.ui:68
+#: pgp/seahorse-gpgme-add-subkey.ui:90
 msgid "If key never expires"
 msgstr "Якщо дія ключа ніколи не закінчується"
 
-#: pgp/seahorse-gpgme-add-subkey.ui:90 ssh/generate-key-dialog.ui:35
+#: pgp/seahorse-gpgme-add-subkey.ui:112 ssh/generate-key-dialog.ui:35
 msgid "_Generate"
 msgstr "С_творити"
 
-#: pgp/seahorse-gpgme-add-subkey.ui:92
+#: pgp/seahorse-gpgme-add-subkey.ui:114
 msgid "Generate a new subkey"
 msgstr "Створити новий підключ"
 
@@ -813,7 +802,7 @@ msgstr "_Ім'я повністю"
 msgid "Must be at least 5 characters long"
 msgstr "Довжина повинна бути не менша ніж 5 символів"
 
-#: pgp/seahorse-gpgme-add-uid.ui:64 pgp/seahorse-gpgme-generate-dialog.ui:81
+#: pgp/seahorse-gpgme-add-uid.ui:64 pgp/seahorse-gpgme-generate-dialog.ui:80
 msgid "_Email Address"
 msgstr "_Адреса ел. пошти"
 
@@ -858,21 +847,12 @@ msgstr "_Змінити"
 msgid "_Never expires"
 msgstr "_Ніколи не закінчується"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:83 pkcs11/pkcs11-generate.vala:44
-#: pkcs11/pkcs11-private-key.vala:75
-msgid "RSA"
-msgstr "RSA"
-
-#: pgp/seahorse-gpgme-generate-dialog.c:84
-msgid "DSA ElGamal"
-msgstr "DSA ElGamal"
-
-#: pgp/seahorse-gpgme-generate-dialog.c:99
+#: pgp/seahorse-gpgme-generate-dialog.c:98
 msgid "Couldn’t generate PGP key"
 msgstr "Не вдалося створити ключ PGP"
 
 #. Has line breaks because GtkLabel is completely broken WRT wrapping
-#: pgp/seahorse-gpgme-generate-dialog.c:158
+#: pgp/seahorse-gpgme-generate-dialog.c:146
 msgid ""
 "When creating a key we need to generate a lot of\n"
 "random data and we need you to help. It’s a good\n"
@@ -886,15 +866,15 @@ msgstr ""
 "клавіатурі, рухання мишкою, користування програмами.\n"
 "Це дає системі випадкові дані, які їй потрібно."
 
-#: pgp/seahorse-gpgme-generate-dialog.c:163 pkcs11/pkcs11-generate.vala:169
+#: pgp/seahorse-gpgme-generate-dialog.c:151 pkcs11/pkcs11-generate.vala:169
 msgid "Generating key"
 msgstr "Створення ключа"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:197
+#: pgp/seahorse-gpgme-generate-dialog.c:237
 msgid "Passphrase for New PGP Key"
 msgstr "Пароль для нового PGP ключа"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:198
+#: pgp/seahorse-gpgme-generate-dialog.c:238
 msgid "Enter the passphrase for your new key twice."
 msgstr "Введіть пароль для нового ключа двічі."
 
@@ -915,31 +895,31 @@ msgstr "Створити новий ключ"
 msgid "A PGP key allows you to encrypt email or files to other people."
 msgstr "Ключ PGP дозволяє шифрувати пошту та файли для інших людей."
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:74
+#: pgp/seahorse-gpgme-generate-dialog.ui:73
 msgid "Name must be at least 5 characters long."
 msgstr "Довжина назви повинна бути не менша ніж 5 символів."
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:91 pkcs11/pkcs11-generate.ui:85
+#: pgp/seahorse-gpgme-generate-dialog.ui:89 pkcs11/pkcs11-generate.ui:85
 msgid "Advanced key options"
 msgstr "Додаткові параметри ключа"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:94
+#: pgp/seahorse-gpgme-generate-dialog.ui:92
 msgid "_Comment"
 msgstr "_Коментар"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:101 ssh/generate-key-dialog.ui:78
+#: pgp/seahorse-gpgme-generate-dialog.ui:98 ssh/generate-key-dialog.ui:78
 msgid "Encryption _Type"
 msgstr "_Тип шифрування"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:108 ssh/generate-key-dialog.ui:102
+#: pgp/seahorse-gpgme-generate-dialog.ui:122 ssh/generate-key-dialog.ui:102
 msgid "Key _Strength (bits)"
 msgstr "_Міцність ключа (біти):"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:122
+#: pgp/seahorse-gpgme-generate-dialog.ui:143
 msgid "Ne_ver Expires"
 msgstr "Н_іколи не закінчується"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:134
+#: pgp/seahorse-gpgme-generate-dialog.ui:156
 msgid "E_xpiration Date"
 msgstr "_Термін дії:"
 
@@ -964,14 +944,39 @@ msgstr "Захищені ключі через PGP"
 msgid "PGP keys"
 msgstr "Ключ PGP"
 
-#: pgp/seahorse-gpgme-key-op.c:362
+#: pgp/seahorse-gpgme-key-op.c:290
 msgid "Wrong password"
 msgstr "Неправильний пароль"
 
-#: pgp/seahorse-gpgme-key-op.c:362
+#: pgp/seahorse-gpgme-key-op.c:290
 msgid ""
 "This was the third time you entered a wrong password. Please try again."
 msgstr "Ви тричі ввели неправильний пароль. Спробуйте ще раз."
+
+#: pgp/seahorse-gpgme-key-gen-type.c:36 pgp/seahorse-pgp-key-algorithm.c:32
+#: pkcs11/pkcs11-generate.vala:44 pkcs11/pkcs11-private-key.vala:75
+msgid "RSA"
+msgstr "RSA"
+
+#: pgp/seahorse-gpgme-key-gen-type.c:38
+msgid "RSA (sign only)"
+msgstr "RSA (лише підпис)"
+
+#: pgp/seahorse-gpgme-key-gen-type.c:40
+msgid "RSA (encrypt only)"
+msgstr "RSA (лише шифрування)"
+
+#: pgp/seahorse-gpgme-key-gen-type.c:42
+msgid "DSA (sign only)"
+msgstr "DSA (лише підпис)"
+
+#: pgp/seahorse-gpgme-key-gen-type.c:44
+msgid "DSA ElGamal"
+msgstr "DSA ElGamal"
+
+#: pgp/seahorse-gpgme-key-gen-type.c:46
+msgid "ElGamal (encrypt only)"
+msgstr "ElGamal (лише шифрування)"
 
 #: pgp/seahorse-gpgme-keyring-panel.ui:4
 msgid "GPG Keyring"
@@ -1039,12 +1044,10 @@ msgid "GnuPG: default keyring directory"
 msgstr "GnuPG: типовий каталог в’язки ключів"
 
 #: pgp/seahorse-gpgme-photos.c:97
-#| msgid "Couldn’t add photo"
 msgid "Couldn’t add photo: invalid format"
 msgstr "Не вдалося додати фотографію, некоректний формат"
 
 #: pgp/seahorse-gpgme-photos.c:100
-#| msgid "Couldn’t add photo"
 msgid "Couldn’t add photo: unknown reason"
 msgstr "Не вдалося додати фотографію, невідома причина"
 
@@ -1054,9 +1057,6 @@ msgstr "Фотографія є надто великою"
 
 #: pgp/seahorse-gpgme-photos.c:212
 #, c-format
-#| msgid ""
-#| "<big><b>The photo is too large</b></big>\n"
-#| "The recommended size for a photo on your key is %d × %d pixels."
 msgid "The recommended size for a photo on your key is %d × %d pixels"
 msgstr "Рекомендований розмір фотографії на вашому ключі —  %d ⨯ %d точок"
 
@@ -1278,7 +1278,7 @@ msgctxt "Algorithm"
 msgid "Unknown"
 msgstr "Невідомо"
 
-#: pgp/seahorse-gpgme-subkey.c:93
+#: pgp/seahorse-gpgme-subkey.c:93 pgp/seahorse-pgp-key-algorithm.c:36
 msgid "ElGamal"
 msgstr "ElGamal"
 
@@ -1422,6 +1422,26 @@ msgstr "Ключі PGP"
 msgid "PGP keys are for encrypting email or files"
 msgstr "Ключі PGP для шифрування пошти або файлів"
 
+#: pgp/seahorse-pgp-key-algorithm.c:34 pkcs11/pkcs11-private-key.vala:77
+msgid "DSA"
+msgstr "DSA"
+
+#: pgp/seahorse-pgp-key-algorithm.c:38
+msgid "ECC"
+msgstr "ECC"
+
+#: pgp/seahorse-pgp-key-algorithm.c:40 pkcs11/pkcs11-private-key.vala:81
+msgid "ECDSA"
+msgstr "ECDSA"
+
+#: pgp/seahorse-pgp-key-algorithm.c:42
+msgid "ECDH"
+msgstr "ECDH"
+
+#: pgp/seahorse-pgp-key-algorithm.c:44
+msgid "EdDSA"
+msgstr "EdDSA"
+
 #: pgp/seahorse-pgp-key-panel.c:117
 msgid "Error changing password"
 msgstr "Помилка під час спроби змінити пароль"
@@ -1551,7 +1571,6 @@ msgid "PGP key"
 msgstr "Ключ PGP"
 
 #: pgp/seahorse-pgp-photos-widget.c:86
-#| msgid "Couldn’t add photo"
 msgid "Couldn't add photo"
 msgstr "Не вдалося додати фотографію"
 
@@ -1582,43 +1601,43 @@ msgstr "Вилучити"
 msgid "Usages"
 msgstr "Використання"
 
-#: pgp/seahorse-pgp-subkey-list-box.c:192
+#: pgp/seahorse-pgp-subkey-list-box.c:194
 msgid "Add subkey"
 msgstr "Додати підключ"
 
-#: pgp/seahorse-pgp-subkey-list-box.c:208
+#: pgp/seahorse-pgp-subkey-list-box.c:210
 msgid "Subkeys"
 msgstr "Підключі"
 
-#: pgp/seahorse-pgp-subkey-list-box.c:313
+#: pgp/seahorse-pgp-subkey-list-box.c:315
 msgid "Couldn't Delete Subkey"
 msgstr "Не вдалося вилучити підключ"
 
-#: pgp/seahorse-pgp-subkey-list-box.c:386
+#: pgp/seahorse-pgp-subkey-list-box.c:388
 msgid "Subkey was revoked"
 msgstr "Підключ було відкликано"
 
-#: pgp/seahorse-pgp-subkey-list-box.c:393
+#: pgp/seahorse-pgp-subkey-list-box.c:395
 msgid "Subkey has expired"
 msgstr "Термін дії підключа закінчився"
 
-#: pgp/seahorse-pgp-subkey-list-box.c:396
+#: pgp/seahorse-pgp-subkey-list-box.c:398
 msgid "Subkey is disabled"
 msgstr "Підключ вимкнено"
 
-#: pgp/seahorse-pgp-subkey-list-box.c:406
+#: pgp/seahorse-pgp-subkey-list-box.c:408
 #: pkcs11/pkcs11-certificate-widget.vala:85
 msgid "Never expires"
 msgstr "Ніколи не закінчується"
 
 #. Translators: first part is the algorithm, second part is the length,
 #. * e.g. "RSA" (2048 bit)
-#: pgp/seahorse-pgp-subkey-list-box.c:429
+#: pgp/seahorse-pgp-subkey-list-box.c:431
 #, c-format
 msgid "%s (%d bit)"
 msgstr "%s (%d-бітовий)"
 
-#: pgp/seahorse-pgp-subkey-list-box.c:436
+#: pgp/seahorse-pgp-subkey-list-box.c:438
 #: pkcs11/pkcs11-certificate-widget.vala:80
 #: pkcs11/pkcs11-certificate-widget.vala:293
 #: pkcs11/pkcs11-certificate-widget.vala:307
@@ -1626,6 +1645,21 @@ msgstr "%s (%d-бітовий)"
 #: pkcs11/pkcs11-private-key-widget.vala:54 pkcs11/pkcs11-token-panel.vala:67
 msgid "Unknown"
 msgstr "Невідомо"
+
+#: pgp/seahorse-pgp-subkey-usage.c:32
+#| msgid "Usages"
+msgid "All Usages"
+msgstr "Усі використання"
+
+#: pgp/seahorse-pgp-subkey-usage.c:34
+#| msgid "Sign Key"
+msgid "Sign Only"
+msgstr "Лише підписування"
+
+#: pgp/seahorse-pgp-subkey-usage.c:36
+#| msgid "Encrypt"
+msgid "Encrypt Only"
+msgstr "Лише шифрування"
 
 #: pgp/seahorse-pgp-subkey.c:212
 msgid "Encrypt"
@@ -1997,17 +2031,9 @@ msgstr "Закритий ключ"
 msgid "Unnamed key"
 msgstr "Ключ без назви"
 
-#: pkcs11/pkcs11-private-key.vala:77
-msgid "DSA"
-msgstr "DSA"
-
 #: pkcs11/pkcs11-private-key.vala:79
 msgid "DH"
 msgstr "DH"
-
-#: pkcs11/pkcs11-private-key.vala:81
-msgid "ECDSA"
-msgstr "ECDSA"
 
 #: pkcs11/pkcs11-request-certificate-dialog.ui:50
 msgid "Create a certificate request file"
