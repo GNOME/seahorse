@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues/\n"
-"POT-Creation-Date: 2025-02-13 02:24+0000\n"
-"PO-Revision-Date: 2025-02-13 05:30+0100\n"
+"POT-Creation-Date: 2025-02-19 02:02+0000\n"
+"PO-Revision-Date: 2025-02-25 07:40+0100\n"
 "Last-Translator: Ekaterine Papava <papava.e@gtu.ge>\n"
 "Language-Team: Georgian <(nothing)>\n"
 "Language: ka\n"
@@ -58,7 +58,7 @@ msgstr "თუ ელემენტს წაშლით, მას სამ�
 #: common/delete-operation.vala:62 common/passphrase-prompt.ui:7
 #: common/seahorse-add-keyserver.ui:22 gkr/add-item-dialog.ui:27
 #: gkr/add-keyring-dialog.ui:27 libseahorse/seahorse-progress.ui:14
-#: pgp/seahorse-gpgme-add-subkey.ui:85 pgp/seahorse-gpgme-add-uid.ui:24
+#: pgp/seahorse-gpgme-add-subkey.ui:107 pgp/seahorse-gpgme-add-uid.ui:24
 #: pgp/seahorse-gpgme-expires-dialog.ui:16
 #: pgp/seahorse-gpgme-generate-dialog.ui:16 pgp/seahorse-gpgme-photos.c:216
 #: pgp/seahorse-gpgme-revoke-dialog.ui:23 pgp/seahorse-gpgme-sign-dialog.ui:23
@@ -712,23 +712,7 @@ msgstr "ნაგულისხმევად დაყენება"
 msgid "Change _Password"
 msgstr "პაროლის შეცვლა"
 
-#: pgp/seahorse-gpgme-add-subkey.c:197 pgp/seahorse-gpgme-generate-dialog.c:85
-msgid "DSA (sign only)"
-msgstr "DSA (მხოლოდ ხელმოწერა)"
-
-#: pgp/seahorse-gpgme-add-subkey.c:199
-msgid "ElGamal (encrypt only)"
-msgstr "ElGamal (მხოლოდ დაშიფვრა)"
-
-#: pgp/seahorse-gpgme-add-subkey.c:201 pgp/seahorse-gpgme-generate-dialog.c:86
-msgid "RSA (sign only)"
-msgstr "RSA (მხოლოდ ხელმოწერა)"
-
-#: pgp/seahorse-gpgme-add-subkey.c:203
-msgid "RSA (encrypt only)"
-msgstr "RSA (მხოლოდ ხელმოწერა)"
-
-#: pgp/seahorse-gpgme-add-subkey.c:217
+#: pgp/seahorse-gpgme-add-subkey.c:245
 #, c-format
 msgid "Add subkey to %s"
 msgstr "%s-სთვის ქვეგასაღების დამატება"
@@ -738,26 +722,30 @@ msgid "Key _Type"
 msgstr "გასაღების _ტიპი"
 
 #: pgp/seahorse-gpgme-add-subkey.ui:41
+msgid "Key _Usage"
+msgstr "გასაღების _ზომა"
+
+#: pgp/seahorse-gpgme-add-subkey.ui:64
 msgid "Key _Length"
 msgstr "გასაღების _სიგრძე"
 
-#: pgp/seahorse-gpgme-add-subkey.ui:59
+#: pgp/seahorse-gpgme-add-subkey.ui:81
 msgid "Expiration Date"
 msgstr "_ვადა"
 
-#: pgp/seahorse-gpgme-add-subkey.ui:67
+#: pgp/seahorse-gpgme-add-subkey.ui:89
 msgid "Never E_xpires"
 msgstr "ვადა _არასწორის გასდის"
 
-#: pgp/seahorse-gpgme-add-subkey.ui:68
+#: pgp/seahorse-gpgme-add-subkey.ui:90
 msgid "If key never expires"
 msgstr "თუ გასაღებს ვადა არასდროს ეწურება"
 
-#: pgp/seahorse-gpgme-add-subkey.ui:90 ssh/generate-key-dialog.ui:35
+#: pgp/seahorse-gpgme-add-subkey.ui:112 ssh/generate-key-dialog.ui:35
 msgid "_Generate"
 msgstr "_გენერაცია"
 
-#: pgp/seahorse-gpgme-add-subkey.ui:92
+#: pgp/seahorse-gpgme-add-subkey.ui:114
 msgid "Generate a new subkey"
 msgstr "ახალი ქვეგასაღების გენერაცია"
 
@@ -787,7 +775,7 @@ msgstr "_სრული სახელი"
 msgid "Must be at least 5 characters long"
 msgstr ""
 
-#: pgp/seahorse-gpgme-add-uid.ui:64 pgp/seahorse-gpgme-generate-dialog.ui:81
+#: pgp/seahorse-gpgme-add-uid.ui:64 pgp/seahorse-gpgme-generate-dialog.ui:80
 msgid "_Email Address"
 msgstr "ელფოსტის მისამართი"
 
@@ -832,21 +820,12 @@ msgstr "_შეცვლა"
 msgid "_Never expires"
 msgstr "ვადა _არასოდეს გასდის"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:83 pkcs11/pkcs11-generate.vala:44
-#: pkcs11/pkcs11-private-key.vala:75
-msgid "RSA"
-msgstr "RSA"
-
-#: pgp/seahorse-gpgme-generate-dialog.c:84
-msgid "DSA ElGamal"
-msgstr "DSA ElGamal"
-
-#: pgp/seahorse-gpgme-generate-dialog.c:99
+#: pgp/seahorse-gpgme-generate-dialog.c:98
 msgid "Couldn’t generate PGP key"
 msgstr "PGP გასაღების გენერაციის შეცდომა"
 
 #. Has line breaks because GtkLabel is completely broken WRT wrapping
-#: pgp/seahorse-gpgme-generate-dialog.c:158
+#: pgp/seahorse-gpgme-generate-dialog.c:146
 msgid ""
 "When creating a key we need to generate a lot of\n"
 "random data and we need you to help. It’s a good\n"
@@ -855,15 +834,15 @@ msgid ""
 "This gives the system the random data that it needs."
 msgstr ""
 
-#: pgp/seahorse-gpgme-generate-dialog.c:163 pkcs11/pkcs11-generate.vala:169
+#: pgp/seahorse-gpgme-generate-dialog.c:151 pkcs11/pkcs11-generate.vala:169
 msgid "Generating key"
 msgstr "გასაღების გენერაცია"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:197
+#: pgp/seahorse-gpgme-generate-dialog.c:237
 msgid "Passphrase for New PGP Key"
 msgstr "ახალი PGP გასაღების საკვანძო ფრაზა"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:198
+#: pgp/seahorse-gpgme-generate-dialog.c:238
 msgid "Enter the passphrase for your new key twice."
 msgstr "შეიყვანეთ ახალი საკვანძო ფრაზა ახალი გასაღებისთვის. ორჯერ."
 
@@ -886,31 +865,31 @@ msgstr ""
 "PGP გასაღები საშუალებას გაძლევთ სხვა ადამიანებისთვის გაგზავნილი ელფოსტა და "
 "ფაილები დაშიფროთ."
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:74
+#: pgp/seahorse-gpgme-generate-dialog.ui:73
 msgid "Name must be at least 5 characters long."
 msgstr ""
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:91 pkcs11/pkcs11-generate.ui:85
+#: pgp/seahorse-gpgme-generate-dialog.ui:89 pkcs11/pkcs11-generate.ui:85
 msgid "Advanced key options"
 msgstr "გასაღების დამატებითი პარამეტრები"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:94
+#: pgp/seahorse-gpgme-generate-dialog.ui:92
 msgid "_Comment"
 msgstr "_კომენტარი"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:101 ssh/generate-key-dialog.ui:78
+#: pgp/seahorse-gpgme-generate-dialog.ui:98 ssh/generate-key-dialog.ui:78
 msgid "Encryption _Type"
 msgstr "შიფრაციის _ტიპი"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:108 ssh/generate-key-dialog.ui:102
+#: pgp/seahorse-gpgme-generate-dialog.ui:122 ssh/generate-key-dialog.ui:102
 msgid "Key _Strength (bits)"
 msgstr ""
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:122
+#: pgp/seahorse-gpgme-generate-dialog.ui:143
 msgid "Ne_ver Expires"
 msgstr "_უვადო"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:134
+#: pgp/seahorse-gpgme-generate-dialog.ui:156
 msgid "E_xpiration Date"
 msgstr ""
 
@@ -935,13 +914,38 @@ msgstr ""
 msgid "PGP keys"
 msgstr "PGP გასაღები"
 
-#: pgp/seahorse-gpgme-key-op.c:362
+#: pgp/seahorse-gpgme-key-op.c:290
 msgid "Wrong password"
 msgstr "არასწორი პაროლი"
 
-#: pgp/seahorse-gpgme-key-op.c:362
+#: pgp/seahorse-gpgme-key-op.c:290
 msgid "This was the third time you entered a wrong password. Please try again."
 msgstr ""
+
+#: pgp/seahorse-gpgme-key-gen-type.c:36 pgp/seahorse-pgp-key-algorithm.c:32
+#: pkcs11/pkcs11-generate.vala:44 pkcs11/pkcs11-private-key.vala:75
+msgid "RSA"
+msgstr "RSA"
+
+#: pgp/seahorse-gpgme-key-gen-type.c:38
+msgid "RSA (sign only)"
+msgstr "RSA (მხოლოდ ხელმოწერა)"
+
+#: pgp/seahorse-gpgme-key-gen-type.c:40
+msgid "RSA (encrypt only)"
+msgstr "RSA (მხოლოდ ხელმოწერა)"
+
+#: pgp/seahorse-gpgme-key-gen-type.c:42
+msgid "DSA (sign only)"
+msgstr "DSA (მხოლოდ ხელმოწერა)"
+
+#: pgp/seahorse-gpgme-key-gen-type.c:44
+msgid "DSA ElGamal"
+msgstr "DSA ElGamal"
+
+#: pgp/seahorse-gpgme-key-gen-type.c:46
+msgid "ElGamal (encrypt only)"
+msgstr "ElGamal (მხოლოდ დაშიფვრა)"
 
 #: pgp/seahorse-gpgme-keyring-panel.ui:4
 msgid "GPG Keyring"
@@ -1221,7 +1225,7 @@ msgctxt "Algorithm"
 msgid "Unknown"
 msgstr "უცნობი"
 
-#: pgp/seahorse-gpgme-subkey.c:93
+#: pgp/seahorse-gpgme-subkey.c:93 pgp/seahorse-pgp-key-algorithm.c:36
 msgid "ElGamal"
 msgstr "ElGamal"
 
@@ -1350,6 +1354,26 @@ msgstr "PGP გასაღებები"
 #: pgp/seahorse-pgp-backend.c:205
 msgid "PGP keys are for encrypting email or files"
 msgstr ""
+
+#: pgp/seahorse-pgp-key-algorithm.c:34 pkcs11/pkcs11-private-key.vala:77
+msgid "DSA"
+msgstr "DSA"
+
+#: pgp/seahorse-pgp-key-algorithm.c:38
+msgid "ECC"
+msgstr "ECC"
+
+#: pgp/seahorse-pgp-key-algorithm.c:40 pkcs11/pkcs11-private-key.vala:81
+msgid "ECDSA"
+msgstr "ECDSA"
+
+#: pgp/seahorse-pgp-key-algorithm.c:42
+msgid "ECDH"
+msgstr "ECDH"
+
+#: pgp/seahorse-pgp-key-algorithm.c:44
+msgid "EdDSA"
+msgstr "EdDSA"
 
 #: pgp/seahorse-pgp-key-panel.c:117
 msgid "Error changing password"
@@ -1509,43 +1533,43 @@ msgstr "წაშლა"
 msgid "Usages"
 msgstr "გამოყენებებ"
 
-#: pgp/seahorse-pgp-subkey-list-box.c:192
+#: pgp/seahorse-pgp-subkey-list-box.c:194
 msgid "Add subkey"
 msgstr "ქვეგასაღების დამატება"
 
-#: pgp/seahorse-pgp-subkey-list-box.c:208
+#: pgp/seahorse-pgp-subkey-list-box.c:210
 msgid "Subkeys"
 msgstr "ქვეგასაღებები"
 
-#: pgp/seahorse-pgp-subkey-list-box.c:313
+#: pgp/seahorse-pgp-subkey-list-box.c:315
 msgid "Couldn't Delete Subkey"
 msgstr "ქვეგასაღების წაშლის შეცდომა"
 
-#: pgp/seahorse-pgp-subkey-list-box.c:386
+#: pgp/seahorse-pgp-subkey-list-box.c:388
 msgid "Subkey was revoked"
 msgstr ""
 
-#: pgp/seahorse-pgp-subkey-list-box.c:393
+#: pgp/seahorse-pgp-subkey-list-box.c:395
 msgid "Subkey has expired"
 msgstr ""
 
-#: pgp/seahorse-pgp-subkey-list-box.c:396
+#: pgp/seahorse-pgp-subkey-list-box.c:398
 msgid "Subkey is disabled"
 msgstr ""
 
-#: pgp/seahorse-pgp-subkey-list-box.c:406
+#: pgp/seahorse-pgp-subkey-list-box.c:408
 #: pkcs11/pkcs11-certificate-widget.vala:85
 msgid "Never expires"
 msgstr ""
 
 #. Translators: first part is the algorithm, second part is the length,
 #. * e.g. "RSA" (2048 bit)
-#: pgp/seahorse-pgp-subkey-list-box.c:429
+#: pgp/seahorse-pgp-subkey-list-box.c:431
 #, c-format
 msgid "%s (%d bit)"
 msgstr "%s (%d-ბიტიანი)"
 
-#: pgp/seahorse-pgp-subkey-list-box.c:436
+#: pgp/seahorse-pgp-subkey-list-box.c:438
 #: pkcs11/pkcs11-certificate-widget.vala:80
 #: pkcs11/pkcs11-certificate-widget.vala:293
 #: pkcs11/pkcs11-certificate-widget.vala:307
@@ -1553,6 +1577,18 @@ msgstr "%s (%d-ბიტიანი)"
 #: pkcs11/pkcs11-private-key-widget.vala:54 pkcs11/pkcs11-token-panel.vala:67
 msgid "Unknown"
 msgstr "უცნობი"
+
+#: pgp/seahorse-pgp-subkey-usage.c:32
+msgid "All Usages"
+msgstr "ყველა გამოყენება"
+
+#: pgp/seahorse-pgp-subkey-usage.c:34
+msgid "Sign Only"
+msgstr "მხოლოდ ხელმოწერა"
+
+#: pgp/seahorse-pgp-subkey-usage.c:36
+msgid "Encrypt Only"
+msgstr "მხოლოდ დაშიფვრა"
 
 #: pgp/seahorse-pgp-subkey.c:212
 msgid "Encrypt"
@@ -1827,7 +1863,7 @@ msgstr "კი"
 
 #: pkcs11/pkcs11-certificate-widget.vala:168
 msgid "No"
-msgstr ""
+msgstr "არა"
 
 #: pkcs11/pkcs11-certificate-widget.vala:172
 msgid "Max Path Length"
@@ -1857,13 +1893,12 @@ msgstr "გასაღების იდენტიფიკატორი"
 
 #: pkcs11/pkcs11-certificate-widget.vala:227
 #, c-format
-#| msgid "Revoke: %s"
 msgid "Method: %s"
 msgstr "მეთოდი: %s"
 
 #: pkcs11/pkcs11-certificate-widget.vala:254
 msgid "Distribution Point"
-msgstr ""
+msgstr "განაწილების წერტილი"
 
 #: pkcs11/pkcs11-certificate-widget.vala:263
 msgid "Raw value"
@@ -1925,17 +1960,9 @@ msgstr "პირადი გასაღები"
 msgid "Unnamed key"
 msgstr "უსახელო გასაღები"
 
-#: pkcs11/pkcs11-private-key.vala:77
-msgid "DSA"
-msgstr "DSA"
-
 #: pkcs11/pkcs11-private-key.vala:79
 msgid "DH"
-msgstr ""
-
-#: pkcs11/pkcs11-private-key.vala:81
-msgid "ECDSA"
-msgstr "ECDSA"
+msgstr "DH"
 
 #: pkcs11/pkcs11-request-certificate-dialog.ui:50
 msgid "Create a certificate request file"
