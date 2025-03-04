@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues/\n"
-"POT-Creation-Date: 2025-02-15 17:03+0000\n"
-"PO-Revision-Date: 2025-02-16 08:00+0300\n"
+"POT-Creation-Date: 2025-02-19 02:02+0000\n"
+"PO-Revision-Date: 2025-03-04 08:00+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Turkish <takim@gnome.org.tr>\n"
 "Language: tr\n"
@@ -65,7 +65,7 @@ msgstr "Bir ögeyi silerseniz, kalıcı olarak yitirilecek"
 #: common/delete-operation.vala:62 common/passphrase-prompt.ui:7
 #: common/seahorse-add-keyserver.ui:22 gkr/add-item-dialog.ui:27
 #: gkr/add-keyring-dialog.ui:27 libseahorse/seahorse-progress.ui:14
-#: pgp/seahorse-gpgme-add-subkey.ui:85 pgp/seahorse-gpgme-add-uid.ui:24
+#: pgp/seahorse-gpgme-add-subkey.ui:107 pgp/seahorse-gpgme-add-uid.ui:24
 #: pgp/seahorse-gpgme-expires-dialog.ui:16
 #: pgp/seahorse-gpgme-generate-dialog.ui:16 pgp/seahorse-gpgme-photos.c:216
 #: pgp/seahorse-gpgme-revoke-dialog.ui:23 pgp/seahorse-gpgme-sign-dialog.ui:23
@@ -735,23 +735,7 @@ msgstr "Ö_ntanımlı ata"
 msgid "Change _Password"
 msgstr "_Parola Değiştir"
 
-#: pgp/seahorse-gpgme-add-subkey.c:197 pgp/seahorse-gpgme-generate-dialog.c:86
-msgid "DSA (sign only)"
-msgstr "DSA (yalnızca imzalama)"
-
-#: pgp/seahorse-gpgme-add-subkey.c:199
-msgid "ElGamal (encrypt only)"
-msgstr "ElGamal (yalnızca şifreleme)"
-
-#: pgp/seahorse-gpgme-add-subkey.c:201 pgp/seahorse-gpgme-generate-dialog.c:87
-msgid "RSA (sign only)"
-msgstr "RSA (yalnızca imzalama)"
-
-#: pgp/seahorse-gpgme-add-subkey.c:203
-msgid "RSA (encrypt only)"
-msgstr "RSA (yalnızca şifreleme)"
-
-#: pgp/seahorse-gpgme-add-subkey.c:217
+#: pgp/seahorse-gpgme-add-subkey.c:245
 #, c-format
 msgid "Add subkey to %s"
 msgstr "%s anahtarına alt anahtar ekle"
@@ -761,26 +745,30 @@ msgid "Key _Type"
 msgstr "Anahtar _Türü"
 
 #: pgp/seahorse-gpgme-add-subkey.ui:41
+msgid "Key _Usage"
+msgstr "Anahtar _Kullanımı"
+
+#: pgp/seahorse-gpgme-add-subkey.ui:64
 msgid "Key _Length"
 msgstr "Anahtar _Uzunluğu"
 
-#: pgp/seahorse-gpgme-add-subkey.ui:59
+#: pgp/seahorse-gpgme-add-subkey.ui:81
 msgid "Expiration Date"
 msgstr "Son Kullanım Tarihi"
 
-#: pgp/seahorse-gpgme-add-subkey.ui:67
+#: pgp/seahorse-gpgme-add-subkey.ui:89
 msgid "Never E_xpires"
 msgstr "Süresi _Dolmaz"
 
-#: pgp/seahorse-gpgme-add-subkey.ui:68
+#: pgp/seahorse-gpgme-add-subkey.ui:90
 msgid "If key never expires"
 msgstr "Anahtarın süresi hiç dolmayacaksa"
 
-#: pgp/seahorse-gpgme-add-subkey.ui:90 ssh/generate-key-dialog.ui:35
+#: pgp/seahorse-gpgme-add-subkey.ui:112 ssh/generate-key-dialog.ui:35
 msgid "_Generate"
 msgstr "_Oluştur"
 
-#: pgp/seahorse-gpgme-add-subkey.ui:92
+#: pgp/seahorse-gpgme-add-subkey.ui:114
 msgid "Generate a new subkey"
 msgstr "Yeni alt anahtar oluştur"
 
@@ -810,7 +798,7 @@ msgstr "Tam _Ad"
 msgid "Must be at least 5 characters long"
 msgstr "En azından 5 karakter uzunluğunda olmalı"
 
-#: pgp/seahorse-gpgme-add-uid.ui:64 pgp/seahorse-gpgme-generate-dialog.ui:81
+#: pgp/seahorse-gpgme-add-uid.ui:64 pgp/seahorse-gpgme-generate-dialog.ui:80
 msgid "_Email Address"
 msgstr "_E-posta Adresi"
 
@@ -855,21 +843,12 @@ msgstr "Değişti_r"
 msgid "_Never expires"
 msgstr "_Asla süresi dolmaz"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:84 pkcs11/pkcs11-generate.vala:44
-#: pkcs11/pkcs11-private-key.vala:75
-msgid "RSA"
-msgstr "RSA"
-
-#: pgp/seahorse-gpgme-generate-dialog.c:85
-msgid "DSA ElGamal"
-msgstr "DSA ElGamal"
-
-#: pgp/seahorse-gpgme-generate-dialog.c:109
+#: pgp/seahorse-gpgme-generate-dialog.c:98
 msgid "Couldn’t generate PGP key"
 msgstr "PGP anahtarı oluşturulamadı"
 
 #. Has line breaks because GtkLabel is completely broken WRT wrapping
-#: pgp/seahorse-gpgme-generate-dialog.c:158
+#: pgp/seahorse-gpgme-generate-dialog.c:146
 msgid ""
 "When creating a key we need to generate a lot of\n"
 "random data and we need you to help. It’s a good\n"
@@ -884,15 +863,15 @@ msgstr ""
 "gerçekleştirmeniz iyi bir fikirdir. Bu, sisteme\n"
 "gereksindiği rastgele veriyi sağlayacaktır."
 
-#: pgp/seahorse-gpgme-generate-dialog.c:163 pkcs11/pkcs11-generate.vala:169
+#: pgp/seahorse-gpgme-generate-dialog.c:151 pkcs11/pkcs11-generate.vala:169
 msgid "Generating key"
 msgstr "Anahtar oluşturuluyor"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:196
+#: pgp/seahorse-gpgme-generate-dialog.c:237
 msgid "Passphrase for New PGP Key"
 msgstr "Yeni PGP Anahtarı için Parola Metni"
 
-#: pgp/seahorse-gpgme-generate-dialog.c:197
+#: pgp/seahorse-gpgme-generate-dialog.c:238
 msgid "Enter the passphrase for your new key twice."
 msgstr "Yeni anahtarınız için parola metnini iki kez girin."
 
@@ -913,31 +892,31 @@ msgstr "Yeni anahtar oluştur"
 msgid "A PGP key allows you to encrypt email or files to other people."
 msgstr "PGP anahtarı, e-posta veya dosyaları başkalarına şifrelemenizi sağlar."
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:74
+#: pgp/seahorse-gpgme-generate-dialog.ui:73
 msgid "Name must be at least 5 characters long."
 msgstr "Ad en az 5 karakter uzunluğunda olmalı."
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:91 pkcs11/pkcs11-generate.ui:85
+#: pgp/seahorse-gpgme-generate-dialog.ui:89 pkcs11/pkcs11-generate.ui:85
 msgid "Advanced key options"
 msgstr "Gelişmiş anahtar seçenekleri"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:94
+#: pgp/seahorse-gpgme-generate-dialog.ui:92
 msgid "_Comment"
 msgstr "_Açıklama"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:101 ssh/generate-key-dialog.ui:78
+#: pgp/seahorse-gpgme-generate-dialog.ui:98 ssh/generate-key-dialog.ui:78
 msgid "Encryption _Type"
 msgstr "Şifreleme _Türü"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:108 ssh/generate-key-dialog.ui:102
+#: pgp/seahorse-gpgme-generate-dialog.ui:122 ssh/generate-key-dialog.ui:102
 msgid "Key _Strength (bits)"
 msgstr "Anahtar _Uzunluğu (bit)"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:122
+#: pgp/seahorse-gpgme-generate-dialog.ui:143
 msgid "Ne_ver Expires"
 msgstr "_Kullanım Süresi Bitmez"
 
-#: pgp/seahorse-gpgme-generate-dialog.ui:134
+#: pgp/seahorse-gpgme-generate-dialog.ui:156
 msgid "E_xpiration Date"
 msgstr "_Son Kullanım Tarihi"
 
@@ -969,6 +948,31 @@ msgstr "Hatalı parola"
 #: pgp/seahorse-gpgme-key-op.c:290
 msgid "This was the third time you entered a wrong password. Please try again."
 msgstr "Üçüncü kez yanlış parola girdiniz. Lütfen yeniden deneyin."
+
+#: pgp/seahorse-gpgme-key-gen-type.c:36 pgp/seahorse-pgp-key-algorithm.c:32
+#: pkcs11/pkcs11-generate.vala:44 pkcs11/pkcs11-private-key.vala:75
+msgid "RSA"
+msgstr "RSA"
+
+#: pgp/seahorse-gpgme-key-gen-type.c:38
+msgid "RSA (sign only)"
+msgstr "RSA (yalnızca imzalama)"
+
+#: pgp/seahorse-gpgme-key-gen-type.c:40
+msgid "RSA (encrypt only)"
+msgstr "RSA (yalnızca şifreleme)"
+
+#: pgp/seahorse-gpgme-key-gen-type.c:42
+msgid "DSA (sign only)"
+msgstr "DSA (yalnızca imzalama)"
+
+#: pgp/seahorse-gpgme-key-gen-type.c:44
+msgid "DSA ElGamal"
+msgstr "DSA ElGamal"
+
+#: pgp/seahorse-gpgme-key-gen-type.c:46
+msgid "ElGamal (encrypt only)"
+msgstr "ElGamal (yalnızca şifreleme)"
 
 #: pgp/seahorse-gpgme-keyring-panel.ui:4
 msgid "GPG Keyring"
@@ -1267,7 +1271,7 @@ msgctxt "Algorithm"
 msgid "Unknown"
 msgstr "Bilinmiyor"
 
-#: pgp/seahorse-gpgme-subkey.c:93
+#: pgp/seahorse-gpgme-subkey.c:93 pgp/seahorse-pgp-key-algorithm.c:36
 msgid "ElGamal"
 msgstr "ElGamal"
 
@@ -1405,6 +1409,26 @@ msgstr "PGP Anahtarları"
 #: pgp/seahorse-pgp-backend.c:205
 msgid "PGP keys are for encrypting email or files"
 msgstr "PGP anahtarları e-posta ya da dosyaların şifrelenmesi içindir"
+
+#: pgp/seahorse-pgp-key-algorithm.c:34 pkcs11/pkcs11-private-key.vala:77
+msgid "DSA"
+msgstr "DSA"
+
+#: pgp/seahorse-pgp-key-algorithm.c:38
+msgid "ECC"
+msgstr "ECC"
+
+#: pgp/seahorse-pgp-key-algorithm.c:40 pkcs11/pkcs11-private-key.vala:81
+msgid "ECDSA"
+msgstr "ECDSA"
+
+#: pgp/seahorse-pgp-key-algorithm.c:42
+msgid "ECDH"
+msgstr "ECDH"
+
+#: pgp/seahorse-pgp-key-algorithm.c:44
+msgid "EdDSA"
+msgstr "EdDSA"
 
 #: pgp/seahorse-pgp-key-panel.c:117
 msgid "Error changing password"
@@ -1563,43 +1587,43 @@ msgstr "Sil"
 msgid "Usages"
 msgstr "Kullanımlar"
 
-#: pgp/seahorse-pgp-subkey-list-box.c:192
+#: pgp/seahorse-pgp-subkey-list-box.c:194
 msgid "Add subkey"
 msgstr "Alt anahtar ekle"
 
-#: pgp/seahorse-pgp-subkey-list-box.c:208
+#: pgp/seahorse-pgp-subkey-list-box.c:210
 msgid "Subkeys"
 msgstr "Alt Anahtarlar"
 
-#: pgp/seahorse-pgp-subkey-list-box.c:313
+#: pgp/seahorse-pgp-subkey-list-box.c:315
 msgid "Couldn't Delete Subkey"
 msgstr "Alt Anahtar Silinemedi"
 
-#: pgp/seahorse-pgp-subkey-list-box.c:386
+#: pgp/seahorse-pgp-subkey-list-box.c:388
 msgid "Subkey was revoked"
 msgstr "Alt anahtar feshedilmiş"
 
-#: pgp/seahorse-pgp-subkey-list-box.c:393
+#: pgp/seahorse-pgp-subkey-list-box.c:395
 msgid "Subkey has expired"
 msgstr "Alt anahtarın süresi dolmuş"
 
-#: pgp/seahorse-pgp-subkey-list-box.c:396
+#: pgp/seahorse-pgp-subkey-list-box.c:398
 msgid "Subkey is disabled"
 msgstr "Alt anahtar devre dışı"
 
-#: pgp/seahorse-pgp-subkey-list-box.c:406
+#: pgp/seahorse-pgp-subkey-list-box.c:408
 #: pkcs11/pkcs11-certificate-widget.vala:85
 msgid "Never expires"
 msgstr "Asla süresi dolmaz"
 
 #. Translators: first part is the algorithm, second part is the length,
 #. * e.g. "RSA" (2048 bit)
-#: pgp/seahorse-pgp-subkey-list-box.c:429
+#: pgp/seahorse-pgp-subkey-list-box.c:431
 #, c-format
 msgid "%s (%d bit)"
 msgstr "%s (%d bit)"
 
-#: pgp/seahorse-pgp-subkey-list-box.c:436
+#: pgp/seahorse-pgp-subkey-list-box.c:438
 #: pkcs11/pkcs11-certificate-widget.vala:80
 #: pkcs11/pkcs11-certificate-widget.vala:293
 #: pkcs11/pkcs11-certificate-widget.vala:307
@@ -1607,6 +1631,18 @@ msgstr "%s (%d bit)"
 #: pkcs11/pkcs11-private-key-widget.vala:54 pkcs11/pkcs11-token-panel.vala:67
 msgid "Unknown"
 msgstr "Bilinmeyen"
+
+#: pgp/seahorse-pgp-subkey-usage.c:32
+msgid "All Usages"
+msgstr "Tüm Kullanımlar"
+
+#: pgp/seahorse-pgp-subkey-usage.c:34
+msgid "Sign Only"
+msgstr "Yalnızca İmzalama"
+
+#: pgp/seahorse-pgp-subkey-usage.c:36
+msgid "Encrypt Only"
+msgstr "Yalnızca Şifreleme"
 
 #: pgp/seahorse-pgp-subkey.c:212
 msgid "Encrypt"
@@ -1978,17 +2014,9 @@ msgstr "Özel Anahtar"
 msgid "Unnamed key"
 msgstr "Adsız anahtar"
 
-#: pkcs11/pkcs11-private-key.vala:77
-msgid "DSA"
-msgstr "DSA"
-
 #: pkcs11/pkcs11-private-key.vala:79
 msgid "DH"
 msgstr "DH"
-
-#: pkcs11/pkcs11-private-key.vala:81
-msgid "ECDSA"
-msgstr "ECDSA"
 
 #: pkcs11/pkcs11-request-certificate-dialog.ui:50
 msgid "Create a certificate request file"
