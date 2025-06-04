@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 
 import argparse
+import os
 import re
 import sys
 import subprocess
+
+os.environ['LC_ALL'] = 'C'
 
 # Run gpg --version in a subprocess and return stdout
 def run_gpg_version(gpg_path):
