@@ -393,7 +393,9 @@ on_gpgme_event (void *user_data,
 		break;
 
 	case GPGME_EVENT_NEXT_KEY:
+#if GPGME_VERSION_NUMBER < 0x020000
 	case GPGME_EVENT_NEXT_TRUSTITEM:
+#endif
 	default:
 		/* Ignore unsupported event types */
 		break;
