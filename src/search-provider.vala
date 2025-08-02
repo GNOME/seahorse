@@ -27,12 +27,12 @@ public class Seahorse.SearchProvider : GLib.Object {
     private HashTable<string, weak Seahorse.Item> handles
         = new HashTable<string, weak Seahorse.Item>.full(str_hash, str_equal, free, null);
 
-    private GLib.Application app;
+    private Gtk.Application app;
     private int n_loading = 0;
     private RWLock n_loading_lock = RWLock();
-    private bool loaded = false;
+    protected bool loaded { get; set; default = false; }
 
-    public SearchProvider(GLib.Application app) {
+    public SearchProvider(Gtk.Application app) {
         this.app = app;
 
         var places = new Gtk.FlattenListModel(this.backends);
@@ -77,6 +77,8 @@ public class Seahorse.SearchProvider : GLib.Object {
                 });
             } else {
                 change_n_loading(-1);
+                if (get_n_loading() == 0)
+                    this.loaded = true;
             }
         }
     }
@@ -97,7 +99,7 @@ public class Seahorse.SearchProvider : GLib.Object {
     public async string[] GetInitialResultSet(string[] terms) throws GLib.Error {
         this.app.hold();
 
-        if (get_n_loading() >= 0)
+        if (!this.loaded)
             yield load();
 
         string?[] results = {};
@@ -173,11 +175,13 @@ public class Seahorse.SearchProvider : GLib.Object {
         unowned Seahorse.Item? item = null;
         identifier.scanf("%p", &item);
         item = this.handles.lookup(identifier);
-        if (!(item is Seahorse.Item))
+        if (!(item is Seahorse.Item)) {
+            this.app.release();
             return; // Bogus value
+        }
 
-        KeyManager key_manager = new KeyManager(GLib.Application.get_default() as Application);
-        item.view((Gtk.Window) key_manager);
+        this.app.activate();
+        item.view(this.app.get_active_window());
 
         this.app.release ();
     }

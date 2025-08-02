@@ -62,7 +62,8 @@ public class Seahorse.Application : Adw.Application {
         GLib.Object (
             application_id: Config.APPLICATION_ID,
             resource_base_path: "/org/gnome/Seahorse",
-            flags: ApplicationFlags.HANDLES_OPEN
+            flags: ApplicationFlags.HANDLES_OPEN,
+            inactivity_timeout: 10000
         );
         this.search_provider = new SearchProvider(this);
 
@@ -101,11 +102,16 @@ public class Seahorse.Application : Adw.Application {
 #if WITH_PKCS11
         Pkcs11.Backend.initialize();
 #endif
+
+        // Initialize search provider
+        this.initialize_search();
     }
 
     public override void activate() {
-        if (get_active_window() == null)
+        if (get_active_window() == null) {
             this.key_mgr = new Seahorse.KeyManager(this);
+            set_inactivity_timeout(0);
+        }
 
         this.key_mgr.present();
     }
