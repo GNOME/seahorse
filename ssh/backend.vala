@@ -39,6 +39,7 @@ public class Seahorse.Ssh.Backend : GLib.Object, GLib.ListModel, Seahorse.Backen
             } catch (GLib.Error e) {
                 warning("Failed to initialize SSH backend: %s", e.message);
             }
+            notify_property("loaded");
         });
     }
 
