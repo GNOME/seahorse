@@ -285,6 +285,8 @@ public class RenameOperation : Operation {
             KeyData.filter_file (keydata.pubfile, keydata, keydata);
         else // A full file for this key
             FileUtils.set_contents(keydata.pubfile, keydata.rawdata);
+
+        key.notify_property("comment");
     }
 
     private bool change_raw_comment(KeyData keydata, string new_comment) {
@@ -296,6 +298,8 @@ public class RenameOperation : Operation {
             return false;
 
         keydata.rawdata = parts[0] + " " + parts[1] + " " + new_comment;
+
+        keydata.comment = new_comment;
 
         return true;
     }
