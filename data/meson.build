@@ -10,6 +10,11 @@ install_data(gsettings_files,
   install_dir: get_option('datadir') / 'glib-2.0' / 'schemas',
 )
 
+# Make sure schemas are available in unit tests
+locally_compiled_schemas_dir = meson.current_build_dir()
+gnome.compile_schemas(
+  depend_files: gsettings_files)
+
 # Resources
 resources_xml = meson.project_source_root() / 'data' / 'seahorse.gresource.xml'
 resources_src = gnome.compile_resources('seahorse-resources',

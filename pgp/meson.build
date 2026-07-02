@@ -126,6 +126,9 @@ if get_option('ldap-support')
   test_names += 'ldap-source'
 endif
 
+test_env = environment()
+test_env.set('GSETTINGS_SCHEMA_DIR', locally_compiled_schemas_dir)
+
 foreach _test : test_names
   test_bin = executable(_test,
     files('test-@0@.c'.format(_test)),
@@ -138,5 +141,6 @@ foreach _test : test_names
 
   test(_test, test_bin,
     suite: 'pgp',
+    env: test_env,
   )
 endforeach
