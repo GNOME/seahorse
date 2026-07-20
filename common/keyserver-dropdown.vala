@@ -33,7 +33,7 @@ public class Seahorse.KeyserverDropdown : Adw.Bin {
         // The base model corresponds to the entries in the "keyserver" setting
         // along with an empty string for "None"
         this.base_model = new Gtk.StringList(null);
-        this.base_model.splice(0, 0, PgpSettings.instance().get_uris());
+        this.base_model.splice(0, 0, AppSettings.instance().get_uris());
         this.base_model.append("");
 
         // Next, we define a SortListModel on top for each searching in the UI
@@ -53,7 +53,7 @@ public class Seahorse.KeyserverDropdown : Adw.Bin {
         this.child = drop_down;
 
         // Now make sure we listen to changes
-        PgpSettings.instance().changed["keyservers"].connect(on_keyservers_changed);
+        AppSettings.instance().changed["keyservers"].connect(on_keyservers_changed);
         AppSettings.instance().changed["server-publish-to"].connect(on_server_publish_to_changed);
     }
 
@@ -80,7 +80,7 @@ public class Seahorse.KeyserverDropdown : Adw.Bin {
         // Remove all except the "None" option and immedaitely add the new ones
         this.base_model.splice(0,
                                base_model.get_n_items() - 1,
-                               PgpSettings.instance().get_uris());
+                               AppSettings.instance().get_uris());
 
         // Restore the selected option from before if possible
         for (uint i = 0; i < this.sorted_model.get_n_items(); i++) {

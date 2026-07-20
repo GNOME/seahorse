@@ -45,7 +45,7 @@ struct _SeahorsePgpBackend {
     char *gpg_homedir;
 
     SeahorseGpgmeKeyring *keyring;
-    SeahorsePgpSettings *pgp_settings;
+    SeahorseAppSettings *app_settings;
     SeahorseDiscovery *discovery;
     SeahorseUnknownSource *unknown;
     GListModel *remotes;
@@ -82,7 +82,7 @@ seahorse_pgp_backend_init (SeahorsePgpBackend *self)
     g_return_if_fail (pgp_backend == NULL);
     pgp_backend = self;
 
-    self->pgp_settings = seahorse_pgp_settings_instance ();
+    self->app_settings = seahorse_app_settings_instance ();
     self->remotes = G_LIST_MODEL (g_list_store_new (SEAHORSE_TYPE_SERVER_SOURCE));
     self->actions = seahorse_pgp_backend_actions_instance ();
 }
@@ -95,7 +95,7 @@ on_settings_keyservers_changed (GSettings  *settings,
                                 void       *user_data)
 {
     SeahorsePgpBackend *self = SEAHORSE_PGP_BACKEND (user_data);
-    SeahorsePgpSettings *pgp_settings = SEAHORSE_PGP_SETTINGS (settings);
+    SeahorseAppSettings *app_settings = SEAHORSE_APP_SETTINGS (settings);
     g_auto(GStrv) keyservers = NULL;
     g_autoptr(GPtrArray) check = NULL;
 
@@ -110,7 +110,7 @@ on_settings_keyservers_changed (GSettings  *settings,
     }
 
     /* Load and strip names from keyserver list */
-    keyservers = seahorse_pgp_settings_get_uris (pgp_settings);
+    keyservers = seahorse_app_settings_get_uris (app_settings);
 
     for (guint i = 0; keyservers[i] != NULL; i++) {
         const char *uri = keyservers[i];
@@ -177,11 +177,11 @@ seahorse_pgp_backend_constructed (GObject *obj)
     self->unknown = seahorse_unknown_source_new ();
 
 #ifdef WITH_KEYSERVER
-    g_signal_connect (self->pgp_settings, "changed::keyservers",
+    g_signal_connect (self->app_settings, "changed::keyservers",
                       G_CALLBACK (on_settings_keyservers_changed), self);
 
     /* Initial loading */
-    on_settings_keyservers_changed (G_SETTINGS (self->pgp_settings),
+    on_settings_keyservers_changed (G_SETTINGS (self->app_settings),
                                     "keyservers",
                                     self);
 #endif
@@ -287,7 +287,7 @@ seahorse_pgp_backend_finalize (GObject *obj)
     SeahorsePgpBackend *self = SEAHORSE_PGP_BACKEND (obj);
 
 #ifdef WITH_KEYSERVER
-    g_signal_handlers_disconnect_by_func (self->pgp_settings,
+    g_signal_handlers_disconnect_by_func (self->app_settings,
                                           on_settings_keyservers_changed, self);
 #endif
 
@@ -426,7 +426,7 @@ seahorse_pgp_backend_get_default_key (SeahorsePgpBackend *self)
     self = self ? self : seahorse_pgp_backend_get ();
     g_return_val_if_fail (SEAHORSE_PGP_IS_BACKEND (self), NULL);
 
-    value = seahorse_pgp_settings_get_default_key (self->pgp_settings);
+    value = seahorse_app_settings_get_default_key (self->app_settings);
     if (value && *value) {
         const char *keyid;
 
@@ -500,7 +500,7 @@ seahorse_pgp_backend_add_remote (SeahorsePgpBackend   *self,
     if (persist) {
         /* Add to the PGP settings. That's all we need to do, since we're
          * subscribed to the "changed" callback */
-        seahorse_pgp_settings_add_keyserver (self->pgp_settings, uri, NULL);
+        seahorse_app_settings_add_keyserver (self->app_settings, uri, NULL);
     } else {
         /* Don't persist, so just immediately create a ServerSource */
         g_autoptr(SeahorseServerSource) ssrc = NULL;
@@ -533,7 +533,7 @@ seahorse_pgp_backend_remove_remote (SeahorsePgpBackend *self,
             g_list_store_remove (G_LIST_STORE (self->remotes), i);
     }
 
-    seahorse_pgp_settings_remove_keyserver (self->pgp_settings, uri);
+    seahorse_app_settings_remove_keyserver (self->app_settings, uri);
 }
 
 typedef struct {

@@ -85,7 +85,7 @@ seahorse_keyset_pgp_signers_new (void)
     model = gtk_filter_list_model_new (G_LIST_MODEL (keyring),
                                        GTK_FILTER (g_steal_pointer (&filter)));
 
-    g_signal_connect_object (seahorse_pgp_settings_instance (), "changed::default-key",
+    g_signal_connect_object (seahorse_app_settings_instance (), "changed::default-key",
                              G_CALLBACK (on_settings_default_key_changed), filter, 0);
 
     return G_LIST_MODEL (model);
