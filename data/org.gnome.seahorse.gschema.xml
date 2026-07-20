@@ -1,5 +1,15 @@
 <schemalist>
 	<schema id="org.gnome.seahorse" path="/apps/seahorse/" gettext-domain="seahorse">
+                <key name="default-key" type="s">
+                        <default>''</default>
+                        <summary>Default PGP Key</summary>
+                        <description>This specifies the ID of the default PGP key to use for certain operations, mainly signing.</description>
+                </key>
+                <key name="keyservers" type="as">
+                        <default>['ldap://keyserver.pgp.com', 'hkps://keys.openpgp.org']</default>
+                        <summary>PGP key servers</summary>
+                        <description>A list of key server URIs to search for remote PGP keys. A display name can be included, by appending a space and then the name.</description>
+                </key>
 		<key name="server-auto-retrieve" type="b">
 			<default>false</default>
 			<summary>Auto retrieve keys</summary>
