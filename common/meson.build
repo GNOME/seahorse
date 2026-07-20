@@ -15,7 +15,6 @@ common_sources = files(
   'panel.vala',
   'panel-window.vala',
   'passphrase-prompt.vala',
-  'pgp-settings.vala',
   'place.vala',
   'place-sorter.vala',
   'server-category.vala',
