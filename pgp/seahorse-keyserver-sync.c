@@ -123,7 +123,6 @@ do_sync_action (GtkWidget *widget, const char *action_name, GVariant *param)
     SeahorseServerSource *source;
     SeahorseGpgmeKeyring *keyring;
     SeahorseAppSettings *app_settings;
-    SeahorsePgpSettings *pgp_settings;
     g_autofree char *keyserver = NULL;
     g_autoptr(GCancellable) cancellable = NULL;
     g_auto(GStrv) keyservers = NULL;
@@ -132,7 +131,7 @@ do_sync_action (GtkWidget *widget, const char *action_name, GVariant *param)
     g_return_if_fail (G_IS_LIST_MODEL (self->keys));
 
     keyring = seahorse_pgp_backend_get_default_keyring (NULL);
-    pgp_settings = seahorse_pgp_settings_instance ();
+    app_settings = seahorse_app_settings_instance ();
     cancellable = g_cancellable_new ();
 
     keyids = g_ptr_array_new ();
@@ -143,7 +142,7 @@ do_sync_action (GtkWidget *widget, const char *action_name, GVariant *param)
     g_ptr_array_add (keyids, NULL);
 
     /* And now synchronizing keys from the servers */
-    keyservers = seahorse_pgp_settings_get_uris (pgp_settings);
+    keyservers = seahorse_app_settings_get_uris (app_settings);
     for (guint i = 0; keyservers[i] != NULL; i++) {
         source = seahorse_pgp_backend_lookup_remote (NULL, keyservers[i]);
 
@@ -160,7 +159,6 @@ do_sync_action (GtkWidget *widget, const char *action_name, GVariant *param)
     }
 
     /* Publishing keys online */
-    app_settings = seahorse_app_settings_instance ();
     keyserver = seahorse_app_settings_get_server_publish_to (app_settings);
     if (keyserver && keyserver[0]) {
         source = seahorse_pgp_backend_lookup_remote (NULL, keyserver);
