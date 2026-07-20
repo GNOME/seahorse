@@ -53,7 +53,7 @@ public class Seahorse.KeyserverDropdown : Adw.Bin {
         this.child = drop_down;
 
         // Now make sure we listen to changes
-        PgpSettings.instance().changed["keyserver"].connect(on_keyservers_changed);
+        PgpSettings.instance().changed["keyservers"].connect(on_keyservers_changed);
         AppSettings.instance().changed["server-publish-to"].connect(on_server_publish_to_changed);
     }
 
