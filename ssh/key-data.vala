@@ -224,11 +224,30 @@ public class Seahorse.Ssh.SecData : GLib.Object {
         // too much though afaik). Note that it's definitely not ideal though;
         // but the openssh format isn't exactly obvious
         var decoded = Base64.decode(rawdata.offset(initial_line.length));
-        for (uint i = 0; i < decoded.length - 3; i++) {
-            unowned var str = ((string) decoded).offset(i);
-            var algo = Algorithm.from_string(str);
-            if (algo != Algorithm.UNKNOWN) {
-                secdata.algo = algo;
+        for (size_t i = 0; i < (size_t) decoded.length; i++) {
+            if (i + 7 <= decoded.length &&
+                decoded[i] == 'e' && decoded[i + 1] == 'd' &&
+                decoded[i + 2] == '2' && decoded[i + 3] == '5' &&
+                decoded[i + 4] == '5' && decoded[i + 5] == '1' &&
+                decoded[i + 6] == '9') {
+                secdata.algo = Algorithm.ED25519;
+                break;
+            }
+            if (i + 5 <= decoded.length &&
+                decoded[i] == 'e' && decoded[i + 1] == 'c' &&
+                decoded[i + 2] == 'd' && decoded[i + 3] == 's' &&
+                decoded[i + 4] == 'a') {
+                secdata.algo = Algorithm.ECDSA;
+                break;
+            }
+            if (i + 3 <= decoded.length &&
+                decoded[i] == 'r' && decoded[i + 1] == 's' && decoded[i + 2] == 'a') {
+                secdata.algo = Algorithm.RSA;
+                break;
+            }
+            if (i + 3 <= decoded.length &&
+                decoded[i] == 'd' && decoded[i + 1] == 's' && decoded[i + 2] == 'a') {
+                secdata.algo = Algorithm.DSA;
                 break;
             }
         }
