@@ -58,6 +58,7 @@ public class Seahorse.PrefsKeyservers : Adw.PreferencesPage {
             this.apply.connect(on_apply);
 
             var remove_button = new Gtk.Button.from_icon_name("list-remove-symbolic");
+            remove_button.set_tooltip_text(_("Remove"));
             remove_button.add_css_class("flat");
             remove_button.clicked.connect(on_remove_button_clicked);
             add_suffix(remove_button);
