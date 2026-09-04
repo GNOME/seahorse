@@ -78,6 +78,7 @@ public class Seahorse.PrefsKeyservers : Adw.PreferencesPage {
             // Before doing anything, make sure we have a valid thing going on
             if (!ServerCategory.is_valid_uri(uri)) {
                 add_css_class("error");
+                update_state(Gtk.AccessibleState.INVALID, Gtk.AccessibleInvalidState.TRUE);
                 return;
             }
 
