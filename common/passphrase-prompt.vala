@@ -120,6 +120,7 @@ public class Seahorse.PassphrasePrompt : Adw.AlertDialog {
             response("submit");
         } else {
             this.error_label.visible = true;
+            this.confirm_entry.update_state(Gtk.AccessibleState.INVALID, Gtk.AccessibleInvalidState.TRUE);
         }
     }
 
