@@ -174,6 +174,8 @@ public class Seahorse.ImportDialog : Adw.Window {
         var label = new Gtk.Label(message);
         label.wrap = true;
         label.add_css_class("error");
+        update_state(Gtk.AccessibleState.INVALID, Gtk.AccessibleInvalidState.TRUE);
+        update_relation(Gtk.AccessibleRelation.ERROR_MESSAGE, label, null);
         this.container.prepend(label);
     }
 }
