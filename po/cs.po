@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues/\n"
-"POT-Creation-Date: 2026-06-09 16:06+0000\n"
-"PO-Revision-Date: 2026-07-09 01:04+0200\n"
+"POT-Creation-Date: 2026-09-14 22:16+0000\n"
+"PO-Revision-Date: 2026-09-15 00:32+0200\n"
 "Last-Translator: Daniel Rusek <mail@asciiwolf.com>\n"
 "Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -102,7 +102,7 @@ msgstr "Ode_slat"
 msgid "Confirm:"
 msgstr "Potvrzení:"
 
-#: common/passphrase-prompt.ui:41
+#: common/passphrase-prompt.ui:44
 msgid "The passwords don't match"
 msgstr "Hesla se liší"
 
@@ -134,6 +134,10 @@ msgstr "Certifikáty"
 #: common/prefs-keyservers.vala:55
 msgid "Server URL"
 msgstr "Adresa serveru"
+
+#: common/prefs-keyservers.vala:61
+msgid "Remove"
+msgstr "Odstranit"
 
 #: common/qr-code-dialog.ui:33
 msgid "QR Code"
@@ -297,8 +301,8 @@ msgid "Show keyring contents (on small screens)"
 msgstr "Zobrazit obsah klíčenky (na malých obrazovkách)"
 
 #: data/org.gnome.Seahorse.desktop.in.in:2
-#: data/org.gnome.Seahorse.metainfo.xml.in.in:6 src/application.vala:93
-#: src/application.vala:156 src/seahorse-key-manager.ui:288
+#: data/org.gnome.Seahorse.metainfo.xml.in.in:6 src/application.vala:94
+#: src/application.vala:162 src/seahorse-key-manager.ui:288
 #: src/seahorse-key-manager.ui:328
 msgid "Passwords and Keys"
 msgstr "Hesla a klíče"
@@ -314,26 +318,50 @@ msgid "keyring;encryption;security;sign;ssh;gpg;pgp;seahorse;"
 msgstr "klíčenka;klíč;šifrování;bezpečnost;zabezpečení;podpis;ssh;gpg;pgp;seahorse;"
 
 #: data/org.gnome.seahorse.gschema.xml:5
+msgid "Default PGP Key"
+msgstr "Výchozí klíč PGP"
+
+#: data/org.gnome.seahorse.gschema.xml:6
+msgid ""
+"This specifies the ID of the default PGP key to use for certain operations, "
+"mainly signing."
+msgstr ""
+"Toto určuje ID výchozího klíče PGP, který se má používat pro určité operace, "
+"zejména pro podepisování."
+
+#: data/org.gnome.seahorse.gschema.xml:10
+msgid "PGP key servers"
+msgstr "Servery s klíči PGP"
+
+#: data/org.gnome.seahorse.gschema.xml:11
+msgid ""
+"A list of key server URIs to search for remote PGP keys. A display name can be "
+"included, by appending a space and then the name."
+msgstr ""
+"Seznam adres URI serverů s klíči pro vyhledávání vzdálených klíčů PGP. Lze uvést "
+"i zobrazovaný název, a to přidáním mezery a následně samotného názvu."
+
+#: data/org.gnome.seahorse.gschema.xml:15
 msgid "Auto retrieve keys"
 msgstr "Automaticky získávat klíče"
 
-#: data/org.gnome.seahorse.gschema.xml:6
+#: data/org.gnome.seahorse.gschema.xml:16
 msgid "Whether or not keys should be automatically retrieved from key servers."
 msgstr "Zda klíče mají nebo nemají být získávány automaticky ze serverů s klíči."
 
-#: data/org.gnome.seahorse.gschema.xml:10
+#: data/org.gnome.seahorse.gschema.xml:20
 msgid "Auto publish keys"
 msgstr "Automaticky zveřejňovat klíče"
 
-#: data/org.gnome.seahorse.gschema.xml:11
+#: data/org.gnome.seahorse.gschema.xml:21
 msgid "Whether or not modified keys should be automatically published."
 msgstr "Zda klíče mají nebo nemají být automaticky zveřejňovány."
 
-#: data/org.gnome.seahorse.gschema.xml:15
+#: data/org.gnome.seahorse.gschema.xml:25
 msgid "Publish keys to this key server"
 msgstr "Zveřejňovat klíče na tento server s klíči"
 
-#: data/org.gnome.seahorse.gschema.xml:16
+#: data/org.gnome.seahorse.gschema.xml:26
 msgid ""
 "The key server to publish PGP keys to. Or empty to suppress publishing of PGP "
 "keys."
@@ -341,19 +369,19 @@ msgstr ""
 "Server s klíči pro zveřejnění klíčů PGP. Když je prázdné, zveřejňování klíčů se "
 "potlačí."
 
-#: data/org.gnome.seahorse.gschema.xml:20
+#: data/org.gnome.seahorse.gschema.xml:30
 msgid "Last key server search pattern"
 msgstr "Poslední vyhledávací vzor serveru s klíči"
 
-#: data/org.gnome.seahorse.gschema.xml:21
+#: data/org.gnome.seahorse.gschema.xml:31
 msgid "The last search pattern searched for against a key server."
 msgstr "Poslední vzor hledání, podle kterého se hledalo vůči serveru s klíči."
 
-#: data/org.gnome.seahorse.gschema.xml:25
+#: data/org.gnome.seahorse.gschema.xml:35
 msgid "Last key servers used"
 msgstr "Naposledy použité servery s klíči"
 
-#: data/org.gnome.seahorse.gschema.xml:26
+#: data/org.gnome.seahorse.gschema.xml:36
 msgid ""
 "The last key server a search was performed against or empty for all key servers."
 msgstr ""
@@ -453,7 +481,8 @@ msgid "Main Window"
 msgstr "Hlavní okno"
 
 #. developer_name tag deprecated with Appstream 1.0
-#: data/org.gnome.Seahorse.metainfo.xml.in.in:265 src/application.vala:159
+#: data/org.gnome.Seahorse.metainfo.xml.in.in:265
+#: data/org.gnome.Seahorse.metainfo.xml.in.in:267 src/application.vala:165
 msgid "The GNOME Project"
 msgstr "Projekt GNOME"
 
@@ -1344,11 +1373,11 @@ msgstr "Nezdařilo se zveřejnit klíče na serveru"
 msgid "Couldn’t retrieve keys from server: %s"
 msgstr "Nezdařilo se získat klíče ze serveru: %s"
 
-#: pgp/seahorse-keyserver-sync.c:176
+#: pgp/seahorse-keyserver-sync.c:174
 msgid "Synchronizing keys…"
 msgstr "Synchronizují se klíče…"
 
-#: pgp/seahorse-keyserver-sync.c:246
+#: pgp/seahorse-keyserver-sync.c:244
 #, c-format
 msgid "<b>%d key is selected for synchronizing</b>"
 msgid_plural "<b>%d keys are selected for synchronizing</b>"
