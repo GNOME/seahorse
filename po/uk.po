@@ -1,22 +1,22 @@
 #
 #
 #  <>, 2020-2024.
-# Yuri Chornoivan <yurchor@ukr.net>, 2025, 2026.
+# SPDX-FileCopyrightText: 2025, 2026 Yuri Chornoivan <yurchor@ukr.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues/\n"
-"POT-Creation-Date: 2026-06-09 16:06+0000\n"
-"PO-Revision-Date: 2026-06-10 22:44+0300\n"
+"POT-Creation-Date: 2026-09-14 22:19+0000\n"
+"PO-Revision-Date: 2026-09-16 21:19+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Lokalize 23.04.3\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<"
+"=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Lokalize 25.12.1\n"
 "X-Project-Style: gnome\n"
 "X-DL-Lang: uk\n"
 "X-DL-Module: seahorse\n"
@@ -99,7 +99,7 @@ msgstr "_Надіслати"
 msgid "Confirm:"
 msgstr "Підтвердження:"
 
-#: common/passphrase-prompt.ui:41
+#: common/passphrase-prompt.ui:44
 msgid "The passwords don't match"
 msgstr "Паролі не збігаються"
 
@@ -131,6 +131,10 @@ msgstr "Сертифікати"
 #: common/prefs-keyservers.vala:55
 msgid "Server URL"
 msgstr "Адреса сервера"
+
+#: common/prefs-keyservers.vala:61
+msgid "Remove"
+msgstr "Вилучити"
 
 #: common/qr-code-dialog.ui:33
 msgid "QR Code"
@@ -294,8 +298,8 @@ msgid "Show keyring contents (on small screens)"
 msgstr "Показати вміст зв'язки ключів (на малих екранах)"
 
 #: data/org.gnome.Seahorse.desktop.in.in:2
-#: data/org.gnome.Seahorse.metainfo.xml.in.in:6 src/application.vala:93
-#: src/application.vala:156 src/seahorse-key-manager.ui:288
+#: data/org.gnome.Seahorse.metainfo.xml.in.in:6 src/application.vala:94
+#: src/application.vala:162 src/seahorse-key-manager.ui:288
 #: src/seahorse-key-manager.ui:328
 msgid "Passwords and Keys"
 msgstr "Паролі й ключі"
@@ -313,27 +317,53 @@ msgstr ""
 "ty;sign;ssh;gpg;pgp;seahorse;"
 
 #: data/org.gnome.seahorse.gschema.xml:5
+#| msgid "Personal PGP key"
+msgid "Default PGP Key"
+msgstr "Типовий ключ PGP"
+
+#: data/org.gnome.seahorse.gschema.xml:6
+msgid ""
+"This specifies the ID of the default PGP key to use for certain operations, "
+"mainly signing."
+msgstr ""
+"Вказує ідентифікатор типового ключа PGP, яким слід користуватися для певних д"
+"ій, в основному, підписування."
+
+#: data/org.gnome.seahorse.gschema.xml:10
+#| msgid "Keyservers"
+msgid "PGP key servers"
+msgstr "Сервери ключів PGP"
+
+#: data/org.gnome.seahorse.gschema.xml:11
+msgid ""
+"A list of key server URIs to search for remote PGP keys. A display name can "
+"be included, by appending a space and then the name."
+msgstr ""
+"Список адрес серверів ключів, на яких слід шукати віддалені ключі PGP. Можна "
+"включити показану назву після пробілу."
+
+#: data/org.gnome.seahorse.gschema.xml:15
 msgid "Auto retrieve keys"
 msgstr "Автоматичне отримання ключів"
 
-#: data/org.gnome.seahorse.gschema.xml:6
+#: data/org.gnome.seahorse.gschema.xml:16
 msgid ""
 "Whether or not keys should be automatically retrieved from key servers."
 msgstr "Чи завантажувати ключі з серверів автоматично."
 
-#: data/org.gnome.seahorse.gschema.xml:10
+#: data/org.gnome.seahorse.gschema.xml:20
 msgid "Auto publish keys"
 msgstr "Автоматичне публікування ключів"
 
-#: data/org.gnome.seahorse.gschema.xml:11
+#: data/org.gnome.seahorse.gschema.xml:21
 msgid "Whether or not modified keys should be automatically published."
 msgstr "Визначає, чи слід автоматично публікувати змінені ключі."
 
-#: data/org.gnome.seahorse.gschema.xml:15
+#: data/org.gnome.seahorse.gschema.xml:25
 msgid "Publish keys to this key server"
 msgstr "Експортувати ключі на цей сервер"
 
-#: data/org.gnome.seahorse.gschema.xml:16
+#: data/org.gnome.seahorse.gschema.xml:26
 msgid ""
 "The key server to publish PGP keys to. Or empty to suppress publishing of "
 "PGP keys."
@@ -341,19 +371,19 @@ msgstr ""
 "Сервер ключів для публікації ключів PGP. Якщо значення немає, ключі не "
 "публікуються."
 
-#: data/org.gnome.seahorse.gschema.xml:20
+#: data/org.gnome.seahorse.gschema.xml:30
 msgid "Last key server search pattern"
 msgstr "Шаблон останнього пошуку на сервері ключів"
 
-#: data/org.gnome.seahorse.gschema.xml:21
+#: data/org.gnome.seahorse.gschema.xml:31
 msgid "The last search pattern searched for against a key server."
 msgstr "Останній шаблон пошуку на сервері ключів."
 
-#: data/org.gnome.seahorse.gschema.xml:25
+#: data/org.gnome.seahorse.gschema.xml:35
 msgid "Last key servers used"
 msgstr "Останній використаний сервер ключів"
 
-#: data/org.gnome.seahorse.gschema.xml:26
+#: data/org.gnome.seahorse.gschema.xml:36
 msgid ""
 "The last key server a search was performed against or empty for all key "
 "servers."
@@ -452,12 +482,12 @@ msgstr ""
 "щоб не набирати їх кожного разу, й робити резервні копії."
 
 #: data/org.gnome.Seahorse.metainfo.xml.in.in:22
-#| msgid "Main Menu"
 msgid "Main Window"
 msgstr "Головне вікно"
 
 #. developer_name tag deprecated with Appstream 1.0
-#: data/org.gnome.Seahorse.metainfo.xml.in.in:265 src/application.vala:159
+#: data/org.gnome.Seahorse.metainfo.xml.in.in:265
+#: data/org.gnome.Seahorse.metainfo.xml.in.in:267 src/application.vala:165
 msgid "The GNOME Project"
 msgstr "Проєкт GNOME"
 
@@ -1359,11 +1389,11 @@ msgstr "Не вдалося опублікувати ключі на серве�
 msgid "Couldn’t retrieve keys from server: %s"
 msgstr "Не вдалося завантажити ключі з сервера: %s"
 
-#: pgp/seahorse-keyserver-sync.c:176
+#: pgp/seahorse-keyserver-sync.c:174
 msgid "Synchronizing keys…"
 msgstr "Синхронізація ключів…"
 
-#: pgp/seahorse-keyserver-sync.c:246
+#: pgp/seahorse-keyserver-sync.c:244
 #, c-format
 msgid "<b>%d key is selected for synchronizing</b>"
 msgid_plural "<b>%d keys are selected for synchronizing</b>"
