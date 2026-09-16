@@ -25,7 +25,7 @@
 
 #include "libseahorse/seahorse-util.h"
 
-#include <gdk-pixbuf/gdk-pixbuf.h>
+#include <glycin.h>
 
 #include <glib/gi18n.h>
 
@@ -76,6 +76,59 @@ calc_scale (int *width, int *height)
     return TRUE;
 }
 
+static GBytes *
+scale_frame_with_cairo (GlyFrame *frame,
+                        int       new_width,
+                        int       new_height,
+                        int      *out_stride)
+{
+    cairo_surface_t *src_surface, *dst_surface;
+    cairo_t *cr;
+    GBytes *src_bytes;
+    int src_width, src_height, src_stride;
+    int dst_stride;
+    const unsigned char *src_data;
+    unsigned char *dst_data;
+    GBytes *result;
+
+    src_width = gly_frame_get_width (frame);
+    src_height = gly_frame_get_height (frame);
+    src_stride = gly_frame_get_stride (frame);
+    src_bytes = gly_frame_get_buf_bytes (frame);
+    src_data = g_bytes_get_data (src_bytes, NULL);
+
+    /* GLY_MEMORY_B8G8R8A8_PREMULTIPLIED matches CAIRO_FORMAT_ARGB32
+     * on little-endian (which is all we support) */
+    src_surface = cairo_image_surface_create_for_data (
+        (unsigned char *) src_data,
+        CAIRO_FORMAT_ARGB32,
+        src_width, src_height, src_stride);
+
+    dst_surface = cairo_image_surface_create (
+        CAIRO_FORMAT_ARGB32, new_width, new_height);
+
+    cr = cairo_create (dst_surface);
+    cairo_scale (cr,
+                 (double) new_width / src_width,
+                 (double) new_height / src_height);
+    cairo_set_source_surface (cr, src_surface, 0, 0);
+    cairo_pattern_set_filter (cairo_get_source (cr), CAIRO_FILTER_BILINEAR);
+    cairo_paint (cr);
+    cairo_destroy (cr);
+
+    cairo_surface_flush (dst_surface);
+    dst_stride = cairo_image_surface_get_stride (dst_surface);
+    dst_data = cairo_image_surface_get_data (dst_surface);
+
+    result = g_bytes_new (dst_data, (gsize) dst_stride * new_height);
+    *out_stride = dst_stride;
+
+    cairo_surface_destroy (dst_surface);
+    cairo_surface_destroy (src_surface);
+
+    return result;
+}
+
 static void
 do_add_photo (GTask *task)
 {
@@ -94,10 +147,10 @@ do_add_photo (GTask *task)
            denote an invalid format file */
         if (gerr == GPG_E (GPG_ERR_USER_1))
             g_task_return_new_error_literal (task, SEAHORSE_ERROR, -1,
-                                             _("Couldn’t add photo: invalid format"));
+                                             _("Couldn't add photo: invalid format"));
         else
             g_task_return_new_error_literal (task, SEAHORSE_ERROR, -1,
-                                             _("Couldn’t add photo: unknown reason"));
+                                             _("Couldn't add photo: unknown reason"));
         return;
     }
 
@@ -109,63 +162,104 @@ do_rewrite_or_add_photo (GTask *task)
 {
     GpgmeAddPhotoClosure *closure = g_task_get_task_data (task);
     GCancellable *cancellable = g_task_get_cancellable (task);
-    g_autoptr(GFileInputStream) input_stream = NULL;
-    g_autoptr(GdkPixbuf) pixbuf = NULL;
+    g_autoptr(GlyLoader) loader = NULL;
+    g_autoptr(GlyImage) image = NULL;
+    g_autoptr(GlyFrame) frame = NULL;
+    g_autoptr(GlyCreator) creator = NULL;
+    g_autoptr(GlyEncodedImage) encoded = NULL;
+    g_autoptr(GBytes) jpeg_data = NULL;
+    g_autoptr(GBytes) scaled_bytes = NULL;
     g_autoptr(GFileIOStream) tmp_iostream = NULL;
     g_autoptr(GError) error = NULL;
-    gboolean ok;
+    GBytes *frame_bytes;
+    uint32_t width, height, stride;
+    GlyMemoryFormat format;
 
     if (!closure->rewrite) {
         do_add_photo (task);
         return;
     }
 
-    /* Load the photo if necessary */
-    input_stream = g_file_read (closure->input_file, cancellable, &error);
-    if (input_stream == NULL) {
-        g_prefix_error (&error, "Couldn't read input image: ");
+    /* Load the image */
+    loader = gly_loader_new (closure->input_file);
+    gly_loader_set_accepted_memory_formats (loader,
+        GLY_MEMORY_SELECTION_B8G8R8A8_PREMULTIPLIED);
+
+    image = gly_loader_load (loader, &error);
+    if (image == NULL) {
+        g_prefix_error (&error, "Couldn't load image: ");
         g_task_return_error (task, g_steal_pointer (&error));
         return;
     }
 
-    pixbuf = gdk_pixbuf_new_from_stream (G_INPUT_STREAM (input_stream),
-                                         cancellable,
-                                         &error);
-    if (pixbuf == NULL) {
-        g_prefix_error (&error, "Couldn't load image from input file: ");
+    frame = gly_image_next_frame (image, &error);
+    if (frame == NULL) {
+        g_prefix_error (&error, "Couldn't decode image: ");
         g_task_return_error (task, g_steal_pointer (&error));
         return;
     }
 
-    /* Resize it properly */
+    frame_bytes = gly_frame_get_buf_bytes (frame);
+    width = gly_frame_get_width (frame);
+    height = gly_frame_get_height (frame);
+    stride = gly_frame_get_stride (frame);
+    format = gly_frame_get_memory_format (frame);
+
+    /* Resize if needed */
     if (closure->resample && calc_scale (&closure->width, &closure->height)) {
-        g_autoptr(GdkPixbuf) sampled = NULL;
+        int scaled_stride;
 
-        sampled = gdk_pixbuf_scale_simple (pixbuf,
-                                           closure->width, closure->height,
-                                           GDK_INTERP_BILINEAR);
-        g_return_if_fail (sampled != NULL);
-        g_set_object (&pixbuf, sampled);
+        scaled_bytes = scale_frame_with_cairo (frame,
+                                               closure->width,
+                                               closure->height,
+                                               &scaled_stride);
+        frame_bytes = scaled_bytes;
+        width = closure->width;
+        height = closure->height;
+        stride = scaled_stride;
+        /* format stays B8G8R8A8_PREMULTIPLIED from Cairo */
     }
 
-    /* And write it out to a temp */
+    /* Encode as JPEG */
+    creator = gly_creator_new ("image/jpeg", &error);
+    if (creator == NULL) {
+        g_prefix_error (&error, "Couldn't create JPEG encoder: ");
+        g_task_return_error (task, g_steal_pointer (&error));
+        return;
+    }
+    gly_creator_set_encoding_quality (creator, 75);
+
+    if (gly_creator_add_frame_with_stride (creator,
+                                           width, height, stride,
+                                           format, frame_bytes,
+                                           &error) == NULL) {
+        g_prefix_error (&error, "Couldn't add frame for JPEG encoding: ");
+        g_task_return_error (task, g_steal_pointer (&error));
+        return;
+    }
+
+    encoded = gly_creator_create (creator, &error);
+    if (encoded == NULL) {
+        g_prefix_error (&error, "Couldn't encode JPEG: ");
+        g_task_return_error (task, g_steal_pointer (&error));
+        return;
+    }
+
+    jpeg_data = gly_encoded_image_get_data (encoded);
+
+    /* Write JPEG to temp file */
     closure->temp_file = g_file_new_tmp ("seahorse-photo.XXXXXX",
                                          &tmp_iostream,
                                          &error);
     if (closure->temp_file == NULL) {
-        g_prefix_error (&error, "Couldn't open temporary file for resizing: ");
+        g_prefix_error (&error, "Couldn't open temporary file: ");
         g_task_return_error (task, g_steal_pointer (&error));
         return;
     }
 
-    ok = gdk_pixbuf_save_to_stream (pixbuf,
-                                    g_io_stream_get_output_stream (G_IO_STREAM (tmp_iostream)),
-                                    "jpeg",
-                                    cancellable,
-                                    &error,
-                                    "quality", "75",
-                                    NULL);
-    if (!ok) {
+    if (!g_output_stream_write_bytes (
+            g_io_stream_get_output_stream (G_IO_STREAM (tmp_iostream)),
+            jpeg_data, cancellable, &error)) {
         g_prefix_error (&error, "Couldn't write resized image: ");
         g_task_return_error (task, g_steal_pointer (&error));
         return;
@@ -214,7 +308,7 @@ suggest_resize (GTask *task)
 
     adw_alert_dialog_add_responses (ADW_ALERT_DIALOG (dialog),
                                     "cancel",  _("_Cancel"),
-                                    "no-resize", _("_Don’t Resize"),
+                                    "no-resize", _("_Don't Resize"),
                                     "resize", _("_Resize"),
                                     NULL);
     adw_alert_dialog_set_response_appearance (ADW_ALERT_DIALOG (dialog),
@@ -249,9 +343,9 @@ on_gpgme_photo_file_opened (GObject      *source_object,
     g_autoptr(GTask) task = G_TASK (user_data);
     GpgmeAddPhotoClosure *closure = g_task_get_task_data (task);
     g_autoptr(GError) error = NULL;
-    g_autofree char *path = NULL;
-    GdkPixbufFormat *format;
-    g_autofree char *name = NULL;
+    g_autoptr(GlyLoader) loader = NULL;
+    g_autoptr(GlyImage) image = NULL;
+    const char *mime_type;
     gboolean suggest = FALSE;
 
     closure->input_file = gtk_file_dialog_open_finish (file_dialog, result, &error);
@@ -260,18 +354,22 @@ on_gpgme_photo_file_opened (GObject      *source_object,
         return;
     }
 
-    /* Prepare the photo id */
-    path = g_file_get_path (closure->input_file);
-    format = gdk_pixbuf_get_file_info (path, &closure->width, &closure->height);
-    if (format == NULL) {
+    /* Probe the image format and dimensions */
+    loader = gly_loader_new (closure->input_file);
+    image = gly_loader_load (loader, &error);
+    if (image == NULL) {
         g_task_return_new_error (task, SEAHORSE_ERROR, -1,
                                  _("This is not a image file, or an unrecognized kind of image file. Try to use a JPEG image."));
         return;
     }
 
+    closure->width = gly_image_get_width (image);
+    closure->height = gly_image_get_height (image);
+    mime_type = gly_image_get_mime_type (image);
+
     /* Check if it's a JPEG */
-    name = gdk_pixbuf_format_get_name (format);
-    if (g_strcmp0 (name, "jpeg") == 0) {
+    if (g_strcmp0 (mime_type, "image/jpeg") == 0) {
+        g_autofree char *path = g_file_get_path (closure->input_file);
         struct stat sb;
 
         /* If so we may just be able to use it straight up */
@@ -311,7 +409,7 @@ seahorse_gpgme_photo_add (SeahorseGpgmeKey    *key,
     g_autoptr(GtkFileFilter) mime_filter = NULL;
     g_autoptr(GtkFileFilter) jpeg_filter = NULL;
     g_autoptr(GtkFileFilter) all_filter = NULL;
-    g_autoptr(GSList) formats = NULL;
+    g_auto(GStrv) mime_types = NULL;
 
     g_return_if_fail (SEAHORSE_GPGME_IS_KEY (key));
 
@@ -328,14 +426,9 @@ seahorse_gpgme_photo_add (SeahorseGpgmeKey    *key,
 
     mime_filter = gtk_file_filter_new ();
     gtk_file_filter_set_name (mime_filter, _("All image files"));
-    formats = gdk_pixbuf_get_formats ();
-    for (GSList *l = formats; l; l = g_slist_next (l)) {
-        g_auto(GStrv) mimes = NULL;
-
-        mimes = gdk_pixbuf_format_get_mime_types ((GdkPixbufFormat*)l->data);
-        for (char **t = mimes; *t; t++)
-            gtk_file_filter_add_mime_type (mime_filter, *t);
-    }
+    mime_types = gly_loader_get_mime_types ();
+    for (char **t = mime_types; t && *t; t++)
+        gtk_file_filter_add_mime_type (mime_filter, *t);
     g_list_store_append (filters, mime_filter);
 
     jpeg_filter = gtk_file_filter_new ();

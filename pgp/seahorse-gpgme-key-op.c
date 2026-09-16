@@ -31,6 +31,8 @@
 #include "libseahorse/seahorse-progress.h"
 #include "libseahorse/seahorse-util.h"
 
+#include <glycin.h>
+
 #include <glib/gstdio.h>
 #include <glib/gi18n.h>
 
@@ -2238,7 +2240,7 @@ photoid_load_transit (unsigned int   current_state,
 {
     PhotoIdLoadParm *parm = (PhotoIdLoadParm*)data;
     SeahorseGpgmePhoto *photo;
-    GdkPixbuf *pixbuf = NULL;
+    g_autoptr(GdkTexture) texture = NULL;
     unsigned int next_state = 0;
     struct stat st;
     GError *error = NULL;
@@ -2273,20 +2275,38 @@ photoid_load_transit (unsigned int   current_state,
                            g_strerror (errno));
 
             } else if (st.st_size > 0) {
-                pixbuf = gdk_pixbuf_new_from_file (parm->output_file, &error);
-                if (pixbuf == NULL) {
+                g_autoptr(GFile) file = g_file_new_for_path (parm->output_file);
+                g_autoptr(GlyLoader) loader = gly_loader_new (file);
+                g_autoptr(GlyImage) image = NULL;
+                g_autoptr(GlyFrame) frame = NULL;
+
+                gly_loader_set_accepted_memory_formats (loader,
+                    GLY_MEMORY_SELECTION_R8G8B8A8);
+
+                image = gly_loader_load (loader, &error);
+                if (image != NULL)
+                    frame = gly_image_next_frame (image, &error);
+
+                if (frame != NULL) {
+                    texture = gdk_memory_texture_new (
+                        gly_frame_get_width (frame),
+                        gly_frame_get_height (frame),
+                        GDK_MEMORY_R8G8B8A8,
+                        gly_frame_get_buf_bytes (frame),
+                        gly_frame_get_stride (frame));
+                } else {
                     g_warning ("Loading image %s failed: %s", parm->output_file,
                                error && error->message ? error->message : "unknown");
-                    g_error_free (error);
+                    g_clear_error (&error);
                 }
             }
 
             g_unlink (parm->output_file);
 
-            photo = seahorse_gpgme_photo_new (parm->key, pixbuf, parm->uid);
+            photo = seahorse_gpgme_photo_new (parm->key,
+                                              GDK_PAINTABLE (texture),
+                                              parm->uid);
             parm->photos = g_list_append (parm->photos, photo);
-
-            g_object_unref (pixbuf);
         }
 
         if (g_str_equal (status, "GET_LINE") && g_str_equal (args, PROMPT)) {

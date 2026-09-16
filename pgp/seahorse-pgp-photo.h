@@ -31,9 +31,9 @@ struct _SeahorsePgpPhotoClass {
     GObjectClass parent_class;
 };
 
-SeahorsePgpPhoto*   seahorse_pgp_photo_new               (GdkPixbuf *pixbuf);
+SeahorsePgpPhoto*   seahorse_pgp_photo_new               (GdkPaintable *paintable);
 
-GdkPixbuf*          seahorse_pgp_photo_get_pixbuf        (SeahorsePgpPhoto *self);
+GdkPaintable*       seahorse_pgp_photo_get_paintable     (SeahorsePgpPhoto *self);
 
-void                seahorse_pgp_photo_set_pixbuf        (SeahorsePgpPhoto *self,
-                                                          GdkPixbuf *pixbuf);
+void                seahorse_pgp_photo_set_paintable     (SeahorsePgpPhoto *self,
+                                                          GdkPaintable *paintable);

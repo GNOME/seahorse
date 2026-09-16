@@ -26,11 +26,11 @@
 #include <glib/gi18n.h>
 
 enum {
-    PROP_PIXBUF = 1
+    PROP_PAINTABLE = 1
 };
 
 typedef struct _SeahorsePgpPhotoPrivate {
-    GdkPixbuf *pixbuf;
+    GdkPaintable *paintable;
 } SeahorsePgpPhotoPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (SeahorsePgpPhoto, seahorse_pgp_photo, G_TYPE_OBJECT);
@@ -49,8 +49,8 @@ seahorse_pgp_photo_get_property (GObject *object,
     SeahorsePgpPhoto *self = SEAHORSE_PGP_PHOTO (object);
 
     switch (prop_id) {
-    case PROP_PIXBUF:
-        g_value_set_object (value, seahorse_pgp_photo_get_pixbuf (self));
+    case PROP_PAINTABLE:
+        g_value_set_object (value, seahorse_pgp_photo_get_paintable (self));
         break;
     }
 }
@@ -64,8 +64,8 @@ seahorse_pgp_photo_set_property (GObject *object,
     SeahorsePgpPhoto *self = SEAHORSE_PGP_PHOTO (object);
 
     switch (prop_id) {
-    case PROP_PIXBUF:
-        seahorse_pgp_photo_set_pixbuf (self, g_value_get_object (value));
+    case PROP_PAINTABLE:
+        seahorse_pgp_photo_set_paintable (self, g_value_get_object (value));
         break;
     }
 }
@@ -77,7 +77,7 @@ seahorse_pgp_photo_finalize (GObject *gobject)
     SeahorsePgpPhotoPrivate *priv =
         seahorse_pgp_photo_get_instance_private (self);
 
-    g_clear_object (&priv->pixbuf);
+    g_clear_object (&priv->paintable);
 
     G_OBJECT_CLASS (seahorse_pgp_photo_parent_class)->finalize (gobject);
 }
@@ -91,38 +91,38 @@ seahorse_pgp_photo_class_init (SeahorsePgpPhotoClass *klass)
     gobject_class->set_property = seahorse_pgp_photo_set_property;
     gobject_class->get_property = seahorse_pgp_photo_get_property;
 
-    g_object_class_install_property (gobject_class, PROP_PIXBUF,
-            g_param_spec_object ("pixbuf", "Pixbuf", "Photo Pixbuf",
-                                 GDK_TYPE_PIXBUF,
+    g_object_class_install_property (gobject_class, PROP_PAINTABLE,
+            g_param_spec_object ("paintable", "Paintable", "Photo Paintable",
+                                 GDK_TYPE_PAINTABLE,
                                  G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 }
 
 SeahorsePgpPhoto*
-seahorse_pgp_photo_new (GdkPixbuf *pixbuf)
+seahorse_pgp_photo_new (GdkPaintable *paintable)
 {
-    g_return_val_if_fail (GDK_IS_PIXBUF (pixbuf), NULL);
+    g_return_val_if_fail (GDK_IS_PAINTABLE (paintable), NULL);
 
-    return g_object_new (SEAHORSE_PGP_TYPE_PHOTO, "pixbuf", pixbuf, NULL);
+    return g_object_new (SEAHORSE_PGP_TYPE_PHOTO, "paintable", paintable, NULL);
 }
 
-GdkPixbuf*
-seahorse_pgp_photo_get_pixbuf (SeahorsePgpPhoto *self)
+GdkPaintable*
+seahorse_pgp_photo_get_paintable (SeahorsePgpPhoto *self)
 {
     SeahorsePgpPhotoPrivate *priv = seahorse_pgp_photo_get_instance_private (self);
 
     g_return_val_if_fail (SEAHORSE_PGP_IS_PHOTO (self), NULL);
 
-    return priv->pixbuf;
+    return priv->paintable;
 }
 
 void
-seahorse_pgp_photo_set_pixbuf (SeahorsePgpPhoto *self, GdkPixbuf* pixbuf)
+seahorse_pgp_photo_set_paintable (SeahorsePgpPhoto *self, GdkPaintable *paintable)
 {
     SeahorsePgpPhotoPrivate *priv = seahorse_pgp_photo_get_instance_private (self);
 
     g_return_if_fail (SEAHORSE_PGP_IS_PHOTO (self));
-    g_return_if_fail (GDK_IS_PIXBUF (pixbuf));
+    g_return_if_fail (GDK_IS_PAINTABLE (paintable));
 
-    if (g_set_object (&priv->pixbuf, pixbuf))
-        g_object_notify (G_OBJECT (self), "pixbuf");
+    if (g_set_object (&priv->paintable, paintable))
+        g_object_notify (G_OBJECT (self), "paintable");
 }

@@ -56,6 +56,7 @@ pgp_dependencies = [
   glib_deps,
   gcr4_dep,
   gpgme_dep,
+  glycin_dep,
   common_dep,
   libseahorse_dep,
 ]

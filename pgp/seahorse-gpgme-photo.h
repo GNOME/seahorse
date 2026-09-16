@@ -32,7 +32,7 @@ G_DECLARE_FINAL_TYPE (SeahorseGpgmePhoto, seahorse_gpgme_photo,
                       SeahorsePgpPhoto);
 
 SeahorseGpgmePhoto* seahorse_gpgme_photo_new             (gpgme_key_t key,
-                                                          GdkPixbuf *pixbuf,
+                                                          GdkPaintable *paintable,
                                                           guint index);
 
 gpgme_key_t         seahorse_gpgme_photo_get_pubkey      (SeahorseGpgmePhoto *self);

@@ -137,15 +137,13 @@ set_primary_photo_action (GtkWidget  *widget,
 static GtkWidget *
 create_widget_for_photo (SeahorsePgpPhoto *photo)
 {
-    GdkPixbuf *pixbuf;
-    g_autoptr(GdkTexture) texture = NULL;
+    GdkPaintable *paintable;
     GtkWidget *picture;
 
-    pixbuf = seahorse_pgp_photo_get_pixbuf (photo);
-    g_return_val_if_fail (GDK_IS_PIXBUF (pixbuf), NULL);
+    paintable = seahorse_pgp_photo_get_paintable (photo);
+    g_return_val_if_fail (GDK_IS_PAINTABLE (paintable), NULL);
 
-    texture = gdk_texture_new_for_pixbuf (pixbuf);
-    picture = gtk_picture_new_for_paintable (GDK_PAINTABLE (texture));
+    picture = gtk_picture_new_for_paintable (paintable);
     gtk_widget_set_size_request (picture, 84, 84);
 
     return picture;

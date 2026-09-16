@@ -131,13 +131,13 @@ seahorse_gpgme_photo_class_init (SeahorseGpgmePhotoClass *klass)
  */
 
 SeahorseGpgmePhoto*
-seahorse_gpgme_photo_new (gpgme_key_t   pubkey,
-                          GdkPixbuf    *pixbuf,
-                          unsigned int  index)
+seahorse_gpgme_photo_new (gpgme_key_t    pubkey,
+                          GdkPaintable  *paintable,
+                          unsigned int   index)
 {
     return g_object_new (SEAHORSE_TYPE_GPGME_PHOTO,
                          "pubkey", pubkey,
-                         "pixbuf", pixbuf,
+                         "paintable", paintable,
                          "index", index, NULL);
 }
 

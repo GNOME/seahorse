@@ -56,6 +56,7 @@ pkcs11_dep = valac.find_library('pkcs11',
 libqrencode_dep = dependency('libqrencode', version: '>= 4.1.1')
 gpg_bin = find_program('gpg2', 'gpg', required: get_option('pgp-support'))
 gpgme_dep = dependency('gpgme', version: '>= 1.14.0', required: get_option('pgp-support'))
+glycin_dep = dependency('glycin-2', version: '>= 2.0', required: get_option('pgp-support'))
 
 if get_option('pgp-support')
   gpg_version_check = run_command(
