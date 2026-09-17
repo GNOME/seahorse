@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues/\n"
-"POT-Creation-Date: 2026-06-09 16:06+0000\n"
-"PO-Revision-Date: 2026-06-13 04:20+0200\n"
+"POT-Creation-Date: 2026-09-14 22:19+0000\n"
+"PO-Revision-Date: 2026-09-17 05:57+0200\n"
 "Last-Translator: Ekaterine Papava <papava.e@gtu.ge>\n"
 "Language-Team: Georgian <(nothing)>\n"
 "Language: ka\n"
@@ -92,7 +92,7 @@ msgstr "_გადაცემა"
 msgid "Confirm:"
 msgstr "დასტური:"
 
-#: common/passphrase-prompt.ui:41
+#: common/passphrase-prompt.ui:44
 msgid "The passwords don't match"
 msgstr "პაროლები არ ემთხვევა"
 
@@ -124,6 +124,10 @@ msgstr "სერტიფიკატები"
 #: common/prefs-keyservers.vala:55
 msgid "Server URL"
 msgstr "სერვერის URL"
+
+#: common/prefs-keyservers.vala:61
+msgid "Remove"
+msgstr "წაშლა"
 
 #: common/qr-code-dialog.ui:33
 msgid "QR Code"
@@ -287,8 +291,8 @@ msgid "Show keyring contents (on small screens)"
 msgstr ""
 
 #: data/org.gnome.Seahorse.desktop.in.in:2
-#: data/org.gnome.Seahorse.metainfo.xml.in.in:6 src/application.vala:93
-#: src/application.vala:156 src/seahorse-key-manager.ui:288
+#: data/org.gnome.Seahorse.metainfo.xml.in.in:6 src/application.vala:94
+#: src/application.vala:162 src/seahorse-key-manager.ui:288
 #: src/seahorse-key-manager.ui:328
 msgid "Passwords and Keys"
 msgstr "პაროლები და გასაღებები"
@@ -304,44 +308,64 @@ msgid "keyring;encryption;security;sign;ssh;gpg;pgp;seahorse;"
 msgstr ""
 
 #: data/org.gnome.seahorse.gschema.xml:5
-msgid "Auto retrieve keys"
-msgstr "გასაღებების ავტომატური მიღება"
+msgid "Default PGP Key"
+msgstr "ნაგულისხმევი PGP გასაღები"
 
 #: data/org.gnome.seahorse.gschema.xml:6
-msgid "Whether or not keys should be automatically retrieved from key servers."
+msgid ""
+"This specifies the ID of the default PGP key to use for certain operations, "
+"mainly signing."
 msgstr ""
 
 #: data/org.gnome.seahorse.gschema.xml:10
-msgid "Auto publish keys"
-msgstr "გასაღებების ავტომატური გამოქვეყნება"
+msgid "PGP key servers"
+msgstr "PGP გასაღების სერვერები"
 
 #: data/org.gnome.seahorse.gschema.xml:11
-msgid "Whether or not modified keys should be automatically published."
+msgid ""
+"A list of key server URIs to search for remote PGP keys. A display name can "
+"be included, by appending a space and then the name."
 msgstr ""
 
 #: data/org.gnome.seahorse.gschema.xml:15
+msgid "Auto retrieve keys"
+msgstr "გასაღებების ავტომატური მიღება"
+
+#: data/org.gnome.seahorse.gschema.xml:16
+msgid "Whether or not keys should be automatically retrieved from key servers."
+msgstr ""
+
+#: data/org.gnome.seahorse.gschema.xml:20
+msgid "Auto publish keys"
+msgstr "გასაღებების ავტომატური გამოქვეყნება"
+
+#: data/org.gnome.seahorse.gschema.xml:21
+msgid "Whether or not modified keys should be automatically published."
+msgstr ""
+
+#: data/org.gnome.seahorse.gschema.xml:25
 msgid "Publish keys to this key server"
 msgstr ""
 
-#: data/org.gnome.seahorse.gschema.xml:16
+#: data/org.gnome.seahorse.gschema.xml:26
 msgid ""
 "The key server to publish PGP keys to. Or empty to suppress publishing of "
 "PGP keys."
 msgstr ""
 
-#: data/org.gnome.seahorse.gschema.xml:20
+#: data/org.gnome.seahorse.gschema.xml:30
 msgid "Last key server search pattern"
 msgstr ""
 
-#: data/org.gnome.seahorse.gschema.xml:21
+#: data/org.gnome.seahorse.gschema.xml:31
 msgid "The last search pattern searched for against a key server."
 msgstr ""
 
-#: data/org.gnome.seahorse.gschema.xml:25
+#: data/org.gnome.seahorse.gschema.xml:35
 msgid "Last key servers used"
 msgstr ""
 
-#: data/org.gnome.seahorse.gschema.xml:26
+#: data/org.gnome.seahorse.gschema.xml:36
 msgid ""
 "The last key server a search was performed against or empty for all key "
 "servers."
@@ -432,7 +456,8 @@ msgid "Main Window"
 msgstr "მთავარი ფანჯარა"
 
 #. developer_name tag deprecated with Appstream 1.0
-#: data/org.gnome.Seahorse.metainfo.xml.in.in:265 src/application.vala:159
+#: data/org.gnome.Seahorse.metainfo.xml.in.in:265
+#: data/org.gnome.Seahorse.metainfo.xml.in.in:267 src/application.vala:165
 msgid "The GNOME Project"
 msgstr "პროექტი \"GNOME\""
 
@@ -442,7 +467,7 @@ msgstr "ფანჯრის სიგანე"
 
 #: data/org.gnome.seahorse.window.gschema.xml:6
 msgid "Width (in pixels) of the window."
-msgstr ""
+msgstr "ფანჯრის სიგანე (პიქსელებში)."
 
 #: data/org.gnome.seahorse.window.gschema.xml:10
 msgid "Height of the window"
@@ -450,7 +475,7 @@ msgstr "ფანჯრის სიმაღლე"
 
 #: data/org.gnome.seahorse.window.gschema.xml:11
 msgid "Height (in pixels) of the window."
-msgstr ""
+msgstr "ფანჯრის სიმაღლე (პიქსელებში)."
 
 #: gkr/add-item-dialog.ui:4
 msgid "Add Password"
@@ -1299,11 +1324,11 @@ msgstr ""
 msgid "Couldn’t retrieve keys from server: %s"
 msgstr ""
 
-#: pgp/seahorse-keyserver-sync.c:176
+#: pgp/seahorse-keyserver-sync.c:174
 msgid "Synchronizing keys…"
 msgstr ""
 
-#: pgp/seahorse-keyserver-sync.c:246
+#: pgp/seahorse-keyserver-sync.c:244
 #, c-format
 msgid "<b>%d key is selected for synchronizing</b>"
 msgid_plural "<b>%d keys are selected for synchronizing</b>"
@@ -1469,7 +1494,7 @@ msgstr ""
 
 #: pgp/seahorse-pgp-key-panel.ui:247
 msgid "Sign key"
-msgstr ""
+msgstr "ხელმოწერის გასაღები"
 
 #: pgp/seahorse-pgp-key-panel.ui:252
 msgid "_Sign key"
