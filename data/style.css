@@ -44,12 +44,6 @@
   padding: 12px;
 }
 
-.pane-separator {
-    border-width: 1px 1px 0 0;
-    border-style: solid;
-    border-color: shade (@theme_bg_color, 0.66);
-}
-
 /* Used to provide a little cutout around an overlayed circular button */
 .seahorse-cutout-button {
   background-color: var(--window-bg-color);
@@ -59,15 +53,15 @@
 }
 
 .pgp-subkey-usage-label {
-  border: 1px solid shade(@theme_bg_color, 0.9);
-  background-color: shade(@theme_bg_color, .95);
+  border: 1px solid color-mix(in srgb, var(--window-bg-color), black 10%);
+  background-color: color-mix(in srgb, var(--window-bg-color), black 5%);
   padding-left: 3px;
   padding-right: 3px;
   border-radius: 4px;
 }
 
 :selected .pgp-subkey-usage-label {
-  background-color: shade(@theme_selected_bg_color, .95);
+  background-color: color-mix(in srgb, var(--accent-bg-color), black 5%);
 }
 
 levelbar .strength-weak {
