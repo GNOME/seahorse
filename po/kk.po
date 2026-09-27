@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues/\n"
-"POT-Creation-Date: 2026-06-09 16:06+0000\n"
-"PO-Revision-Date: 2026-07-29 11:39+0500\n"
+"POT-Creation-Date: 2026-09-20 21:55+0000\n"
+"PO-Revision-Date: 2026-09-27 17:00+0500\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <kk_KZ@googlegroups.com>\n"
 "Language: kk\n"
@@ -91,7 +91,7 @@ msgstr "_Жөнелту"
 msgid "Confirm:"
 msgstr "Растау:"
 
-#: common/passphrase-prompt.ui:41
+#: common/passphrase-prompt.ui:44
 msgid "The passwords don't match"
 msgstr "Парольдер сәйкес келмейді"
 
@@ -123,6 +123,10 @@ msgstr "Сертификаттар"
 #: common/prefs-keyservers.vala:55
 msgid "Server URL"
 msgstr "Сервер URL адресі"
+
+#: common/prefs-keyservers.vala:61
+msgid "Remove"
+msgstr "Өшіру"
 
 #: common/qr-code-dialog.ui:33
 msgid "QR Code"
@@ -286,8 +290,8 @@ msgid "Show keyring contents (on small screens)"
 msgstr "Кілттер бауының мазмұнын көрсету (кішкентай экрандарда)"
 
 #: data/org.gnome.Seahorse.desktop.in.in:2
-#: data/org.gnome.Seahorse.metainfo.xml.in.in:6 src/application.vala:93
-#: src/application.vala:156 src/seahorse-key-manager.ui:288
+#: data/org.gnome.Seahorse.metainfo.xml.in.in:6 src/application.vala:94
+#: src/application.vala:162 src/seahorse-key-manager.ui:288
 #: src/seahorse-key-manager.ui:328
 msgid "Passwords and Keys"
 msgstr "Парольдер және кілттер"
@@ -304,26 +308,50 @@ msgid "keyring;encryption;security;sign;ssh;gpg;pgp;seahorse;"
 msgstr "кілттер бауы;шифрлеу;қауіпсіздік;қолтаңба;ssh;gpg;pgp;seahorse;"
 
 #: data/org.gnome.seahorse.gschema.xml:5
+msgid "Default PGP Key"
+msgstr "Үнсіз келісім бойынша PGP кілті"
+
+#: data/org.gnome.seahorse.gschema.xml:6
+msgid ""
+"This specifies the ID of the default PGP key to use for certain operations, "
+"mainly signing."
+msgstr ""
+"Бұл белгілі бір операциялар, негізінен қол қою үшін үнсіз келісім бойынша "
+"қолданылатын PGP кілтінің идентификаторын көрсетеді."
+
+#: data/org.gnome.seahorse.gschema.xml:10
+msgid "PGP key servers"
+msgstr "PGP кілт серверлері"
+
+#: data/org.gnome.seahorse.gschema.xml:11
+msgid ""
+"A list of key server URIs to search for remote PGP keys. A display name can "
+"be included, by appending a space and then the name."
+msgstr ""
+"Қашықтағы PGP кілттерін іздеуге арналған кілт серверлерінің URI тізімі. "
+"Көрсетілетін атты бос орын және одан кейін атты қосу арқылы қамтуға болады."
+
+#: data/org.gnome.seahorse.gschema.xml:15
 msgid "Auto retrieve keys"
 msgstr "Кілттерді автоматты түрде алу"
 
-#: data/org.gnome.seahorse.gschema.xml:6
+#: data/org.gnome.seahorse.gschema.xml:16
 msgid "Whether or not keys should be automatically retrieved from key servers."
 msgstr "Кілттерді кілттер серверлерінен автоматты түрде алу керек пе, жоқ па."
 
-#: data/org.gnome.seahorse.gschema.xml:10
+#: data/org.gnome.seahorse.gschema.xml:20
 msgid "Auto publish keys"
 msgstr "Кілттерді автожариялау"
 
-#: data/org.gnome.seahorse.gschema.xml:11
+#: data/org.gnome.seahorse.gschema.xml:21
 msgid "Whether or not modified keys should be automatically published."
 msgstr "Өзгертілген кілттерді автоматты түрде жариялау керек пе, жоқ па."
 
-#: data/org.gnome.seahorse.gschema.xml:15
+#: data/org.gnome.seahorse.gschema.xml:25
 msgid "Publish keys to this key server"
 msgstr "Кілттерді бұл кілттер серверіне жариялау"
 
-#: data/org.gnome.seahorse.gschema.xml:16
+#: data/org.gnome.seahorse.gschema.xml:26
 msgid ""
 "The key server to publish PGP keys to. Or empty to suppress publishing of PGP "
 "keys."
@@ -331,19 +359,19 @@ msgstr ""
 "PGP кілттерін жариялауға арналған кілттер сервері. PGP кілттерін жариялауды "
 "болдырмау үшін бос қалдырыңыз."
 
-#: data/org.gnome.seahorse.gschema.xml:20
+#: data/org.gnome.seahorse.gschema.xml:30
 msgid "Last key server search pattern"
 msgstr "Кілттер серверіндегі соңғы іздеу үлгісі"
 
-#: data/org.gnome.seahorse.gschema.xml:21
+#: data/org.gnome.seahorse.gschema.xml:31
 msgid "The last search pattern searched for against a key server."
 msgstr "Кілттер серверінен ізделген соңғы іздеу үлгісі."
 
-#: data/org.gnome.seahorse.gschema.xml:25
+#: data/org.gnome.seahorse.gschema.xml:35
 msgid "Last key servers used"
 msgstr "Соңғы қолданылған кілттер сервері"
 
-#: data/org.gnome.seahorse.gschema.xml:26
+#: data/org.gnome.seahorse.gschema.xml:36
 msgid ""
 "The last key server a search was performed against or empty for all key "
 "servers."
@@ -449,8 +477,8 @@ msgid "Main Window"
 msgstr "Басты терезе"
 
 #. developer_name tag deprecated with Appstream 1.0
-#: data/org.gnome.Seahorse.metainfo.xml.in.in:265
-#: data/org.gnome.Seahorse.metainfo.xml.in.in:267 src/application.vala:159
+#: data/org.gnome.Seahorse.metainfo.xml.in.in:288
+#: data/org.gnome.Seahorse.metainfo.xml.in.in:290 src/application.vala:165
 msgid "The GNOME Project"
 msgstr "GNOME жобасы"
 
@@ -1346,11 +1374,11 @@ msgstr "Кілттерді серверге жариялау мүмкін еме
 msgid "Couldn’t retrieve keys from server: %s"
 msgstr "Серверден кілттерді алу мүмкін емес: %s"
 
-#: pgp/seahorse-keyserver-sync.c:176
+#: pgp/seahorse-keyserver-sync.c:174
 msgid "Synchronizing keys…"
 msgstr "Кілттерді синхрондау…"
 
-#: pgp/seahorse-keyserver-sync.c:246
+#: pgp/seahorse-keyserver-sync.c:244
 #, c-format
 msgid "<b>%d key is selected for synchronizing</b>"
 msgid_plural "<b>%d keys are selected for synchronizing</b>"
@@ -3039,9 +3067,6 @@ msgstr "Қауіпсіз қоршам кілттерін баптау…"
 #~ msgid "PGP Key"
 #~ msgstr "PGP кілті"
 
-#~ msgid "_Remote"
-#~ msgstr "Қа_шықтағы"
-
 #~ msgid "Close this window"
 #~ msgstr "Бұл терезені жабу"
 
@@ -3057,9 +3082,6 @@ msgstr "Қауіпсіз қоршам кілттерін баптау…"
 
 #~ msgid "Email:"
 #~ msgstr "Эл. пошта:"
-
-#~ msgid "Private PGP Key"
-#~ msgstr "Жеке PGP кілті"
 
 #~ msgid "- System Settings"
 #~ msgstr "- Жүйелік баптаулар"
