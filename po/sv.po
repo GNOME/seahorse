@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues/\n"
-"POT-Creation-Date: 2026-06-09 16:06+0000\n"
-"PO-Revision-Date: 2026-07-30 00:23+0200\n"
+"POT-Creation-Date: 2026-09-20 21:55+0000\n"
+"PO-Revision-Date: 2026-10-10 15:31+0200\n"
 "Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -95,7 +95,7 @@ msgstr "_Skicka in"
 msgid "Confirm:"
 msgstr "Bekräfta:"
 
-#: common/passphrase-prompt.ui:41
+#: common/passphrase-prompt.ui:44
 msgid "The passwords don't match"
 msgstr "Lösenorden stämmer inte överens"
 
@@ -127,6 +127,10 @@ msgstr "Certifikat"
 #: common/prefs-keyservers.vala:55
 msgid "Server URL"
 msgstr "Server-URL"
+
+#: common/prefs-keyservers.vala:61
+msgid "Remove"
+msgstr "Ta bort"
 
 #: common/qr-code-dialog.ui:33
 msgid "QR Code"
@@ -290,8 +294,8 @@ msgid "Show keyring contents (on small screens)"
 msgstr "Visa nyckelringsinnehåll (på små skärmar)"
 
 #: data/org.gnome.Seahorse.desktop.in.in:2
-#: data/org.gnome.Seahorse.metainfo.xml.in.in:6 src/application.vala:93
-#: src/application.vala:156 src/seahorse-key-manager.ui:288
+#: data/org.gnome.Seahorse.metainfo.xml.in.in:6 src/application.vala:94
+#: src/application.vala:162 src/seahorse-key-manager.ui:288
 #: src/seahorse-key-manager.ui:328
 msgid "Passwords and Keys"
 msgstr "Lösenord och nycklar"
@@ -307,26 +311,51 @@ msgid "keyring;encryption;security;sign;ssh;gpg;pgp;seahorse;"
 msgstr "nyckelring;kryptering;säkerhet;signera;ssh;gpg;pgp;seahorse;"
 
 #: data/org.gnome.seahorse.gschema.xml:5
+msgid "Default PGP Key"
+msgstr "PGP-standardnyckel"
+
+#: data/org.gnome.seahorse.gschema.xml:6
+msgid ""
+"This specifies the ID of the default PGP key to use for certain operations, "
+"mainly signing."
+msgstr ""
+"Detta anger ID för PGP-standardnyckeln att använda för vissa åtgärder, "
+"främst signering."
+
+#: data/org.gnome.seahorse.gschema.xml:10
+msgid "PGP key servers"
+msgstr "PGP-nyckelservrar"
+
+#: data/org.gnome.seahorse.gschema.xml:11
+msgid ""
+"A list of key server URIs to search for remote PGP keys. A display name can "
+"be included, by appending a space and then the name."
+msgstr ""
+"En lista över nyckelserver-URI:er för att söka efter PGP-fjärrnycklar. Ett "
+"visningsnamn kan inkluderas genom att lägga till ett blanksteg och sedan "
+"namnet."
+
+#: data/org.gnome.seahorse.gschema.xml:15
 msgid "Auto retrieve keys"
 msgstr "Hämta automatiskt nycklar"
 
-#: data/org.gnome.seahorse.gschema.xml:6
+#: data/org.gnome.seahorse.gschema.xml:16
 msgid "Whether or not keys should be automatically retrieved from key servers."
 msgstr "Huruvida nycklar ska hämtas automatiskt från nyckelservrar."
 
-#: data/org.gnome.seahorse.gschema.xml:10
+#: data/org.gnome.seahorse.gschema.xml:20
 msgid "Auto publish keys"
 msgstr "Publicera nycklar automatiskt"
 
-#: data/org.gnome.seahorse.gschema.xml:11
+#: data/org.gnome.seahorse.gschema.xml:21
 msgid "Whether or not modified keys should be automatically published."
 msgstr "Huruvida ändrade nycklar ska publiceras automatiskt eller inte."
 
-#: data/org.gnome.seahorse.gschema.xml:15
+#: data/org.gnome.seahorse.gschema.xml:25
 msgid "Publish keys to this key server"
 msgstr "Publicera nycklar på denna nyckelserver"
 
-#: data/org.gnome.seahorse.gschema.xml:16
+#: data/org.gnome.seahorse.gschema.xml:26
 msgid ""
 "The key server to publish PGP keys to. Or empty to suppress publishing of "
 "PGP keys."
@@ -334,19 +363,19 @@ msgstr ""
 "Nyckelservern att publicera PGP-nycklar på. Eller tomt för att undertrycka "
 "publicering av PGP-nycklar."
 
-#: data/org.gnome.seahorse.gschema.xml:20
+#: data/org.gnome.seahorse.gschema.xml:30
 msgid "Last key server search pattern"
 msgstr "Senaste sökmönster för nyckelserver"
 
-#: data/org.gnome.seahorse.gschema.xml:21
+#: data/org.gnome.seahorse.gschema.xml:31
 msgid "The last search pattern searched for against a key server."
 msgstr "Det senaste sökmönster som sökts efter mot en nyckelserver."
 
-#: data/org.gnome.seahorse.gschema.xml:25
+#: data/org.gnome.seahorse.gschema.xml:35
 msgid "Last key servers used"
 msgstr "Senast använda nyckelservrar"
 
-#: data/org.gnome.seahorse.gschema.xml:26
+#: data/org.gnome.seahorse.gschema.xml:36
 msgid ""
 "The last key server a search was performed against or empty for all key "
 "servers."
@@ -449,8 +478,8 @@ msgid "Main Window"
 msgstr "Huvudfönster"
 
 #. developer_name tag deprecated with Appstream 1.0
-#: data/org.gnome.Seahorse.metainfo.xml.in.in:265
-#: data/org.gnome.Seahorse.metainfo.xml.in.in:267 src/application.vala:159
+#: data/org.gnome.Seahorse.metainfo.xml.in.in:288
+#: data/org.gnome.Seahorse.metainfo.xml.in.in:290 src/application.vala:165
 msgid "The GNOME Project"
 msgstr "GNOME-projektet"
 
@@ -1349,11 +1378,11 @@ msgstr "Kunde inte publicera nycklar på servern"
 msgid "Couldn’t retrieve keys from server: %s"
 msgstr "Kunde inte hämta nycklar från server: %s"
 
-#: pgp/seahorse-keyserver-sync.c:176
+#: pgp/seahorse-keyserver-sync.c:174
 msgid "Synchronizing keys…"
 msgstr "Synkroniserar nycklar…"
 
-#: pgp/seahorse-keyserver-sync.c:246
+#: pgp/seahorse-keyserver-sync.c:244
 #, c-format
 msgid "<b>%d key is selected for synchronizing</b>"
 msgid_plural "<b>%d keys are selected for synchronizing</b>"
