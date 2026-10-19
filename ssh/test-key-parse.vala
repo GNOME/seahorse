@@ -26,6 +26,10 @@ void main(string[] args) {
 
   Test.add_func("/ssh/key-parse/private-key-simple", test_key_parse_private_key_simple);
   Test.add_func("/ssh/key-parse/private-key-pw-protected", test_key_parse_private_key_pw_protected);
+  Test.add_func("/ssh/key-parse/private-key-ecdsa", test_key_parse_private_key_ecdsa);
+  Test.add_func("/ssh/key-parse/private-key-ed25519", test_key_parse_private_key_ed25519);
+  Test.add_func("/ssh/key-parse/private-key-truncated", test_key_parse_private_key_truncated);
+  Test.add_func("/ssh/key-parse/private-key-truncated-short", test_key_parse_private_key_truncated_short);
 
   Test.run();
 }
@@ -223,6 +227,129 @@ private void test_key_parse_private_key_pw_protected() {
           assert_true(secdata.algo == Seahorse.Ssh.Algorithm.RSA);
       } catch (Error err) {
           error("Couldn't parse private key: %s", err.message);
+      } finally {
+          mainloop.quit();
+      }
+  });
+  mainloop.run();
+}
+
+// ECDSA key: the key type "ecdsa-sha2-nistp256" means "ecdsa" is always
+// followed by '-', never a null byte, so the old from_string() exact-match
+// approach could not detect it.
+const string PRIVATE_KEY_ECDSA = """
+-----BEGIN OPENSSH PRIVATE KEY-----
+b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAaAAAABNlY2RzYS
+1zaGEyLW5pc3RwMjU2AAAACG5pc3RwMjU2AAAAQQRZW5Qpt4kgRU2MZE/OGau0DhdDFpF1
+JD9UdzvEK3yeGdigAv6X2LPDenTaFXpTxMNwTdfSUdDCEjjq3nDPfkGNAAAAqE5L4W9OS+
+FvAAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBFlblCm3iSBFTYxk
+T84Zq7QOF0MWkXUkP1R3O8QrfJ4Z2KAC/pfYs8N6dNoVelPEw3BN19JR0MISOOrecM9+QY
+0AAAAhAIhi7BegeSewKXV0ZIjVzyPVUa1Z75vQFIg+QjU+mr0FAAAACXRlc3RlY2RzYQEC
+AwQFBg==
+-----END OPENSSH PRIVATE KEY-----
+""";
+
+private void test_key_parse_private_key_ecdsa() {
+  var input = new MemoryInputStream.from_data(PRIVATE_KEY_ECDSA.data);
+
+  var mainloop = new GLib.MainLoop();
+  Seahorse.Ssh.Key.parse.begin(input, null, (obj, res) => {
+      try {
+          var parse_result = Seahorse.Ssh.Key.parse.end(res);
+          assert_true(parse_result.public_keys.length == 0);
+
+          assert_true(parse_result.secret_keys.length == 1);
+          unowned var secdata = parse_result.secret_keys[0];
+          assert_null(secdata.comment);
+          assert_true(secdata.algo == Seahorse.Ssh.Algorithm.ECDSA);
+      } catch (Error err) {
+          error("Couldn't parse ECDSA private key: %s", err.message);
+      } finally {
+          mainloop.quit();
+      }
+  });
+  mainloop.run();
+}
+
+const string PRIVATE_KEY_ED25519 = """
+-----BEGIN OPENSSH PRIVATE KEY-----
+b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
+QyNTUxOQAAACCOVSQ9mr0tI7sSULGViLSOzfx69lqRSzQCb/Ga/7+3XgAAAJDZl/Of2Zfz
+nwAAAAtzc2gtZWQyNTUxOQAAACCOVSQ9mr0tI7sSULGViLSOzfx69lqRSzQCb/Ga/7+3Xg
+AAAEConaGNR4spnCHKp3KpCKBirF8boV5f7LvW0fU4oAsTVY5VJD2avS0juxJQsZWItI7N
+/Hr2WpFLNAJv8Zr/v7deAAAABnRlc3RlZAECAwQFBgc=
+-----END OPENSSH PRIVATE KEY-----
+""";
+
+private void test_key_parse_private_key_ed25519() {
+  var input = new MemoryInputStream.from_data(PRIVATE_KEY_ED25519.data);
+
+  var mainloop = new GLib.MainLoop();
+  Seahorse.Ssh.Key.parse.begin(input, null, (obj, res) => {
+      try {
+          var parse_result = Seahorse.Ssh.Key.parse.end(res);
+          assert_true(parse_result.public_keys.length == 0);
+
+          assert_true(parse_result.secret_keys.length == 1);
+          unowned var secdata = parse_result.secret_keys[0];
+          assert_null(secdata.comment);
+          assert_true(secdata.algo == Seahorse.Ssh.Algorithm.ED25519);
+      } catch (Error err) {
+          error("Couldn't parse ED25519 private key: %s", err.message);
+      } finally {
+          mainloop.quit();
+      }
+  });
+  mainloop.run();
+}
+
+// Truncated key with no data after the BEGIN line. The base64 decode
+// produces an empty buffer, so the old "decoded.length - 3" underflows
+// (unsigned), causing a massive out-of-bounds read.
+const string PRIVATE_KEY_TRUNCATED = """
+-----BEGIN OPENSSH PRIVATE KEY-----
+-----END OPENSSH PRIVATE KEY-----
+""";
+
+private void test_key_parse_private_key_truncated() {
+  var input = new MemoryInputStream.from_data(PRIVATE_KEY_TRUNCATED.data);
+
+  var mainloop = new GLib.MainLoop();
+  Seahorse.Ssh.Key.parse.begin(input, null, (obj, res) => {
+      try {
+          var parse_result = Seahorse.Ssh.Key.parse.end(res);
+          assert_true(parse_result.secret_keys.length == 1);
+          unowned var secdata = parse_result.secret_keys[0];
+          assert_true(secdata.algo == Seahorse.Ssh.Algorithm.UNKNOWN);
+      } catch (Error err) {
+          error("Couldn't parse truncated private key: %s", err.message);
+      } finally {
+          mainloop.quit();
+      }
+  });
+  mainloop.run();
+}
+
+// Truncated key with only 2 bytes of base64 data ("QQ==" decodes to 1 byte).
+// With the END line's base64-valid characters adding a few more decoded bytes,
+// the total is still well under 3, triggering the old underflow.
+const string PRIVATE_KEY_TRUNCATED_SHORT = """
+-----BEGIN OPENSSH PRIVATE KEY-----
+QQ==
+""";
+
+private void test_key_parse_private_key_truncated_short() {
+  var input = new MemoryInputStream.from_data(PRIVATE_KEY_TRUNCATED_SHORT.data);
+
+  var mainloop = new GLib.MainLoop();
+  Seahorse.Ssh.Key.parse.begin(input, null, (obj, res) => {
+      try {
+          var parse_result = Seahorse.Ssh.Key.parse.end(res);
+          assert_true(parse_result.secret_keys.length == 1);
+          unowned var secdata = parse_result.secret_keys[0];
+          assert_true(secdata.algo == Seahorse.Ssh.Algorithm.UNKNOWN);
+      } catch (Error err) {
+          error("Couldn't parse truncated short private key: %s", err.message);
       } finally {
           mainloop.quit();
       }
