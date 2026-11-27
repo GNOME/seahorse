@@ -19,21 +19,22 @@
 # Rafael Fontenelle <rafaelff@gnome.org>, 2012-2025.
 # Samuel Schlemper <samuelschlemper2006@gmail.com>, 2025.
 # Juliano de Souza Camargo <julianosc@pm.me>, 2024-2025.
+# Álvaro Burns <(null)>, 2026.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: seahorse\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/seahorse/issues/\n"
-"POT-Creation-Date: 2025-09-10 23:06+0000\n"
-"PO-Revision-Date: 2025-09-13 13:27-0300\n"
-"Last-Translator: Juliano de Souza Camargo <julianosc@pm.me>\n"
-"Language-Team: Brazilian Portuguese <https://br.gnome.org/traducao>\n"
+"POT-Creation-Date: 2026-09-20 21:55+0000\n"
+"PO-Revision-Date: 2026-11-26 09:33-0300\n"
+"Last-Translator: Álvaro Burns <\n"
+"Language-Team: Brazilian Portuguese <https://br.gnome.org/traducao/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Gtranslator 48.0\n"
+"X-Generator: Gtranslator 51.0\n"
 "X-Project-Style: gnome\n"
 "X-DL-Team: pt_BR\n"
 "X-DL-Module: seahorse\n"
@@ -115,7 +116,7 @@ msgstr "_Enviar"
 msgid "Confirm:"
 msgstr "Confirmar:"
 
-#: common/passphrase-prompt.ui:41
+#: common/passphrase-prompt.ui:44
 msgid "The passwords don't match"
 msgstr "As senhas não conferem"
 
@@ -147,6 +148,10 @@ msgstr "Certificados"
 #: common/prefs-keyservers.vala:55
 msgid "Server URL"
 msgstr "URL do servidor"
+
+#: common/prefs-keyservers.vala:61
+msgid "Remove"
+msgstr "Remover"
 
 #: common/qr-code-dialog.ui:33
 msgid "QR Code"
@@ -318,8 +323,8 @@ msgid "Show keyring contents (on small screens)"
 msgstr "Mostra o conteúdo do chaveiro (em telas pequenas)"
 
 #: data/org.gnome.Seahorse.desktop.in.in:2
-#: data/org.gnome.Seahorse.metainfo.xml.in.in:6 src/application.vala:93
-#: src/application.vala:156 src/seahorse-key-manager.ui:288
+#: data/org.gnome.Seahorse.metainfo.xml.in.in:6 src/application.vala:94
+#: src/application.vala:162 src/seahorse-key-manager.ui:288
 #: src/seahorse-key-manager.ui:328
 msgid "Passwords and Keys"
 msgstr "Senhas e chaves"
@@ -335,28 +340,53 @@ msgid "keyring;encryption;security;sign;ssh;gpg;pgp;seahorse;"
 msgstr "chaveiro;criptografia;segurança;assinar;ssh;gpg;pgp;seahorse;"
 
 #: data/org.gnome.seahorse.gschema.xml:5
+msgid "Default PGP Key"
+msgstr "Chave PGP padrão"
+
+#: data/org.gnome.seahorse.gschema.xml:6
+msgid ""
+"This specifies the ID of the default PGP key to use for certain operations, "
+"mainly signing."
+msgstr ""
+"Isto especifica o ID da chave PGP padrão para usar em certas operações, "
+"principalmente assinatura."
+
+#: data/org.gnome.seahorse.gschema.xml:10
+msgid "PGP key servers"
+msgstr "Servidores de chaves PGP"
+
+#: data/org.gnome.seahorse.gschema.xml:11
+msgid ""
+"A list of key server URIs to search for remote PGP keys. A display name can "
+"be included, by appending a space and then the name."
+msgstr ""
+"Uma lista de chaves URIs de servidores para pesquisar por chaves PGP "
+"remotas. Um nome de exibição pode ser incluído adicionando um espaço e "
+"depois o nome."
+
+#: data/org.gnome.seahorse.gschema.xml:15
 msgid "Auto retrieve keys"
 msgstr "Recuperar chaves automaticamente"
 
-#: data/org.gnome.seahorse.gschema.xml:6
+#: data/org.gnome.seahorse.gschema.xml:16
 msgid "Whether or not keys should be automatically retrieved from key servers."
 msgstr ""
 "Se chaves devem ou não ser recuperadas automaticamente de servidores de "
 "chaves."
 
-#: data/org.gnome.seahorse.gschema.xml:10
+#: data/org.gnome.seahorse.gschema.xml:20
 msgid "Auto publish keys"
 msgstr "Publicar chaves automaticamente"
 
-#: data/org.gnome.seahorse.gschema.xml:11
+#: data/org.gnome.seahorse.gschema.xml:21
 msgid "Whether or not modified keys should be automatically published."
 msgstr "Se chaves modificadas devem ou não ser publicadas automaticamente."
 
-#: data/org.gnome.seahorse.gschema.xml:15
+#: data/org.gnome.seahorse.gschema.xml:25
 msgid "Publish keys to this key server"
 msgstr "Publicar chaves neste servidor de chaves"
 
-#: data/org.gnome.seahorse.gschema.xml:16
+#: data/org.gnome.seahorse.gschema.xml:26
 msgid ""
 "The key server to publish PGP keys to. Or empty to suppress publishing of "
 "PGP keys."
@@ -364,19 +394,19 @@ msgstr ""
 "O servidor para publicar as chaves PGP. Se vazio, suprime a publicação de "
 "chaves PGP."
 
-#: data/org.gnome.seahorse.gschema.xml:20
+#: data/org.gnome.seahorse.gschema.xml:30
 msgid "Last key server search pattern"
 msgstr "Último padrão de pesquisa de servidor de chaves"
 
-#: data/org.gnome.seahorse.gschema.xml:21
+#: data/org.gnome.seahorse.gschema.xml:31
 msgid "The last search pattern searched for against a key server."
 msgstr "O último padrão de pesquisa procurado em um servidor de chaves."
 
-#: data/org.gnome.seahorse.gschema.xml:25
+#: data/org.gnome.seahorse.gschema.xml:35
 msgid "Last key servers used"
 msgstr "Últimos servidores de chaves utilizados"
 
-#: data/org.gnome.seahorse.gschema.xml:26
+#: data/org.gnome.seahorse.gschema.xml:36
 msgid ""
 "The last key server a search was performed against or empty for all key "
 "servers."
@@ -476,8 +506,13 @@ msgstr ""
 "frase secreta para que você não precise continuar digitando-a e efetuar "
 "cópia de segurança (backup) de suas chaves e chaveiro."
 
+#: data/org.gnome.Seahorse.metainfo.xml.in.in:22
+msgid "Main Window"
+msgstr "Janela principal"
+
 #. developer_name tag deprecated with Appstream 1.0
-#: data/org.gnome.Seahorse.metainfo.xml.in.in:264 src/application.vala:159
+#: data/org.gnome.Seahorse.metainfo.xml.in.in:288
+#: data/org.gnome.Seahorse.metainfo.xml.in.in:290 src/application.vala:165
 msgid "The GNOME Project"
 msgstr "O Projeto GNOME"
 
@@ -1380,11 +1415,11 @@ msgstr "Não foi possível publicar chaves para o servidor"
 msgid "Couldn’t retrieve keys from server: %s"
 msgstr "Não foi possível recuperar chaves do servidor: %s"
 
-#: pgp/seahorse-keyserver-sync.c:176
+#: pgp/seahorse-keyserver-sync.c:174
 msgid "Synchronizing keys…"
 msgstr "Sincronizando chaves…"
 
-#: pgp/seahorse-keyserver-sync.c:246
+#: pgp/seahorse-keyserver-sync.c:244
 #, c-format
 msgid "<b>%d key is selected for synchronizing</b>"
 msgid_plural "<b>%d keys are selected for synchronizing</b>"
